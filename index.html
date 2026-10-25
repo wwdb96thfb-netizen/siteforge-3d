@@ -367,6 +367,8 @@ body.nightmode #scalebar{color:#e6e9f2;text-shadow:0 0 3px #000}
 #camPiPv{height:210px;position:relative}#camPiPv:after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 49.5%,rgba(255,255,255,.25) 50%,transparent 50.5%),linear-gradient(90deg,transparent 49.5%,rgba(255,255,255,.25) 50%,transparent 50.5%)}
 #camPiP .hint3{font:11px var(--body);color:#8fa3b8;padding:4px 9px;background:#0d1520}
 @media (max-width:760px){#camPiP{width:220px;top:calc(var(--hdr) + 84px)}#camPiPv{height:130px}#camPiP .hint3{display:none}}
+#about{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:rgba(30,40,52,.35)}#about[hidden]{display:none}#about .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;box-shadow:0 20px 50px rgba(0,0,0,.25);width:calc(100% - 32px);box-sizing:border-box}#about dl{display:grid;grid-template-columns:100px 1fr;gap:4px 10px;font-size:13px}#about dt{color:var(--muted)}#about dd{margin:0}
+#copyNote{color:var(--muted)}
 </style>
 
 <div id="scene"></div>
@@ -502,6 +504,22 @@ body.nightmode #scalebar{color:#e6e9f2;text-shadow:0 0 3px #000}
 <div id="camPiP" hidden><div class="ph3"><b>CAMERA VIEW</b><span id="camPiPn"></span></div><div id="camPiPv"></div><div class="hint3">Drag the blue handle on the map to aim · orange handles to widen</div></div>
 <div id="mbox" hidden style="position:fixed;border:1.5px dashed #ffd23f;background:rgba(255,210,63,.12);z-index:8;pointer-events:none"></div>
 <div id="draftBar" hidden><span>You have unsaved changes from last time.</span><button class="btn" id="draftYes">Bring them back</button><button class="btn ghost" id="draftNo">Throw away</button></div>
+<div id="about" hidden><div class="card" style="max-width:560px">
+<div style="display:flex;gap:14px;align-items:center"><img id="aboutLogo" alt="" style="width:64px;height:64px;border-radius:14px"><div><h3 style="margin:0;letter-spacing:.08em">SENTINEL 3D</h3><div style="font:600 12px var(--mono);color:var(--muted);letter-spacing:.12em">TACTICAL SITE PLANNING</div></div></div>
+<dl style="margin:14px 0 6px"><dt>Version</dt><dd>2.1.0 · build 2026.10.25</dd><dt>Created by</dt><dd><b>Syed Iftikhar Shah</b></dd><dt>Purpose</dt><dd>3D modelling and security planning of garrisons and military sites: buildings, perimeter, posts, cameras, lighting, weapons coverage, QRF, drones and lockdown drills.</dd></dl>
+<div style="font-size:12.5px;line-height:1.55;color:var(--fg);max-height:42vh;overflow:auto;border-top:1px solid var(--line);padding-top:10px">
+<p style="margin:0 0 8px"><b>Copyright © 2026 Syed Iftikhar Shah. All rights reserved.</b></p>
+<p style="margin:0 0 8px">Sentinel 3D, its name, logo, design, source code, 3D models and documentation are the intellectual property of Syed Iftikhar Shah and are protected by copyright law, including the Copyright Ordinance, 1962 (Pakistan) and international copyright treaties.</p>
+<p style="margin:0 0 4px"><b>Terms of use</b></p>
+<ol style="margin:0 0 8px;padding-left:18px">
+<li>This software is licensed for use by authorised personnel only. It is not sold.</li>
+<li>No part of this software may be copied, modified, reverse-engineered, redistributed, published, sold or used to create derivative products without the prior written permission of the copyright holder.</li>
+<li>Project files and models made with Sentinel 3D may contain sensitive information. Users are responsible for handling, storing and sharing them according to their organisation's security instructions.</li>
+<li>All project data is stored on the user's own device. Sentinel 3D does not send project data to any server.</li>
+<li>Sentinel 3D is a planning and visualisation aid. Coverage, ranges, response times and distances are estimates and must be verified on the ground before operational use. The author accepts no liability for decisions taken on the basis of this software.</li>
+</ol>
+<p style="margin:0;color:var(--muted)">Built with three.js (MIT licence). Fonts: Rajdhani, Saira Condensed, IBM Plex (SIL Open Font Licence).</p></div>
+<div class="row" style="margin-top:14px"><button class="btn" id="aboutClose">Close</button></div></div></div>
 <div id="help" hidden><div class="card"><h3>Keyboard and mouse</h3><div class="grid">
 <kbd>Left-drag</kbd><span>Rotate the view (in Edit: box-select)</span><kbd>Right / middle-drag</kbd><span>Move the map</span><kbd>Scroll</kbd><span>Zoom towards the cursor</span>
 <kbd>Right-click</kbd><span>Quick menu for the thing under the cursor</span>
@@ -511,7 +529,7 @@ body.nightmode #scalebar{color:#e6e9f2;text-shadow:0 0 3px #000}
 <kbd>H</kbd><span>Hide or show panels</span><kbd>/</kbd><span>Find a building</span><kbd>Arrows, + −</kbd><span>Move and zoom</span>
 </div><div class="row" style="margin-top:14px"><button class="btn" id="helpClose">Close</button></div></div></div>
 <div id="vwall" hidden><div class="vh">Camera feeds<span id="vwInfo"></span><button class="btn ghost" id="vwPrev" style="padding:3px 8px">‹</button><button class="btn ghost" id="vwNext" style="padding:3px 8px">›</button></div><div id="tiles"></div></div>
-<footer class="statusbar"><span id="sbXYZ">X <b id="sbX">—</b> · Y <b id="sbY">—</b> · Z <b id="sbZ">—</b></span><span>Grid <b id="sbCoord">—</b></span><span id="sbSel">Nothing selected</span><span id="sbMode">Mode: <b>View</b></span><span id="saveNote"></span><span>FPS <b id="fps">—</b></span><span style="color:#3fd0ff">SENTINEL 3D · CAD</span></footer>
+<footer class="statusbar"><span id="sbXYZ">X <b id="sbX">—</b> · Y <b id="sbY">—</b> · Z <b id="sbZ">—</b></span><span>Grid <b id="sbCoord">—</b></span><span id="copyNote" title="About Sentinel 3D" style="cursor:pointer" onclick="document.getElementById('about').hidden=false">© 2026 Syed Iftikhar Shah</span><span id="sbSel">Nothing selected</span><span id="sbMode">Mode: <b>View</b></span><span id="saveNote"></span><span>FPS <b id="fps">—</b></span><span style="color:#3fd0ff">SENTINEL 3D · CAD</span></footer>
 <div class="mapctl">
   <button id="zIn" aria-label="Zoom in">+</button><button id="zOut" aria-label="Zoom out">−</button><button id="zHome" aria-label="Reset view">⌂</button>
 </div>
@@ -2897,7 +2915,7 @@ function dutyCounts(){const d=S.items.filter(i=>DUTYABLE(i.type));const on=d.fil
 function updDutyBanner(){const b=$('ldBanner');if(!b)return;const c=dutyCounts();b.hidden=false;b.className=DUTYMODE==='lockdown'?'ld on':'ld';b.innerHTML=DUTYMODE==='lockdown'?`<b>⚠ GARRISON LOCKDOWN</b><span>${c.on+c.sb} positions manned · ${c.pon+c.psb} people · wall watched ${STATS.wallW!=null?STATS.wallW+'%':'…'}</span>`:`<b>Normal routine</b><span>${c.on} on duty · ${c.sb} stand-to at rest · wall watched ${STATS.wallW!=null?STATS.wallW+'%':'…'}</span>`;}
 function setNight(on){night=on;if(LOOK==='sec')applySecLook(false);LOOK=on?'night':'day';applyLook(on);
   $('nightBtn').setAttribute('aria-pressed',on);$('nightLbl').textContent=on?'Day':'Night';document.body.classList.toggle('nightmode',on);applyOverlayVis();}
-$('nightBtn').onclick=()=>setNight(!night);{const off=()=>{const n=$('saveNote');document.body.classList.toggle('offline',!navigator.onLine);if(!navigator.onLine)flash('Offline: everything still works and saves on this device.');};addEventListener('online',off);addEventListener('offline',off);setTimeout(off,1500);}$('ldBtn').onclick=()=>setDuty(DUTYMODE==='lockdown'?'normal':'lockdown');setTimeout(()=>setDuty(DUTYMODE,true),300);
+$('nightBtn').onclick=()=>setNight(!night);{const lg=document.querySelector('.brandx img');if(lg)$('aboutLogo').src=lg.src;$('aboutClose').onclick=()=>{$('about').hidden=true;};$('about').onclick=e=>{if(e.target.id==='about')$('about').hidden=true;};}{const off=()=>{const n=$('saveNote');document.body.classList.toggle('offline',!navigator.onLine);if(!navigator.onLine)flash('Offline: everything still works and saves on this device.');};addEventListener('online',off);addEventListener('offline',off);setTimeout(off,1500);}$('ldBtn').onclick=()=>setDuty(DUTYMODE==='lockdown'?'normal':'lockdown');setTimeout(()=>setDuty(DUTYMODE,true),300);
 let compare=false,splitX=.5,compare3=false;
 function setCompare3(on){compare3=on;if(on&&compare)setCompare(false);$('cmp3').hidden=!on;if(!on)setLook(night?'night':'day');else flash('Day, night and security views side by side.');}
 function setCompare(on){if(on&&compare3)setCompare3(false);compare=on;$('split').hidden=!on;$('cmpDay').hidden=!on;$('cmpNight').hidden=!on;placeSplit();document.querySelectorAll('#rail [data-r="cmp"]').forEach(b=>b.classList.toggle('on',on));if(on)flash('Day / night compare: drag the middle handle.');}
@@ -2971,6 +2989,7 @@ function drawGizmo(){
   }else if(sel.kind==='road'||sel.kind==='wall'||sel.kind==='cwall'){
     const pts=sel.kind==='wall'?S.wall:o.pts;const closed=sel.kind==='wall';
     if(sel.kind!=='wall'){const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts.map(p=>new THREE.Vector3(p[0],.9,p[1]))),lineM);ln.renderOrder=39;G.gizmo.add(ln);}
+    if(sel.kind==='road'&&ROADSEG>=0&&ROADSEG<pts.length-1&&pts.length>2){const a=pts[ROADSEG],q=pts[ROADSEG+1];const L=Math.hypot(q[0]-a[0],q[1]-a[1]);const m=new THREE.Mesh(new THREE.PlaneGeometry(L,(o.w||7)+1),new THREE.MeshBasicMaterial({color:0xffd23f,transparent:true,opacity:.45,depthTest:false}));m.rotation.x=-Math.PI/2;m.rotation.z=-Math.atan2(q[1]-a[1],q[0]-a[0]);m.position.set((a[0]+q[0])/2,.5,(a[1]+q[1])/2);m.renderOrder=38;m.raycast=()=>{};m.userData.fixed=true;G.gizmo.add(m);}
     if(!editing)return;
     pts.forEach((p,i)=>handle(p[0],p[1],i===selV?hSelM:hMat,{kind:'h-vert',i},1.2,1.8));
     const n=closed?pts.length:pts.length-1;for(let i=0;i<n;i++){const a=pts[i],b=pts[(i+1)%pts.length];handle((a[0]+b[0])/2,(a[1]+b[1])/2,hMid,{kind:'h-mid',i},1.2,1.2);}
@@ -3109,6 +3128,16 @@ function showArea(a){
 }
 function roadLen(r){let L=0;for(let i=0;i<r.pts.length-1;i++)L+=Math.hypot(r.pts[i+1][0]-r.pts[i][0],r.pts[i+1][1]-r.pts[i][1]);return L;}
 const RCLS=[['main','Main road'],['road','Road'],['lane','Lane'],['dirt','Dirt track']];
+let ROADSEG=-1;
+function roadSegAt(r,x,z){let best=-1,bd=1e9;for(let i=0;i<r.pts.length-1;i++){const a=r.pts[i],q=r.pts[i+1];const vx=q[0]-a[0],vz=q[1]-a[1],L2=vx*vx+vz*vz||1;let t=((x-a[0])*vx+(z-a[1])*vz)/L2;t=Math.max(0,Math.min(1,t));const d=Math.hypot(x-a[0]-vx*t,z-a[1]-vz*t);if(d<bd){bd=d;best=i;}}return best;}
+function newRoadFrom(r,pts){const n={id:'r'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),cls:r.cls,w:r.w,pts:pts.map(p=>p.slice())};S.roads.push(n);buildRoad(n);return n;}
+function detachSection(r,i){if(r.pts.length<=2)return r;remember();const P=r.pts;const A=P.slice(0,i+1),B=[P[i],P[i+1]],C=P.slice(i+1);let mid=r;
+  if(A.length>=2&&C.length>=2){r.pts=A;mid=newRoadFrom(r,B);newRoadFrom(r,C);}else if(A.length>=2){r.pts=A;mid=newRoadFrom(r,B);}else if(C.length>=2){r.pts=C;mid=newRoadFrom(r,B);}
+  buildRoad(r);rebuildRoadsSoon();save();rebuildTrees();ROADSEG=0;select('road',mid);flash('This section is now its own road. Change its type, width or delete it.');return mid;}
+function splitRoadAt(r,x,z){const i=roadSegAt(r,x,z);if(i<0)return;const a=r.pts[i],q=r.pts[i+1];const vx=q[0]-a[0],vz=q[1]-a[1],L2=vx*vx+vz*vz||1;let t=((x-a[0])*vx+(z-a[1])*vz)/L2;if(t<.03||t>.97){flash('Too close to a bend — tap a little further along the road.');return;}
+  remember();const p=[+(a[0]+vx*t).toFixed(2),+(a[1]+vz*t).toFixed(2)];const A=[...r.pts.slice(0,i+1),p],B=[p,...r.pts.slice(i+1)];r.pts=A;buildRoad(r);const n=newRoadFrom(r,B);rebuildRoadsSoon();save();rebuildTrees();ROADSEG=-1;select('road',n);flash('Road split into two parts.');}
+function deleteSection(r,i){remember();const P=r.pts;const A=P.slice(0,i+1),C=P.slice(i+1);if(A.length>=2&&C.length>=2){r.pts=A;newRoadFrom(r,C);}else if(A.length>=2)r.pts=A;else if(C.length>=2)r.pts=C;else{r.group&&r.group.parent&&r.group.parent.remove(r.group);S.roads=S.roads.filter(x=>x!==r);clearSel();save();rebuildTrees();showOverview();return;}
+  buildRoad(r);rebuildRoadsSoon();ROADSEG=-1;save();rebuildTrees();select('road',r);flash('Section removed.');}
 function showRoad(r){
   const lbl=RCLS.find(x=>x[0]===r.cls)[1];
   if(!editing){setPanel(lbl,lbl,'',`<dl><dt>Length</dt><dd>${fmt(roadLen(r))}</dd><dt>Width</dt><dd>${r.w} m</dd></dl><div class="form"><div class="row"><button class="btn" id="f_edit">Edit this road</button><button class="btn ghost" id="f_back">Overview</button></div></div>`);
@@ -3117,10 +3146,15 @@ function showRoad(r){
    <label>Width: <span id="f_wv">${r.w} m</span><input type="range" id="f_w" min="2" max="24" step="0.5" value="${r.w}"></label>
    <dl style="padding:0"><dt>Length</dt><dd>${fmt(roadLen(r))}</dd><dt>Points</dt><dd>${r.pts.length}</dd></dl>
    <p class="hint">Drag an orange point to move it. Tap a white point to add a bend there. Tap a point to select it (red) and delete it below. Drag the road itself to move all of it.</p>
+   ${r.pts.length>2&&ROADSEG>=0&&ROADSEG<r.pts.length-1?`<div class="sec" style="padding:8px 0"><b style="font-size:12px">Selected section ${ROADSEG+1} of ${r.pts.length-1}</b> <span class="hint" style="margin:0">(${fmt(Math.hypot(r.pts[ROADSEG+1][0]-r.pts[ROADSEG][0],r.pts[ROADSEG+1][1]-r.pts[ROADSEG][1]))}, shown in yellow)</span><div class="row" style="margin-top:6px"><button class="btn" id="f_sdet">Make this section separate</button><button class="btn danger" id="f_sdel">Remove this section</button></div><div class="row"><button class="btn ghost" id="f_sprev">◀ Previous section</button><button class="btn ghost" id="f_snext">Next section ▶</button></div></div>`:`<p class="hint">Tap the road anywhere to pick that section.</p>`}
+   <div class="row"><button class="btn ghost" id="f_split">Split road here…</button></div>
    <div class="row"><button class="btn danger" id="f_dp" ${selV<0||r.pts.length<=2?'disabled':''}>Delete selected point</button><button class="btn ghost" id="f_ext">Extend road</button></div>
    <div class="row"><button class="btn danger" id="f_del">Delete road</button><button class="btn ghost" id="f_back">Done</button></div></div>`);
   $('f_cls').onchange=e=>{remember();r.cls=e.target.value;buildRoad(r);save();rebuildTrees();showRoad(r);};
   let live=false;$('f_w').oninput=e=>{if(!live){remember();live=true;}r.w=+e.target.value;$('f_wv').textContent=r.w+' m';buildRoad(r);};$('f_w').onchange=()=>{live=false;save();rebuildTrees();};
+  if($('f_sdet'))$('f_sdet').onclick=()=>detachSection(r,ROADSEG);if($('f_sdel'))$('f_sdel').onclick=()=>deleteSection(r,ROADSEG);
+  if($('f_sprev'))$('f_sprev').onclick=()=>{ROADSEG=Math.max(0,ROADSEG-1);drawGizmo();showRoad(r);};if($('f_snext'))$('f_snext').onclick=()=>{ROADSEG=Math.min(r.pts.length-2,ROADSEG+1);drawGizmo();showRoad(r);};
+  $('f_split').onclick=()=>{splitMode=true;flash('Tap the road where you want to split it.');};
   $('f_dp').onclick=()=>{if(selV>=0&&r.pts.length>2){remember();r.pts.splice(selV,1);selV=-1;buildRoad(r);drawGizmo();save();showRoad(r);}};
   $('f_ext').onclick=()=>{startDraw(r.cls,r);};
   $('f_del').onclick=()=>{remember();r.group.parent&&r.group.parent.remove(r.group);S.roads=S.roads.filter(x=>x!==r);clearSel();save();rebuildTrees();showOverview();};
@@ -3331,7 +3365,7 @@ cv.addEventListener('pointerdown',e=>{
     if(h){const u=h.object.userData;const p=groundAt(e.clientX,e.clientY);
       if(u.kind.startsWith('h-')){drag={kind:u.kind,u,start:p,moved:false};gest=null;return;}
       const kindMap={building:'building',area:'area',item:'item',road:'road',wall:'wall',cwall:'cwall',tree:'tree'};
-      if(kindMap[u.kind]){const ref=u.kind==='wall'?null:u.ref;if(!sel||sel.ref!==ref||sel.kind!==u.kind)select(u.kind,ref);
+      if(kindMap[u.kind]){const ref=u.kind==='wall'?null:u.ref;if(u.kind==='road'){const sg=roadSegAt(ref,h.point.x,h.point.z);if(sel&&sel.ref===ref&&sg!==ROADSEG){ROADSEG=sg;drawGizmo();showRoad(ref);}else ROADSEG=sg;}if(!sel||sel.ref!==ref||sel.kind!==u.kind)select(u.kind,ref);
         drag={kind:'move',start:p,moved:false,orig:snapPos()};gest=null;return;}}
   }
   startGesture();
@@ -3434,7 +3468,7 @@ function endPointer(e){
       if(G.trees.visible&&(add.length===0||e.altKey||$('msTrees')&&$('msTrees').checked))(S.trees||[]).forEach(t=>{if(inBox(t[0],2,t[1]))add.push({kind:'tree',ref:t});});
       if(sel&&sel.ref&&!MS.length&&['building','item','tree','cwall','area'].includes(sel.kind))MS.push({kind:sel.kind,ref:sel.ref});sel=null;
       add.forEach(a=>{if(!msHas(a.kind,a.ref))MS.push(a);});afterMS();if(MS.length>1)flash(MS.length+' selected.');}
-    else{const h=hitAt(e.clientX,e.clientY);if(!h){msClear();clearSel();showOverview();}else{const u2=h.object.userData;if(u2&&u2.kind&&!u2.kind.startsWith('h-')){if(e.shiftKey||msMode){if(['building','item','tree','cwall','area'].includes(u2.kind))msToggle(u2.kind,u2.ref);}else{select(u2.kind,u2.kind==='wall'?null:u2.ref);openPanel();}}}}
+    else{const h=hitAt(e.clientX,e.clientY);if(!h){msClear();clearSel();showOverview();}else{const u2=h.object.userData;if(u2&&u2.kind&&!u2.kind.startsWith('h-')){if(e.shiftKey||msMode){if(['building','item','tree','cwall','area'].includes(u2.kind))msToggle(u2.kind,u2.ref);}else{if(u2.kind==='road')ROADSEG=roadSegAt(u2.ref,h.point.x,h.point.z);select(u2.kind,u2.kind==='wall'?null:u2.ref);openPanel();}}}}
     return;}
   if(drag&&drag.kind==='multi'){const d=drag;drag=null;if(d.moved){buildWallSoon();rebuildTrees();save();}else{const h=hitAt(e.clientX,e.clientY);if(h){const u=h.object.userData;MS=[];select(u.kind,u.ref);}}return;}
   if(drag){const d=drag;drag=null;
@@ -3453,12 +3487,12 @@ function endPointer(e){
   const p=groundAt(e.clientX,e.clientY);
   if(draw){if(p){let q=[p.x,p.z];if(draw.cls==='wall'){const sp=snapOn?snapWallPt(p.x,p.z,draw.target):null;if(sp){q=sp;flash('Joined to the wall / corner next to it.');}}else if(snapOn){const sp=snapRoadPt(p.x,p.z,draw.target);if(sp){q=sp;flash('Joined to the road next to it.');}}draw.pts.push(q);drawPreview();}return;}
   if(tool){const rh=TYPES[tool]&&TYPES[tool].roof?roofHit(e.clientX,e.clientY):null;const pp=rh||p;if(pp){if(!editing)setEdit(true);newThing(tool,pp.x,pp.z);setTool(null);flash(rh?'Placed on the roof of '+bTitle(rh.b)+'.':'Placed. Drag it to fine-tune.');}return;}
-  if(splitMode){const hs=hitAt(e.clientX,e.clientY);const us=hs&&hs.object.userData;splitMode=false;if(us&&us.kind==='cwall'){splitCWall(us.ref,hs.point.x,hs.point.z);}else if(us&&us.kind==='wall'){flash('The boundary wall cannot be split. Put a gate or small door in it to make an opening.');}else flash('Split cancelled — that was not a wall.');return;}
+  if(splitMode){const hs=hitAt(e.clientX,e.clientY);const us=hs&&hs.object.userData;splitMode=false;if(us&&us.kind==='cwall'){splitCWall(us.ref,hs.point.x,hs.point.z);}else if(us&&us.kind==='road'){splitRoadAt(us.ref,hs.point.x,hs.point.z);}else if(us&&us.kind==='wall'){flash('The boundary wall cannot be split. Put a gate or small door in it to make an opening.');}else flash('Split cancelled — that was not a wall.');return;}
   const h=hitAt(e.clientX,e.clientY);
   if(!h){if(msMode&&MS.length)return;clearSel();showOverview();return;}
   const u=h.object.userData;if(u.kind.startsWith('h-'))return;
   if((e.shiftKey||e.metaKey||e.ctrlKey||msMode)&&['building','item','tree','cwall','area'].includes(u.kind)){msToggle(u.kind,u.ref);openPanel();return;}
-  select(u.kind,u.kind==='wall'?null:u.ref);openPanel();
+  if(u.kind==='road')ROADSEG=roadSegAt(u.ref,h.point.x,h.point.z);select(u.kind,u.kind==='wall'?null:u.ref);openPanel();
 }
 cv.addEventListener('pointerup',endPointer);cv.addEventListener('pointercancel',endPointer);
 cv.addEventListener('pointerleave',()=>{tip.hidden=true;setHover(null);});
@@ -3769,7 +3803,7 @@ const MENUS={
  view:()=>[['Top-down','',()=>flyTo(...views.top.map(v=>v.clone()))],['Oblique','',()=>flyTo(...views.oblique.map(v=>v.clone()))],['Low pass','',()=>flyTo(...views.low.map(v=>v.clone()))],['North up','',()=>northUp()],'-',[(compare?'✓ ':'')+'Day / night compare','',()=>setCompare(!compare)],[(compare3?'✓ ':'')+'Day / night / security (3 views)','3',()=>setCompare3(!compare3)],[(night&&LOOK!=='sec'?'✓ ':'')+'Night view','N',()=>setNight(!night)],[(LOOK==='sec'?'✓ ':'')+'Security view (glowing by level)','S',()=>{if(LOOK==='sec'){setNight(false);}else{setLook('sec');}}],[(ctl.auto?'✓ ':'')+'Auto-rotate','',()=>$('spinBtn').click()],'-',[(COLORBY==='sec'&&!natural?'✓ ':'')+'Colours: by security level','',()=>{if(natural)$('natBtn').click();setColorBy('sec');}],[(COLORBY==='ppl'&&!natural?'✓ ':'')+'Colours: by number of people','',()=>{if(natural)$('natBtn').click();setColorBy('ppl');}],[(COLORBY==='model'&&!natural?'✓ ':'')+'Colours: white model','',()=>{if(natural)$('natBtn').click();setColorBy('model');}],[(natural?'✓ ':'')+'Colours: natural (real look)','',()=>{if(!natural)$('natBtn').click();}],...(photoT?['-',[(GROUNDMODE!=='photo'?'✓ ':'')+'Ground: drawn map','',()=>setGround('map')],[(GROUNDMODE==='photo'?'✓ ':'')+'Ground: real aerial photo','',()=>setGround('photo')]]:[]),'-',[(LBLMODE==='off'?'✓ ':'')+'Labels: off','L',()=>setLabelMode('off')],[(LBLMODE==='key'?'✓ ':'')+'Labels: key places only','',()=>setLabelMode('key')],[(LBLMODE==='all'?'✓ ':'')+'Labels: all','',()=>setLabelMode('all')],[(LBLSZ<.75?'✓ ':'')+'Label size: small','',()=>setLabelSize(.6)],[(LBLSZ>=.75&&LBLSZ<1?'✓ ':'')+'Label size: medium','',()=>setLabelSize(.8)],[(LBLSZ>=1?'✓ ':'')+'Label size: large','',()=>setLabelSize(1.1)],'-',[(HQ?'✓ ':'')+'Quality: high (shadows)','',()=>setQuality(true)],[(!HQ?'✓ ':'')+'Quality: fast (older devices)','',()=>setQuality(false)],'-',['Hide / show panels','H',()=>$('hidePanels').click()],['Full screen','',()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}catch(_){}}]],
  insert:()=>[['Buildings…','',()=>{railTab('add');setTimeout(()=>{const el=$('palH0');if(el)el.scrollIntoView({block:'start'});},60);}],['Security items…','',()=>{railTab('add');setTimeout(()=>{const el=$('palDuty');if(el)el.previousElementSibling.scrollIntoView({block:'start'});},60);}],'-',['Draw a road','',()=>startDraw('road')],['Draw a wall','',()=>startDraw('wall')],['Draw a power line','',()=>startDraw('power')],['Add open ground','',()=>{railTab('add');setTool('nb_ground');}],'-',['Find a building…','/',()=>{$('search').focus();}],['Overview','',()=>{clearSel();showOverview();openPanel();}],['Layers (show / hide)','',()=>railTab('show')]],
  analysis:()=>[[(DUTYMODE==='normal'?'✓ ':'')+'Normal routine (on-duty only)','',()=>setDuty('normal')],[(DUTYMODE==='lockdown'?'✓ ':'')+'Garrison lockdown','K',()=>setDuty('lockdown')],'-',['Security planning view','T',()=>tacticalView()],[(HEATON?'✓ ':'')+'Heat map in security view','',()=>{HEATON=!HEATON;buildHeat();if(SECX.heat)SECX.heat.visible=LOOK==='sec'&&HEATON;}],'-',[(ckOn('cover')?'✓ ':'')+'Camera coverage','',()=>clickCk('cover')],[(ckOn('blind')?'✓ ':'')+'CCTV blind spots','',()=>clickCk('blind')],[(ckOn('lit')?'✓ ':'')+'Light on the ground (night)','',()=>clickCk('lit')],[(ckOn('dark')?'✓ ':'')+'Dark areas','',()=>clickCk('dark')],[(ckOn('fire')?'✓ ':'')+'Weapon arcs of fire','',()=>clickCk('fire')],[(ckOn('zones')?'✓ ':'')+'Ranges: sirens, drones, fire, threats','',()=>clickCk('zones')],[(ckOn('qrfr')?'✓ ':'')+'QRF response time','',()=>clickCk('qrfr')],[(ckOn('wallchk')?'✓ ':'')+'Wall watch check','',()=>clickCk('wallchk')],'-',[(ctrlMode?'✓ ':'')+'Control room (camera feeds)','C',()=>setCtrl(!ctrlMode)],['Measure distance','M',()=>setMeasure(!measuring)]],
- help:()=>[['Keyboard and mouse','?',()=>{$('help').hidden=false;}],['About Sentinel 3D','',()=>flash('Sentinel 3D · version 2.0 · tactical security planning and 3D garrison models')]]};
+ help:()=>[['Keyboard and mouse','?',()=>{$('help').hidden=false;}],['About Sentinel 3D','',()=>{$('about').hidden=false;}]]};
 const md=$('menuDrop');let openMenu=null;
 function closeMenu(){md.hidden=true;openMenu=null;document.querySelectorAll('.menus>button').forEach(b=>b.classList.remove('open'));}
 function showMenu(btn){const k=btn.dataset.m;closeMenu();openMenu=k;btn.classList.add('open');const items=MENUS[k]();
