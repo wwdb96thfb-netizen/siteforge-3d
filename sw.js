@@ -1,6 +1,6 @@
 // Sentinel 3D app shell: opens from the copy kept on the device (works offline); updates are fetched quietly in the background.
-var CACHE = "garrison3d-v19";
-var SHELL = ["./", "./index.html", "./manifest.json", "./three.min.js", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
+var CACHE = "garrison3d-v20";
+var SHELL = ["./", "./index.html", "./manifest.json", "./three.min.js", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./logo-64.png", "./fonts/rajdhani-latin-500-normal.woff2", "./fonts/rajdhani-latin-600-normal.woff2", "./fonts/rajdhani-latin-700-normal.woff2", "./fonts/saira-condensed-latin-500-normal.woff2", "./fonts/saira-condensed-latin-700-normal.woff2", "./fonts/ibm-plex-sans-latin-400-normal.woff2", "./fonts/ibm-plex-sans-latin-500-normal.woff2", "./fonts/ibm-plex-sans-latin-600-normal.woff2", "./fonts/ibm-plex-mono-latin-400-normal.woff2", "./fonts/ibm-plex-mono-latin-500-normal.woff2", "./fonts/fonts.css"];
 self.addEventListener("install", function (e) { e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL.map(function (u) { return new Request(u, { cache: "no-cache" }); })); }).then(function () { return self.skipWaiting(); })); });
 self.addEventListener("activate", function (e) { e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k.indexOf("garrison3d-") === 0 && k !== CACHE; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); })); });
 self.addEventListener("fetch", function (e) {

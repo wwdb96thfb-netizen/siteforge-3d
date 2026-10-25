@@ -7,7 +7,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Saira+Condensed:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 /* Layout: full-screen daylight garrison model. Collapsible tool rail top-left, collapsible detail panel right (bottom sheet on phones), edit toolbar top-centre, zoom buttons bottom-right. Olive-and-brass panels, one look by choice. */
 :root{
@@ -1428,7 +1428,7 @@ const G3P=(()=>{const DBN='garrison3d',ST='projects';let dbp=null;
   const setCur=id=>{try{localStorage.setItem('g3d-current',id);}catch(_){}};
   async function boot(){window.__PID='builtin';window.__PREC=null;const pid=cur();
     if(pid!=='builtin'){try{const rec=await get(pid);if(rec&&rec.world){Object.assign(WORLD,rec.world);window.__PID=pid;window.__PREC=rec;}else setCur('builtin');}catch(_){}}
-    if(APPMODE&&'serviceWorker' in navigator&&location.protocol==='https:'){try{navigator.serviceWorker.register('sw.js');}catch(_){}}
+    if(APPMODE&&'serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){try{navigator.serviceWorker.register('sw.js');}catch(_){}}
     window.__MAIN();}
   return {get,put,del,all,cur,setCur,boot};})();
 </script>
@@ -2891,7 +2891,7 @@ function dutyCounts(){const d=S.items.filter(i=>DUTYABLE(i.type));const on=d.fil
 function updDutyBanner(){const b=$('ldBanner');if(!b)return;const c=dutyCounts();b.hidden=false;b.className=DUTYMODE==='lockdown'?'ld on':'ld';b.innerHTML=DUTYMODE==='lockdown'?`<b>⚠ GARRISON LOCKDOWN</b><span>${c.on+c.sb} positions manned · ${c.pon+c.psb} people · wall watched ${STATS.wallW!=null?STATS.wallW+'%':'…'}</span>`:`<b>Normal routine</b><span>${c.on} on duty · ${c.sb} stand-to at rest · wall watched ${STATS.wallW!=null?STATS.wallW+'%':'…'}</span>`;}
 function setNight(on){night=on;if(LOOK==='sec')applySecLook(false);LOOK=on?'night':'day';applyLook(on);
   $('nightBtn').setAttribute('aria-pressed',on);$('nightLbl').textContent=on?'Day':'Night';document.body.classList.toggle('nightmode',on);applyOverlayVis();}
-$('nightBtn').onclick=()=>setNight(!night);$('ldBtn').onclick=()=>setDuty(DUTYMODE==='lockdown'?'normal':'lockdown');setTimeout(()=>setDuty(DUTYMODE,true),300);
+$('nightBtn').onclick=()=>setNight(!night);{const off=()=>{const n=$('saveNote');document.body.classList.toggle('offline',!navigator.onLine);if(!navigator.onLine)flash('Offline: everything still works and saves on this device.');};addEventListener('online',off);addEventListener('offline',off);setTimeout(off,1500);}$('ldBtn').onclick=()=>setDuty(DUTYMODE==='lockdown'?'normal':'lockdown');setTimeout(()=>setDuty(DUTYMODE,true),300);
 let compare=false,splitX=.5,compare3=false;
 function setCompare3(on){compare3=on;if(on&&compare)setCompare(false);$('cmp3').hidden=!on;if(!on)setLook(night?'night':'day');else flash('Day, night and security views side by side.');}
 function setCompare(on){if(on&&compare3)setCompare3(false);compare=on;$('split').hidden=!on;$('cmpDay').hidden=!on;$('cmpNight').hidden=!on;placeSplit();document.querySelectorAll('#rail [data-r="cmp"]').forEach(b=>b.classList.toggle('on',on));if(on)flash('Day / night compare: drag the middle handle.');}
