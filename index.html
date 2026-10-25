@@ -788,11 +788,11 @@ if(GROUNDMODE==='photo'&&photoT)setTimeout(()=>setGround('photo'),0);
 // ---------- controls: rotate, pan, zoom together ----------
 const ctl={target:new THREE.Vector3(),r:1,th:0,ph:1,auto:false,enabled:true};
 function csync(){const o=camera.position.clone().sub(ctl.target);ctl.r=o.length();ctl.th=Math.atan2(o.x,o.z);ctl.ph=Math.acos(Math.min(1,Math.max(-1,o.y/ctl.r)));}
-function cupdate(){if(ctl.auto)ctl.th+=0.001;ctl.r=Math.max(15,Math.min(1500,ctl.r));ctl.target.y=0;const phMax=Math.min(Math.PI*0.40,Math.acos(Math.min(1,10/ctl.r)));ctl.ph=Math.max(0.02,Math.min(phMax,ctl.ph));
+function cupdate(){if(ctl.auto)ctl.th+=0.001;ctl.r=Math.max(15,Math.min(1500*Math.max(1,SK),ctl.r));ctl.target.y=0;const phMax=Math.min(Math.PI*0.40,Math.acos(Math.min(1,10/ctl.r)));ctl.ph=Math.max(0.02,Math.min(phMax,ctl.ph));
   camera.position.set(ctl.target.x+ctl.r*Math.sin(ctl.ph)*Math.sin(ctl.th),ctl.target.y+ctl.r*Math.cos(ctl.ph),ctl.target.z+ctl.r*Math.sin(ctl.ph)*Math.cos(ctl.th));camera.lookAt(ctl.target);}
 function cpan(dx,dy){const k=ctl.r*0.0016,fwd=new THREE.Vector3(Math.sin(ctl.th),0,Math.cos(ctl.th)),right=new THREE.Vector3(Math.cos(ctl.th),0,-Math.sin(ctl.th));
-  ctl.target.addScaledVector(right,-dx*k).addScaledVector(fwd,-dy*k);ctl.target.x=Math.max(-700,Math.min(700,ctl.target.x));ctl.target.z=Math.max(-350,Math.min(350,ctl.target.z));}
-function czoomAt(f,cx,cy){const p=cx!=null?groundAt(cx,cy):null;const nr=Math.max(10,Math.min(1500,ctl.r*f));const k=nr/ctl.r;ctl.r=nr;
+  ctl.target.addScaledVector(right,-dx*k).addScaledVector(fwd,-dy*k);ctl.target.x=Math.max(gx1-200,Math.min(gx2+200,ctl.target.x));ctl.target.z=Math.max(gz1-150,Math.min(gz2+150,ctl.target.z));}
+function czoomAt(f,cx,cy){const p=cx!=null?groundAt(cx,cy):null;const nr=Math.max(10,Math.min(1500*Math.max(1,SK),ctl.r*f));const k=nr/ctl.r;ctl.r=nr;
   if(p){ctl.target.x=p.x+(ctl.target.x-p.x)*k;ctl.target.z=p.z+(ctl.target.z-p.z)*k;}}
 csync();
 const cv=renderer.domElement;cv.addEventListener('contextmenu',e=>e.preventDefault());
@@ -2603,7 +2603,7 @@ function updHud(){$('compassSvg').style.transform=`rotate(${ctl.th+(S.north||0)*
   const mpp=2*ctl.r*Math.tan(camera.fov*Math.PI/360)/innerHeight;const steps=[5,10,20,25,50,100,200,250,500];let L=steps[0];for(const s3 of steps){if(s3/mpp<=140)L=s3;}
   $('scaleBar').style.width=Math.round(L/mpp)+'px';$('scaleTxt').textContent=L+' m';}
 // minimap
-const mm=$('minimap'),mctx=mm.getContext('2d');const mmBase=document.createElement('canvas');mmBase.width=mm.width;mmBase.height=mm.height;let mmDirty=true;
+const mm=$('minimap');{const ar=GD/GW;mm.width=600;mm.height=Math.max(80,Math.round(600*ar));mm.style.height=Math.round(300*ar)+'px';}const mctx=mm.getContext('2d');const mmBase=document.createElement('canvas');mmBase.width=mm.width;mmBase.height=mm.height;let mmDirty=true;
 const MMX=x=>(x-gx1)/GW*mm.width,MMZ=z=>(z-gz1)/GD*mm.height;
 function drawMMBase(){const c=mmBase.getContext('2d');c.fillStyle='#9a8d68';c.fillRect(0,0,mm.width,mm.height);try{if(gTex.image&&(gTex.image.complete||gTex.image.getContext))c.drawImage(gTex.image,0,0,mm.width,mm.height);}catch(_){}
   c.strokeStyle='#3a3d40';c.lineCap='round';S.roads.forEach(r=>{c.lineWidth=Math.max(1.5,r.w/GW*mm.width);c.strokeStyle=r.cls==='dirt'?'#9c8058':'#3a3d40';c.beginPath();r.pts.forEach((p,i)=>i?c.lineTo(MMX(p[0]),MMZ(p[1])):c.moveTo(MMX(p[0]),MMZ(p[1])));c.stroke();});
