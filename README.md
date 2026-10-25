@@ -1,4 +1,4 @@
-# SiteForge 3D
+# Sentinel 3D
 
 3D site planning app: build a site model with buildings, roads, walls, gates, posts, cameras, lights and troops; check camera coverage, lighting and blind spots; keep several named projects.
 
