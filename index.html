@@ -846,14 +846,14 @@ function facade(m){m.onBeforeCompile=sh=>{sh.uniforms.uNight=FAC.night;
    .replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
      float vert=1.0-step(0.5,abs(vWN.y));float u=abs(vWN.x)>abs(vWN.z)?vWP.z:vWP.x;float fy=fract(vWP.y/3.5),fx=fract(u/3.0);
      float win=vert*step(0.28,fy)*step(fy,0.78)*step(0.14,fx)*step(fx,0.86)*step(0.9,vWP.y);
-     diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(0.66,0.74,0.8),vec3(0.16,0.15,0.13),uNight),win*0.8);
+     diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(0.66,0.74,0.8),vec3(0.16,0.15,0.13),uNight),win*0.5);
      float lit=step(0.3,fh(vec2(floor(u/3.0),floor(vWP.y/3.5))));
      totalEmissiveRadiance+=win*uNight*mix(vec3(0.08,0.07,0.05),vec3(1.0,0.78,0.45),lit)*1.1;totalEmissiveRadiance+=uNight*(1.0-win)*vert*vec3(0.06,0.05,0.035);`);};
   m.customProgramCacheKey=()=>'facade1';return m;}
 function frost(c,k){const a=new THREE.Color(c),w=new THREE.Color(0xffffff);return a.lerp(w,k).getHex();}
 function mats(sens,sh){const key=(natural?'n':'s')+sens+sh;if(MC[key])return MC[key];let wc,rc;
   if(sens==='model'&&!natural){wc=0xf3f3ef;rc={shed:0xf6f6f3,shade:0xf6f6f3,hall:0xf8f8f6,marriage:0xf8f8f6,warehouse:0xf2f2ef,stable:0xe9e6df,cattle:0xe9e6df,bungalow:0xd9d5cc}[sh]||0xe6e7e4;}
-  else if(!natural){wc=frost(SW[sens]!=null?SW[sens]:0xdddddd,.42);rc=frost(SR[sens]!=null?SR[sens]:0xcccccc,.5);if({shed:1,shade:1,hall:1,marriage:1,warehouse:1}[sh])rc=frost(rc,.55);}
+  else if(!natural){wc=SW[sens]!=null?SW[sens]:0xdddddd;rc=SR[sens]!=null?SR[sens]:0xcccccc;}
   if(natural){wc={school:0xefe4c8,office:0xe8e0cc,mess:0xf1ead8,dining:0xe6dcc4,canteen:0xefe6d2,guard:0xe3dac2,kote:0xc9c3ad,quarters:0xe9e0c8,store:0xd8d0b8,marriage:0xe9e2d0,filter:0xd8d2c0,flats:0xeee6d2,bungalow:0xf3eee2,barracks:0xe6dcc0,workers:0xddd2b6,control:0xb7c2c8,magazine:0x9aa08e,pol:0xe8e3d0}[sh]||0xe8dfc6;rc=sh==='shed'?0x5f7a52:sh==='hall'?0xb9b3a4:sh==='mosque'?0xf2f0ea:sh==='bungalow'?0xb8573f:sh==='barracks'?0x6f7a5a:0xcfc8b6;}
   if(!natural)return MC[key]={wall:FACADE_SHAPES[sh]?facade(new THREE.MeshPhongMaterial({color:wc,specular:0x333333,shininess:22})):new THREE.MeshPhongMaterial({color:wc,specular:0x333333,shininess:22}),roof:lam(rc,{side:THREE.DoubleSide}),edge:new THREE.LineBasicMaterial({color:0x7d8791,transparent:true,opacity:.3}),glass:lam(0xbfd0da,{emissive:night?0x6b4a12:0}),trim:lam(0xffffff)};
   return MC[key]={wall:FACADE_SHAPES[sh]?facade(lam(wc)):lam(wc),roof:lam(rc,{side:THREE.DoubleSide}),edge:new THREE.LineBasicMaterial({color:0x2b261c,transparent:true,opacity:.35}),glass:lam(0x34434d,{emissive:night?0x6b4a12:0}),trim:lam(0xf1ece0)};}
@@ -903,7 +903,7 @@ let _solM=null;function solarMat(){if(_solM)return _solM;const c=document.create
   const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;return _solM=new THREE.MeshPhongMaterial({map:t,color:0xffffff,specular:0x6688aa,shininess:60});}
 function solarRoof(g,w,d,y){const along=w>=d,L=along?w:d,D=along?d:w;const rows=Math.max(1,Math.floor((D-2)/2.6)),cols=Math.max(1,Math.floor((L-2)/2.2));const pw=Math.min(L-2,cols*2.2)-.4;if(pw<2)return;
   for(let r=0;r<rows;r++){const off=-D/2+1.4+r*2.6;const p=new THREE.Mesh(new THREE.BoxGeometry(along?pw:1.6,.08,along?1.6:pw),solarMat());p.position.set(along?0:off,y+.45,along?off:0);if(along)p.rotation.x=-.32;else p.rotation.z=.32;p.castShadow=true;g.add(p);}}
-const _gtw={};function glassTower(c){return _gtw[c]||(_gtw[c]=new THREE.MeshPhongMaterial({color:c,specular:0xffffff,shininess:90,transparent:true,opacity:.84,emissive:night?0x7a5a2a:0}));}
+const _gtw={};function glassTower(c){return _gtw[c]||(_gtw[c]=new THREE.MeshPhongMaterial({color:c,specular:0xffffff,shininess:90,transparent:true,opacity:.92,emissive:night?0x7a5a2a:0}));}
 function buildBld(b){
   if(b.group){G.buildings.remove(b.group);disposeGroup(b.group);G.numbers.remove(b.numLabel);}
   const sens=colorKey(b);const sh=shapeOf(b);b.shape=sh;const M=mats(sens,sh);if(sh==='marriage'||sh==='canteen'||sh==='store')b.front=sh==='marriage'||b.info.inside==='Outside wall'?mainRoadSide(b):null;
@@ -975,7 +975,7 @@ function buildBld(b){
     const hit=new THREE.Mesh(new THREE.BoxGeometry(w,1,d),new THREE.MeshBasicMaterial({visible:false}));hit.position.y=.5;g.add(hit);
   }else if(sh==='flats'){
     const FL=(g,w,d)=>{const add=(mesh,th)=>{mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);addEdges(g,mesh,M.edge,th);return mesh;};
-    const body=add(new THREE.Mesh(new THREE.BoxGeometry(w,H,d),!natural?glassTower(sens==='model'?0xcfdde6:frost(SW[sens]||0xcccccc,.55)):M.wall));body.position.y=H/2;
+    const body=add(new THREE.Mesh(new THREE.BoxGeometry(w,H,d),!natural?glassTower(sens==='model'?0xcfdde6:frost(SW[sens]||0xcccccc,.12)):M.wall));body.position.y=H/2;
     const floors=Math.max(1,Math.round(H/3.5));if(!natural){for(let f=1;f<floors;f++){const sl=new THREE.Mesh(new THREE.BoxGeometry(w+.25,.22,d+.25),M.trim);sl.position.y=f*H/floors;g.add(sl);}[[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([sx,sz])=>{const c=new THREE.Mesh(new THREE.BoxGeometry(.5,H,.5),M.trim);c.position.set(sx*(w/2-.1),H/2,sz*(d/2-.1));g.add(c);});}
     const bal=lam(0xf1ece0),rail=lam(0x5b6168);const longX=w>=d;const L=longX?w:d,D=longX?d:w;
     for(let f=0;f<floors;f++){const y=(f+.55)*H/floors;
