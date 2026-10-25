@@ -1477,6 +1477,7 @@ window.__MAIN=(function(){
 const $=id=>document.getElementById(id);
 const PID=window.__PID||'builtin',PREC=window.__PREC;
 try{
+if(location.protocol==='file:')window.__dbg=s=>eval(s);
 const fmt=m=>`${m.toFixed(0)} m · ${(m*3.2808).toFixed(0)} ft`;
 const clone=o=>JSON.parse(JSON.stringify(o));
 const SITE=WORLD.site;const gx1=SITE[0],gz1=SITE[1],gx2=SITE[2],gz2=SITE[3];const GW=gx2-gx1,GD=gz2-gz1,GCX=(gx1+gx2)/2,GCZ=(gz1+gz2)/2;const SK=Math.min(5,Math.max(.15,Math.max(GW,GD)/986));
@@ -1497,7 +1498,7 @@ const r2=v=>Math.round(v*100)/100;
 function cleanB(b){const o={mir:b.mir||undefined,num:b.num,cx:r2(b.cx),cz:r2(b.cz),w:r2(b.w),d:r2(b.d),rot:Math.round(b.rot||0),h:r2(b.h),name:b.name,info:b.info};if(b.parts&&b.parts.length)o.parts=b.parts;return o;}
 function cleanW(w){const o={id:w.id,h:r2(w.h),t:r2(w.t),col:w.col||'offwhite',top:w.top||'none',pts:w.pts.map(p=>[r2(p[0]),r2(p[1])])};if(w.outer)o.outer=true;if(w.kind)o.kind=w.kind;return o;}
 function cleanR(r){return {id:r.id,cls:r.cls,w:r.w,pts:r.pts.map(p=>[r2(p[0]),r2(p[1])])};}
-function cleanA(a){const o=cleanA0(a);if(a.fence)o.fence=true;return o;}
+function cleanA(a){const o=cleanA0(a);if(a.fence)o.fence=true;if(a.track)o.track=true;if(a.trackW)o.trackW=a.trackW;return o;}
 function cleanA0(a){return {id:a.id,name:a.name,info:a.info,kind:a.kind,cx:r2(a.cx),cz:r2(a.cz),w:r2(a.w),d:r2(a.d),rot:Math.round(a.rot||0)};}
 function cleanI(it){const o={id:it.id,type:it.type,name:it.name,x:r2(it.x),z:r2(it.z),rot:Math.round(it.rot||0),who:it.who||'',notes:it.notes||'',status:it.status||'manned'};if(it.onWall){o.onWall=it.onWall;o.mh=it.mh;}if(it.inWall)o.inWall=true;if(it.wid)o.wid=it.wid;if(it.online===false)o.online=false;if(it.y)o.y=r2(it.y);if(it.len)o.len=r2(it.len);if(it.people!=null)o.people=+it.people;if(it.wpn)o.wpn=it.wpn;if(it.hh)o.hh=r2(it.hh);if(it.range!=null){o.range=it.range;o.fov=it.fov;}if(it.alt)o.alt=it.alt;if(it.duty)o.duty=it.duty;if(it.mir)o.mir=true;if(it.path&&it.path.length)o.path=it.path.map(p=>[r2(p[0]),r2(p[1])]);if(it.speed)o.speed=it.speed;return o;}
 function save(){scheduleAnalysis();if(typeof buildBeamsSoon==='function')buildBeamsSoon();if(typeof buildLinks==='function'){mmDirty=true;buildLinks();if(ctrlMode)buildTiles();}
@@ -1814,7 +1815,10 @@ function buildArea(a){
     }
   else geo=new THREE.PlaneGeometry(w,d);
   const m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({visible:false}));m.rotation.x=-Math.PI/2;m.position.y=0.05;m.userData={kind:'area',ref:a};g.add(m);
-  if(a.fence){const fm=lam(0xf3efe2);[[w,0,-d/2],[w,0,d/2],[d,1,w/2],[d,1,-w/2]].forEach(([L,rt,x,z])=>{const f=new THREE.Mesh(new THREE.BoxGeometry(L,1.6,.35),fm);if(rt){f.rotation.y=Math.PI/2;f.position.set(x,.8,0);}else f.position.set(0,.8,z);f.castShadow=true;f.userData={kind:'area',ref:a};g.add(f);});}
+  if(a.fence){const fm=lam(0xf3efe2);[[w,0,0,-d/2],[w,0,0,d/2],[d,1,w/2,0],[d,1,-w/2,0]].forEach(([L,rt,x,z])=>{const f=new THREE.Mesh(new THREE.BoxGeometry(L,1.6,.35),fm);if(rt){f.rotation.y=Math.PI/2;f.position.set(x,.8,0);}else f.position.set(0,.8,z);f.castShadow=true;f.userData={kind:'area',ref:a};g.add(f);});}
+  if(a.track){const tw=a.trackW||5,tm=new THREE.MeshLambertMaterial({color:0x8a8c87,toneMapped:false});const y=.42;
+    {const gm=new THREE.MeshLambertMaterial({color:0x6a9e42,toneMapped:false});const gr=new THREE.Mesh(new THREE.PlaneGeometry(w-2*tw,d-2*tw),gm);gr.rotation.x=-Math.PI/2;gr.position.y=y-.01;gr.receiveShadow=true;gr.userData={kind:'area',ref:a};g.add(gr);}[[w,tw,0,-d/2+tw/2],[w,tw,0,d/2-tw/2],[tw,d-2*tw,-w/2+tw/2,0],[tw,d-2*tw,w/2-tw/2,0]].forEach(([a1,b1,x,z])=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(a1,b1),tm);m.rotation.x=-Math.PI/2;m.position.set(x,y,z);m.receiveShadow=true;m.userData={kind:'area',ref:a};g.add(m);});
+    const lm=new THREE.LineBasicMaterial({color:0xf2f2ee});[tw*.5].forEach(o=>{const pts=[[-w/2+o,-d/2+o],[w/2-o,-d/2+o],[w/2-o,d/2-o],[-w/2+o,d/2-o],[-w/2+o,-d/2+o]].map(([x,z])=>new THREE.Vector3(x,y+.02,z));g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),lm));});}
   if(a.kind==='range'){const lanes=Math.max(3,Math.round(w/8));const bm=lam(0xa98b5e);for(let k=0;k<=lanes;k++){const x=-w/2+w*k/lanes;const br=new THREE.Mesh(new THREE.BoxGeometry(1.2,1.2,d*.92),bm);br.position.set(x,.6,0);br.castShadow=true;br.userData={kind:'area',ref:a};g.add(br);}
     const butt=new THREE.Mesh(new THREE.BoxGeometry(w,6,6),lam(0x9c7f55));butt.position.set(0,3,-d/2+3);butt.castShadow=true;butt.userData={kind:'area',ref:a};g.add(butt);
     for(let k=0;k<lanes;k++){const tg=new THREE.Mesh(new THREE.BoxGeometry(1.2,1.6,.15),lam(0xf4f4f0));tg.position.set(-w/2+w*(k+.5)/lanes,5.2,-d/2+6.2);g.add(tg);}
@@ -1917,7 +1921,7 @@ function prism(len,span,rise,alongX,m){const s=new THREE.Shape();s.moveTo(-span/
   const g=new THREE.ExtrudeGeometry(s,{depth:len,bevelEnabled:false});g.translate(0,0,-len/2);const mesh=new THREE.Mesh(g,m);if(alongX)mesh.rotation.y=Math.PI/2;return mesh;}
 const KON={};let showOutside=true,showInside=true;
 function applyVis(b){const v=SON[b.info.importance||'']&&KON[b.shape]!==false&&(b.info.inside==='Outside wall'?showOutside:showInside);b.group.visible=v;b.numLabel.visible=v;if(b.nameLabel)b.nameLabel.visible=v;}
-let _tin={};function tinMat(kind,tint){const key=kind+(tint||'');if(_tin[key])return _tin[key];if(tint!=null){const b=tinMat(kind);const m=b.clone();m.color.setHex(tint);return _tin[key]=m;}const c=document.createElement('canvas');c.width=64;c.height=8;const x=c.getContext('2d');const base=kind==='green'?[63,107,74]:[150,158,164];
+let _tin={};function tinMat(kind,tint){const key=kind+(tint||'');if(_tin[key])return _tin[key];if(tint!=null){const b=tinMat(kind);const m=b.clone();m.color.setHex(tint);m.userData.secCol=tint;return _tin[key]=m;}const c=document.createElement('canvas');c.width=64;c.height=8;const x=c.getContext('2d');const base=kind==='green'?[63,107,74]:[150,158,164];
   for(let i=0;i<64;i++){const k=0.82+0.18*Math.cos(i/64*Math.PI*8);x.fillStyle=`rgb(${base.map(v=>Math.round(v*k)).join(',')})`;x.fillRect(i,0,1,8);}
   const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;t.repeat.set(1,1);return _tin[kind]=new THREE.MeshStandardMaterial({map:t,roughness:.45,metalness:.35,side:THREE.DoubleSide});}
 function addUV(geo,sc){const p=geo.attributes.position;const n=geo.attributes.normal;const uv=[];for(let i=0;i<p.count;i++){const ax=Math.abs(n?n.getX(i):0),az=Math.abs(n?n.getZ(i):1);uv.push((ax>az?p.getZ(i):p.getX(i))/sc,p.getY(i)/sc+(ax>az?p.getX(i):p.getZ(i))/sc);}geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));return geo;}
@@ -2405,21 +2409,21 @@ function worldTreeSpots(){const inBld=(x,z,m)=>S.blds.some(b=>{const [lx,lz]=toL
   return (WORLD.trees||[]).filter(([x,z,r])=>!inBld(x,z,.3)&&!segs.some(([a,b,hw])=>segD(x,z,a,b)<hw+.2)).map(t=>t.slice());}
 function ownTrees(){if(!S.trees)S.trees=worldTreeSpots();return S.trees;}
 let treeQ=false;function rebuildTreesSoon(){if(treeQ)return;treeQ=true;requestAnimationFrame(()=>{treeQ=false;rebuildTrees();});}
+function treeRoom(x,z){let m=1e9;for(const b of S.blds){const dx0=x-b.cx,dz0=z-b.cz,R=Math.max(b.w,b.d)/2+14;if(Math.abs(dx0)>R||Math.abs(dz0)>R)continue;const a=(b.rot||0)*Math.PI/180,c=Math.cos(a),s=Math.sin(a);const lx=dx0*c-dz0*s,lz=dx0*s+dz0*c;const ox=Math.max(Math.abs(lx)-b.w/2,0),oz=Math.max(Math.abs(lz)-b.d/2,0);const dd=(ox||oz)?Math.hypot(ox,oz):-1;if(dd<m)m=dd;}return m-1;}
 function rebuildTrees(){
   while(G.trees.children.length){const c=G.trees.children[0];G.trees.remove(c);if(c.geometry)c.geometry.dispose();}
   const all=S.trees||worldTreeSpots();if(!S.trees)S.trees=all;
-  const kinds={tree:[],bush:[],palm:[]};all.forEach((t,i)=>{(kinds[t[3]||'tree']||kinds.tree).push(i);});
+  const kinds={tree:[],bush:[],palm:[]};const RR={};all.forEach((t,i)=>{const room=treeRoom(t[0],t[1]);const k=t[3]||'tree';const r=k==='palm'?Math.min(t[2],room+1.5):Math.min(t[2],room);if(r<(k==='bush'?.8:2.2))return;RR[i]=r;(kinds[k]||kinds.tree).push(i);});const rOf=i=>RR[i];
   const m=new THREE.Matrix4(),q=new THREE.Quaternion(),sc=new THREE.Vector3(),p=new THREE.Vector3(),col=new THREE.Color(),up=new THREE.Vector3(0,1,0);
   const mk=(geo,mat,idx)=>{const im=new THREE.InstancedMesh(geo,mat,Math.max(1,idx.length));im.count=idx.length;im.castShadow=true;im.userData={kind:'tree',idx};G.trees.add(im);return im;};
-  if(kinds.tree.length){const idx=kinds.tree;const tr=mk(new THREE.CylinderGeometry(.14,.2,1,6),lam(0x6b5236),idx),cr=mk(new THREE.IcosahedronGeometry(1,2),lam(0xffffff,{roughness:.95}),idx),cr2=mk(new THREE.IcosahedronGeometry(1,2),lam(0xffffff,{roughness:.95}),idx);
+  if(kinds.tree.length){const idx=kinds.tree;const tr=mk(new THREE.CylinderGeometry(.14,.2,1,6),lam(0x6b5236),idx),cr=mk(new THREE.SphereGeometry(1,16,12),lam(0xffffff,{roughness:.95}),idx);
     const sh0=new THREE.InstancedMesh(new THREE.CircleGeometry(1,20),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.22,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2}),idx.length);sh0.raycast=()=>{};G.trees.add(sh0);const qd=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),-Math.PI/2);
-    idx.forEach((ti,k)=>{const [x,z,r]=all[ti];let sd=(Math.abs(x*73+z*31)|0)%997+1;const rnd=()=>{sd=(sd*16807)%2147483647;return sd/2147483647;};const th=Math.max(1.4,r*.75);
+    idx.forEach((ti,k)=>{const [x,z]=all[ti],r=rOf(ti);let sd=(Math.abs(x*73+z*31)|0)%997+1;const rnd=()=>{sd=(sd*16807)%2147483647;return sd/2147483647;};const th=Math.max(1.4,r*.75);
       m.compose(p.set(x,th/2,z),q.set(0,0,0,1),sc.set(1,th,1));tr.setMatrixAt(k,m);m.compose(p.set(x,th+r*.7,z),q.setFromAxisAngle(up,rnd()*6),sc.set(r,r*.85,r));cr.setMatrixAt(k,m);const hu=.25+rnd()*.06,sa=.38+rnd()*.15,li=.22+rnd()*.08;cr.setColorAt(k,col.setHSL(hu,sa,li));
-      const a2=rnd()*6.28;m.compose(p.set(x+Math.cos(a2)*r*.45,th+r*.95,z+Math.sin(a2)*r*.45),q.setFromAxisAngle(up,rnd()*6),sc.set(r*.7,r*.62,r*.7));cr2.setMatrixAt(k,m);cr2.setColorAt(k,col.setHSL(hu,sa,li+.05));
       m.compose(p.set(x+.4,.05,z+.3),qd,sc.set(r*1.15,r*1.15,1));sh0.setMatrixAt(k,m);});}
-  if(kinds.bush.length){const idx=kinds.bush;const cr=mk(new THREE.IcosahedronGeometry(1,1),lam(0xffffff),idx);idx.forEach((ti,k)=>{const [x,z,r]=all[ti];m.compose(p.set(x,r*.55,z),q.setFromAxisAngle(up,x),sc.set(r,r*.6,r));cr.setMatrixAt(k,m);cr.setColorAt(k,col.setHSL(.27,.4,.28));});}
+  if(kinds.bush.length){const idx=kinds.bush;const cr=mk(new THREE.IcosahedronGeometry(1,1),lam(0xffffff),idx);idx.forEach((ti,k)=>{const [x,z]=all[ti],r=rOf(ti);m.compose(p.set(x,r*.55,z),q.setFromAxisAngle(up,x),sc.set(r,r*.6,r));cr.setMatrixAt(k,m);cr.setColorAt(k,col.setHSL(.27,.4,.28));});}
   if(kinds.palm.length){const idx=kinds.palm;const tr=mk(new THREE.CylinderGeometry(.16,.26,1,6),lam(0x8a6a48),idx),cr=mk(new THREE.ConeGeometry(1,.5,7),lam(0x4f7a32),idx);
-    idx.forEach((ti,k)=>{const [x,z,r]=all[ti];const th=Math.max(4,r*3.2);m.compose(p.set(x,th/2,z),q.set(0,0,0,1),sc.set(1,th,1));tr.setMatrixAt(k,m);m.compose(p.set(x,th,z),q.setFromAxisAngle(up,x),sc.set(r*1.3,r*.6,r*1.3));cr.setMatrixAt(k,m);});}
+    idx.forEach((ti,k)=>{const [x,z]=all[ti],r=rOf(ti);const th=Math.max(4,r*3.2);m.compose(p.set(x,th/2,z),q.set(0,0,0,1),sc.set(1,th,1));tr.setMatrixAt(k,m);m.compose(p.set(x,th,z),q.setFromAxisAngle(up,x),sc.set(r*1.3,r*.6,r*1.3));cr.setMatrixAt(k,m);});}
 }
 
 // ---------- wall ----------
@@ -2892,6 +2896,8 @@ function applySecLook(on){const Mv=Object.values(MC);
       else{const o=mm.userData.o;mm.transparent=o.t;mm.opacity=o.op;mm.depthWrite=o.dw;mm.color.setHex(o.c);if(mm.emissive)mm.emissive.setHex(o.e);}if(mm.userData.lt!==on){mm.userData.lt=on;mm.needsUpdate=true;}});
     if(m.edge){if(on){m.edge.color.set(new THREE.Color(SR[m.sens]!=null?SR[m.sens]:0x888888).lerp(new THREE.Color(0xffffff),.35));m.edge.opacity=1;}}});
   [typeof _mw!=='undefined'?_mw:null,typeof _msh!=='undefined'?_msh:null].forEach(mm=>{if(!mm)return;if(!mm.userData.o)mm.userData.o={op:mm.opacity,t:mm.transparent,c:mm.color.getHex()};if(on){mm.transparent=true;mm.opacity=.18;mm.color.setHex(0x9fb3c8);}else{mm.transparent=mm.userData.o.t;mm.opacity=mm.userData.o.op;mm.color.setHex(mm.userData.o.c);}if(mm.userData.lt!==on){mm.userData.lt=on;mm.needsUpdate=true;}});
+  Object.values(_tin).forEach(mm=>{if(mm.userData.secCol==null)return;if(!mm.userData.o)mm.userData.o={t:mm.transparent,op:mm.opacity,e:mm.emissive.getHex(),c:mm.color.getHex(),dw:mm.depthWrite};const o=mm.userData.o;
+    if(on){const col=new THREE.Color(mm.userData.secCol);mm.transparent=true;mm.opacity=.42;mm.depthWrite=false;mm.color.copy(col).multiplyScalar(.6);mm.emissive.copy(col).multiplyScalar(.75);}else{mm.transparent=o.t;mm.opacity=o.op;mm.depthWrite=o.dw;mm.color.setHex(o.c);mm.emissive.setHex(o.e);}if(mm.userData.lt!==on){mm.userData.lt=on;mm.needsUpdate=true;}});
   if(site.material.userData.o==null)site.material.userData.o=site.material.color.getHex();site.material.color.setHex(on?0x2a3340:site.material.userData.o);
   G.trees.visible=!on&&G.trees.userData.v!==false;
   // perimeter walls glow cyan
@@ -3132,11 +3138,13 @@ function showArea(a){
     $('f_edit').onclick=()=>{setEdit(true);select('area',a);};$('f_back').onclick=()=>{clearSel();showOverview();};return;}
   setPanel('Editing ground',a.name,'',`<div class="form"><label>Name<input type="text" id="f_name" value="${esc(a.name)}"></label>
    <label>Kind<select id="f_kind">${[['parade','Parade ground'],['sports','Sports courts'],['turf','Football / turf'],['riding','Riding track (oval)'],['field','Grass field'],['open','Open sand ground'],['range','Firing range']].map(([k,l])=>`<option value="${k}" ${k===a.kind?'selected':''}>${l}</option>`).join('')}</select></label>
+   <label class="sw" style="font-size:12px"><input type="checkbox" id="f_trk" ${a.track?'checked':''}> Jogging track around it</label><label class="sw" style="font-size:12px"><input type="checkbox" id="f_fen" ${a.fence?'checked':''}> Low wall around it</label>
    <label>Turn: <span id="f_rv">${Math.round(a.rot||0)}°</span><input type="range" id="f_r" min="-180" max="180" value="${Math.round(a.rot||0)}"></label>
    <dl style="padding:0"><dt>Size</dt><dd>${a.w.toFixed(0)} × ${a.d.toFixed(0)} m · ${(a.w*a.d/4046.86).toFixed(1)} acres</dd></dl>
    <p class="hint">Drag the ground to move it. Orange points resize it, the blue point turns it.</p>
    <div class="row"><button class="btn danger" id="f_del">Delete ground</button><button class="btn ghost" id="f_back">Done</button></div></div>`);
   $('f_name').onchange=e=>{remember();a.name=e.target.value.trim()||a.name;buildArea(a);save();};
+  $('f_trk').onchange=e=>{remember();a.track=e.target.checked;buildArea(a);save();};$('f_fen').onchange=e=>{remember();a.fence=e.target.checked;buildArea(a);buildPoloWall();save();};
   $('f_kind').onchange=e=>{remember();a.kind=e.target.value;buildArea(a);save();};
   let live=false;$('f_r').oninput=e=>{if(!live){remember();live=true;}a.rot=+e.target.value;$('f_rv').textContent=a.rot+'°';buildArea(a);drawGizmo();};$('f_r').onchange=()=>{live=false;save();};
   $('f_del').onclick=()=>{remember();G.areas.remove(a.group);G.areaLabels.remove(a.label);S.areas=S.areas.filter(x=>x!==a);clearSel();save();showOverview();};
@@ -3372,7 +3380,7 @@ cv.addEventListener('pointerdown',e=>{
   down={x:e.clientX,y:e.clientY,btn:e.button,t:performance.now()};
   if(ptrs.size>1){drag=null;startGesture();return;}
   if(e.button===0&&!draw&&!tool&&!measuring&&(e.shiftKey||msMode||(editing&&e.pointerType!=='touch'))){const h0=hitAt(e.clientX,e.clientY);const u0=h0&&h0.object.userData;
-    const blocks=h0&&(u0.kind.startsWith('h-')||['building','item','cwall'].includes(u0.kind)||(sel&&sel.ref===u0.ref&&u0.ref)||msHas(u0.kind,u0.ref)||(u0.kind==='wall'&&sel&&sel.kind==='wall'));
+    const blocks=h0&&(u0.kind.startsWith('h-')||['building','item','cwall','area'].includes(u0.kind)||(sel&&sel.ref===u0.ref&&u0.ref)||msHas(u0.kind,u0.ref)||(u0.kind==='wall'&&sel&&sel.kind==='wall'));
     if(!blocks){drag={kind:'box',x0:e.clientX,y0:e.clientY,moved:false};gest=null;return;}}
   if(!editing&&e.button===0&&!draw&&!tool&&sel&&sel.kind==='item'){const hh=hitAt(e.clientX,e.clientY,true);if(hh&&hh.object.userData.kind&&hh.object.userData.kind.startsWith('h-')){setEdit(true);select('item',sel.ref);}}
   if(editing&&e.button===0&&!draw&&!tool){
