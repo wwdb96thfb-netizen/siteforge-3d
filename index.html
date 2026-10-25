@@ -582,6 +582,7 @@ const STOREYS=[['Ground only',3.8],['2',7.3],['3',10.8],['4',14.3],['5',17.8],['
 const TYPES={
   maingate:{label:'Main gate',col:'#d9b44a',staff:true,grp:'Gates and posts',r:14},
   gate:{label:'Side gate',col:'#e0c46a',staff:true,grp:'Gates and posts',r:8},
+  guardhut:{label:'Gate guard hut',col:'#e7dfc8',staff:true,grp:'Gates and posts',r:3,mk:'ghut',solid:2.5},
   door:{label:'Small door',col:'#c9c3ad',grp:'Gates and posts',r:3},
   post:{label:'Sentry post (2-storey)',col:'#a7d36a',staff:true,grp:'Gates and posts',solid:2.6,r:6,ring:true},
   tower:{label:'Watch tower',col:'#8fbf5a',staff:true,grp:'Gates and posts',solid:3,r:6,ring:true},
@@ -640,11 +641,11 @@ const TYPES={
   thr_dark:{label:'Weak point: dark area',col:'#7c4dff',grp:'Threats and weak points',r:4,mk:'weak',thr:1},
   cordon:{label:'Cordon point',col:'#ff5252',staff:true,grp:'Threats and weak points',r:4,mk:'cordon',zone:{range:40}},
 };
-const DEFPPL={qrfteam:5,patrol:2,rp:1,dutyoffr:1,ctrlroom:2,kote2:1,firepos:2,scanner:1,wtgate:1,visitor:2,ambulance:2,firstaid:1,cordon:2,maingate:6,gate:3,post:2,tower:2,bunker:3,barrier:4,qrf:8,rifleman:1,mg:2,sniper:1,altpos:0,jeep:2,truck:2,apc:3,tank:4,bowser:1,bike:1};
+const DEFPPL={guardhut:1,qrfteam:5,patrol:2,rp:1,dutyoffr:1,ctrlroom:2,kote2:1,firepos:2,scanner:1,wtgate:1,visitor:2,ambulance:2,firstaid:1,cordon:2,maingate:6,gate:3,post:2,tower:2,bunker:3,barrier:4,qrf:8,rifleman:1,mg:2,sniper:1,altpos:0,jeep:2,truck:2,apc:3,tank:4,bowser:1,bike:1};
 function peopleI(it){return it.people!=null?+it.people:(DEFPPL[it.type]||0);}
 const PALS={'Security duties':'palDuty','Access control':'palAcc','Alarms and emergency':'palEmg','Threats and weak points':'palThr','Gates and posts':'palSec','Obstacles':'palObs','Troops and weapons':'palTrp','Vehicles':'palVeh','Lighting':'palLgt','Cameras':'palCam'};
 function mkIcon(col,gl,thr){return `<svg viewBox="0 0 26 26">${thr?`<path d="M13 2 L25 23 H1Z" fill="${col}"/>`:`<circle cx="13" cy="13" r="11" fill="${col}" stroke="#2b3a49" stroke-width="1"/>`}<text x="13" y="${thr?20:17.5}" text-anchor="middle" font-family="Arial" font-weight="700" font-size="${gl.length>2?8:10}" fill="${(col==='#ffffff'||col==='#fff2c4'||col==='#ffe066'||col==='#f2b705')?'#17212b':'#fff'}">${gl}</text></svg>`;}
-const NEWGL={qrfteam:'QRF',patrol:'PTL',rp:'RP',dutyoffr:'DO',ctrlroom:'CR',kote2:'K',firepos:'FP',drone:'UAV',hydblock:'HB',boombar:'BB',scanner:'SCN',wtgate:'WTG',visitor:'VP',siren:'AL',firept:'FF',ambulance:'+',firstaid:'+',rv:'RV',searchlt:'SL',solarlt:'SOL',thr_snipe:'S',thr_vbied:'V',thr_drone:'D',thr_surv:'O',thr_entry:'!',thr_wire:'W',thr_dark:'?',cordon:'C'};
+const NEWGL={guardhut:'GH',qrfteam:'QRF',patrol:'PTL',rp:'RP',dutyoffr:'DO',ctrlroom:'CR',kote2:'K',firepos:'FP',drone:'UAV',hydblock:'HB',boombar:'BB',scanner:'SCN',wtgate:'WTG',visitor:'VP',siren:'AL',firept:'FF',ambulance:'+',firstaid:'+',rv:'RV',searchlt:'SL',solarlt:'SOL',thr_snipe:'S',thr_vbied:'V',thr_drone:'D',thr_surv:'O',thr_entry:'!',thr_wire:'W',thr_dark:'?',cordon:'C'};
 const ICON={
   post:'<svg viewBox="0 0 26 26"><rect x="6" y="14" width="13" height="10" fill="#6b7046"/><rect x="5" y="5" width="15" height="8" fill="#6b7046"/><rect x="4" y="3" width="17" height="2" fill="#4b5232"/><rect x="9" y="8" width="7" height="2" fill="#1d2318"/><path d="M19 23 L24 13" stroke="#cfc8b6" stroke-width="1.5"/></svg>',
   bunker:'<svg viewBox="0 0 26 26"><ellipse cx="13" cy="19" rx="10" ry="4" fill="#c9b27a"/><ellipse cx="13" cy="15" rx="9" ry="3.5" fill="#b8a77a"/><rect x="3" y="9" width="20" height="2" fill="#5f7a52"/></svg>',
@@ -1455,6 +1456,7 @@ function mkMesh(g,it,T){const col=new THREE.Color(T.col);const M=lam(col.getHex(
   const person=(x,z,c)=>{add(new THREE.Mesh(new THREE.CylinderGeometry(.28,.32,1.3,8),c||M),x,.65,z);add(new THREE.Mesh(new THREE.SphereGeometry(.22,8,6),lam(0x6b4f3a)),x,1.5,z);add(new THREE.Mesh(new THREE.CylinderGeometry(.25,.25,.12,8),D),x,1.68,z);};
   switch(T.mk){
   case 'people':{const n=T.n||1;for(let k=0;k<n;k++){const a=k/n*Math.PI*2;person(n>1?Math.cos(a)*1.1:0,n>1?Math.sin(a)*1.1:0);}const pl=new THREE.Mesh(new THREE.CircleGeometry(2.2,24),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.35,depthWrite:false}));pl.rotation.x=-Math.PI/2;pl.position.y=.06;g.add(pl);break;}
+  case 'ghut':{const h=hut(2.6,2.6,2.6);g.add(h);break;}
   case 'hut':{add(new THREE.Mesh(new THREE.BoxGeometry(4,2.8,3.2),M),0,1.4,0);add(new THREE.Mesh(new THREE.BoxGeometry(4.4,.25,3.6),W),0,2.9,0);add(new THREE.Mesh(new THREE.BoxGeometry(1,2,.1),D),0,1,1.62);break;}
   case 'firepos':{for(let k=0;k<7;k++){const a=-Math.PI*.75+k/6*Math.PI*1.5;const sb=new THREE.Mesh(new THREE.BoxGeometry(.7,.6,.4),lam(0xc9b27a));sb.position.set(Math.cos(a)*1.3,.3,Math.sin(a)*1.3);sb.rotation.y=-a;sb.castShadow=true;g.add(sb);const s2=sb.clone();s2.position.y=.85;g.add(s2);}person(0,0,lam(0x6b7046));break;}
   case 'drone':{const y=Math.max(12,it.alt||25);const b=add(new THREE.Mesh(new THREE.BoxGeometry(.8,.25,.8),D),0,y,0);[[1,1],[1,-1],[-1,1],[-1,-1]].forEach(([a,c])=>{add(new THREE.Mesh(new THREE.BoxGeometry(1.2,.08,.1),D),a*.5,y,c*.5).rotation.y=a*c*Math.PI/4;const r=new THREE.Mesh(new THREE.CylinderGeometry(.5,.5,.04,16),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.7}));r.position.set(a*.9,y+.12,c*.9);g.add(r);});
@@ -1487,17 +1489,12 @@ function itemMesh(it){
       const cap=new THREE.Mesh(new THREE.BoxGeometry(pw+.4,.4,pw+.4),lam(0x6f7a5a));cap.position.set(s*(span/2+pw/2),ph+.2,0);g.add(cap);});
     if(it.type==='maingate'){const beam=new THREE.Mesh(new THREE.BoxGeometry(span+pw*2+.6,1.4,1.4),lam(0x6f7a5a));beam.position.y=ph+.9;beam.castShadow=true;g.add(beam);
       const board=new THREE.Mesh(new THREE.BoxGeometry(span*.7,1,.1),lam(0x1f3d1c));board.position.set(0,ph+.9,.75);g.add(board);
-      const h=hut(3,2.8,3);h.position.set(span/2+pw+3,0,-2.5);g.add(h);const h2=hut(3,2.8,3);h2.position.set(-(span/2+pw+3),0,-2.5);g.add(h2);}
-    else{const h=hut(2.4,2.5,2.4);h.position.set(span/2+pw+2.2,0,-2);g.add(h);}
-    {const sw=new THREE.Mesh(new THREE.BoxGeometry(span*.9,.45,1.1),[lam(0x333333),lam(0x333333),lam(0x333333),lam(0x333333),new THREE.MeshLambertMaterial({map:ybStripe}),new THREE.MeshLambertMaterial({map:ybStripe})]);sw.position.set(0,.22,3.2);sw.rotation.x=-.15;sw.castShadow=true;g.add(sw);
-     if(it.type==='maingate'){for(let k=0;k<4;k++){const u=jerseyUnit(g,-span/2+1+k*2,8.5);u.rotation.y=Math.PI/2;}for(let k=0;k<4;k++){const u=jerseyUnit(g,span/2-1-k*2,14);u.rotation.y=Math.PI/2;}
-       [-1,1].forEach(sd=>{const sg=new THREE.Group();sandbagRow(sg,2.4,1,lam(0xc9b27a),0,0,true);sg.position.set(sd*(span/2+pw+3),0,3.5);g.add(sg);});
-       [[-1,5.5],[1,5.5]].forEach(([sd,z])=>{const d=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.9,12),new THREE.MeshLambertMaterial({map:stripe}));d.position.set(sd*(span/2+.6),.45,z);d.castShadow=true;g.add(d);});}}
+}
     {const gh=it.type==='maingate'?3.6:2.6;const gm=new THREE.MeshLambertMaterial({map:ironTex(),color:0xffffff});const tm=lam(0x1f2a1c);
      [-1,1].forEach(sd=>{const lf=new THREE.Mesh(new THREE.BoxGeometry(span/2-.05,gh,.18),gm);lf.position.set(sd*span/4,gh/2+.05,0);lf.castShadow=true;g.add(lf);
        const tp=new THREE.Mesh(new THREE.BoxGeometry(span/2-.05,.2,.24),tm);tp.position.set(sd*span/4,gh+.1,0);g.add(tp);
        for(let k=0;k<Math.round(span/1.2);k++){const sp=new THREE.Mesh(new THREE.ConeGeometry(.07,.4,4),tm);sp.position.set(sd*(.2+k*.6),gh+.4,0);if(Math.abs(sp.position.x)<span/2)g.add(sp);}});
-     const bm=boom(span*.95);bm.position.set(0,1.1,2.2);g.add(bm);}
+}
   }else if(it.type==='tower'){
     const legM=lam(0x6d6a5c);[[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([a,b])=>{const l=new THREE.Mesh(new THREE.BoxGeometry(.35,8,.35),legM);l.position.set(a*1.3,4,b*1.3);l.castShadow=true;g.add(l);});
     const cab=new THREE.Mesh(new THREE.BoxGeometry(3.6,2.4,3.6),lam(0x7a8a52));cab.position.y=9.2;cab.castShadow=true;g.add(cab);
@@ -1764,11 +1761,15 @@ function placeSplit(){const x=Math.round(innerWidth*splitX);$('split').style.lef
 {const k=$('splitKnob');let dr=false;k.addEventListener('pointerdown',e=>{dr=true;try{k.setPointerCapture(e.pointerId);}catch(_){}e.preventDefault();});k.addEventListener('pointermove',e=>{if(!dr)return;splitX=Math.min(.95,Math.max(.05,e.clientX/innerWidth));placeSplit();});k.addEventListener('pointerup',()=>{dr=false;});addEventListener('resize',placeSplit);}
 function roofAt(x,z){let top=0;S.blds.forEach(b=>{const rects=b.parts&&b.parts.length?b.parts.map(([u1,u2,v1,v2])=>[-b.w/2+u1*b.w,-b.w/2+u2*b.w,-b.d/2+v1*b.d,-b.d/2+v2*b.d]):[[-b.w/2,b.w/2,-b.d/2,b.d/2]];const [lx,lz]=toLocal(b,x,z);
   if(rects.some(([x1,x2,z1,z2])=>lx>x1&&lx<x2&&lz>z1&&lz<z2)){const sh=b.shape;const h=sh==='pool'?1:sh==='bungalow'?b.h+.1:(sh==='flats'||sh==='control')?b.h+.6:b.h;if(h>top)top=h;}});return top;}
-function snapWall(it){let best=null,bd=8;S.blds.forEach(b=>{const rects=b.parts&&b.parts.length?b.parts.map(([u1,u2,v1,v2])=>[-b.w/2+u1*b.w,-b.w/2+u2*b.w,-b.d/2+v1*b.d,-b.d/2+v2*b.d]):[[-b.w/2,b.w/2,-b.d/2,b.d/2]];
+function snapWall(it){let best=null,bd=10;S.blds.forEach(b=>{const rects=b.parts&&b.parts.length?b.parts.map(([u1,u2,v1,v2])=>[-b.w/2+u1*b.w,-b.w/2+u2*b.w,-b.d/2+v1*b.d,-b.d/2+v2*b.d]):[[-b.w/2,b.w/2,-b.d/2,b.d/2]];
     const [lx,lz]=toLocal(b,it.x,it.z);
     rects.forEach(([x1,x2,z1,z2])=>{const cands=[[Math.max(x1,Math.min(x2,lx)),z1,0,-1],[Math.max(x1,Math.min(x2,lx)),z2,0,1],[x1,Math.max(z1,Math.min(z2,lz)),-1,0],[x2,Math.max(z1,Math.min(z2,lz)),1,0]];
       cands.forEach(([px,pz,nx,nz])=>{const d=Math.hypot(px-lx,pz-lz);if(d<bd){bd=d;best={b,px,pz,nx,nz};}});});});
+  {const WT=(S.wallT||.5)/2+.15;const segs=[];for(let i=0;i<S.wall.length;i++)segs.push([S.wall[i],S.wall[(i+1)%S.wall.length],S.wallH||3,'b',WT]);(S.walls||[]).forEach(w=>{for(let i=0;i<w.pts.length-1;i++)segs.push([w.pts[i],w.pts[i+1],w.h||2.4,w.id,(w.t||.35)/2+.15]);});
+   segs.forEach(([a,q,h,id,th])=>{const L=Math.hypot(q[0]-a[0],q[1]-a[1]);if(L<.5)return;const ux=(q[0]-a[0])/L,uz=(q[1]-a[1])/L;let t=(it.x-a[0])*ux+(it.z-a[1])*uz;t=Math.max(.3,Math.min(L-.3,t));const px=a[0]+ux*t,pz=a[1]+uz*t;const d=Math.hypot(it.x-px,it.z-pz);
+     if(d<bd){bd=d;let nx=-uz,nz=ux;if((it.x-px)*nx+(it.z-pz)*nz<0){nx=-nx;nz=-nz;}best={wall:id,h,px:px+nx*th,pz:pz+nz*th,nx,nz};}});}
   if(!best){it.onWall=null;const T3=TYPES[it.type];it.mh=T3.lgt?T3.lgt.h:(T3.mh||5);return;}
+  if(best.wall){const T3=TYPES[it.type];it.x=best.px;it.z=best.pz;it.rot=Math.round(Math.atan2(best.nz,best.nx)*180/Math.PI);it.onWall='w:'+best.wall;it.mh=+(best.h+(T3.light?.35:.5)).toFixed(2);return;}
   const b=best.b;const [wx,wz]=toWorld(b,best.px+best.nx*.3,best.pz+best.nz*.3);const [ox,oz]=toWorld(b,best.nx,best.nz);const nx=ox-b.cx,nz=oz-b.cz;
   it.x=wx;it.z=wz;it.rot=Math.round(Math.atan2(nz,nx)*180/Math.PI);it.onWall=b.num;const T3=TYPES[it.type];const want=T3.lgt?T3.lgt.h:(T3.mh||5);it.mh=Math.max(2.5,Math.min(b.h-.4,want));}
 const hemi=scene.children.find(o=>o.isHemisphereLight);
@@ -1996,13 +1997,13 @@ function showItem(it){
   setPanel(T.label,it.name,pill,`<div class="form">
    <label>Name<input type="text" id="f_name" value="${esc(it.name)}"></label>
    <label>Facing: <span id="f_rv">${Math.round(it.rot||0)}°</span><input type="range" id="f_r" min="0" max="359" value="${Math.round(it.rot||0)}"></label>
-   ${T.light?`<label>Light reach: <span id="f_rgv">${it.range} m</span><input type="range" id="f_rg" min="4" max="120" value="${it.range}"></label>${!T.full?`<label>Beam width: <span id="f_fv">${it.fov}°</span><input type="range" id="f_f" min="20" max="${T.wall?220:180}" value="${it.fov}"></label>`:''}`:''}${T.wall?`<p class="hint">${it.onWall?'Fixed on the wall of building #'+it.onWall+' at '+(it.mh||4).toFixed(1)+' m. Drag it along the wall to move it.':'Drag it onto a building wall to fix it there.'}</p>`:''}
+   ${T.light?`<label>Light reach: <span id="f_rgv">${it.range} m</span><input type="range" id="f_rg" min="4" max="120" value="${it.range}"></label>${!T.full?`<label>Beam width: <span id="f_fv">${it.fov}°</span><input type="range" id="f_f" min="20" max="${T.wall?220:180}" value="${it.fov}"></label>`:''}`:''}${T.wall?`<p class="hint">${it.onWall?(String(it.onWall).startsWith('w:')?(it.onWall==='w:b'?'Fixed on the boundary wall':'Fixed on a wall you drew'):'Fixed on the wall of building #'+it.onWall)+' at '+(it.mh||4).toFixed(1)+' m. Drag it along the wall to move it.':'Drag it onto a building wall to fix it there.'}</p>`:''}
    ${T.arc?`${it.type==='altpos'?`<label>Weapon for this position<select id="f_wpn">${['Machine gun','Sniper','Rifle','LMG'].map(w=>`<option ${w===(it.wpn||'Machine gun')?'selected':''}>${w}</option>`).join('')}</select></label>`:''}<label>Fire range: <span id="f_rgv">${it.range} m</span><input type="range" id="f_rg" min="20" max="1200" step="10" value="${it.range}"></label><label>Arc of fire: <span id="f_fv">${it.fov}°</span><input type="range" id="f_f" min="10" max="360" value="${it.fov}"></label><p class="hint">The red fan shows where this weapon can fire. In Edit, drag the blue handle to aim it and the orange handles to widen the arc.</p>`:''}
    ${T.cam?`<label>Range: <span id="f_rgv">${it.range} m</span><input type="range" id="f_rg" min="5" max="150" value="${it.range}"></label>${!T.full?`<label>View angle: <span id="f_fv">${it.fov}°</span><input type="range" id="f_f" min="10" max="180" value="${it.fov}"></label>`:''}`:''}
    ${T.zone?`<label>${T.thr?'Danger radius':it.type==='siren'?'Can be heard up to':it.type==='drone'?'Patrol radius':it.type==='firept'?'Covers buildings within':it.type==='rv'?'Assembly area radius':'Radius'}: <span id="f_rgv">${it.range} m</span><input type="range" id="f_rg" min="5" max="${it.type==='drone'?1500:600}" step="5" value="${it.range}"></label>`:''}${it.type==='drone'?`<label>Flying height: <span id="f_altv">${it.alt||25} m</span><input type="range" id="f_alt" min="10" max="120" value="${it.alt||25}"></label>`:''}${T.thr?'<p class="hint">Threat and weak-point markers are planning notes. Write what you saw or expect in Notes.</p>':''}
    ${LINEAR[it.type]?`<label>Length: <span id="f_lnv">${(it.len||LINEAR[it.type][1]).toFixed(1)} m</span><input type="range" id="f_ln" min="${LINEAR[it.type][0]}" max="60" step="0.5" value="${it.len||LINEAR[it.type][1]}"></label>`:''}${it.type==='sandbags'?`<label>Height: <span id="f_hhv">${(it.hh||1.2).toFixed(2)} m</span><input type="range" id="f_hh" min="0.25" max="2.5" step="0.25" value="${it.hh||1.2}"></label>`:''}
    ${T.roof?`<p class="hint">${it.y?'Deployed on a rooftop, '+it.y.toFixed(1)+' m up. Drag it to another roof or onto the ground.':'On the ground. Drag it onto a building to put it on the roof.'}</p>`:''}
-   ${it.type==='maingate'||it.type==='gate'?'<div class="row"><button class="btn ghost" id="f_flip">Flip outside / inside</button></div><p class="hint">The road stopper and barriers face the outside. Flip if they are on the wrong side.</p>':''}
+   ${it.type==='maingate'||it.type==='gate'?'<div class="row"><button class="btn ghost" id="f_flip">Flip outside / inside</button></div><p class="hint">Gates come plain. Add a boom barrier, road blocker, guard hut or checkpoint from the Add tab — drop it near the gate and it lines up by itself.</p>':''}
    ${DEFPPL[it.type]!=null?`<label>People here now</label><div class="stepper"><button class="btn ghost" type="button" id="f_pm">−</button><b id="f_pv">${peopleI(it)}</b><button class="btn ghost" type="button" id="f_pp">+</button></div>`:''}
    ${T.staff?`<label>Who is on duty<input type="text" id="f_who" value="${esc(it.who)}" placeholder="e.g. Hav Tariq + 3"></label>`:''}
    <label>Notes<input type="text" id="f_notes" value="${esc(it.notes)}"></label>
@@ -2080,10 +2081,32 @@ function cancelDraw(){draw=null;drawPreview();}
 const statusEl=$('status');let flashT;function flash(t){statusEl.textContent=t;clearTimeout(flashT);flashT=setTimeout(()=>{statusEl.textContent=tool?`Tap the ground to place: ${label(tool)}`:'';},2400);}
 let tool=null;const label=k=>TYPES[k]?TYPES[k].label:NEWB[k].label;
 function setTool(t){tool=t;document.querySelectorAll('.pal button').forEach(b=>b.classList.toggle('on',b.dataset.t===tool));statusEl.textContent=tool?`Tap the ground to place: ${label(tool)}`:'';}
+
+const BARR={barrier:12,boombar:3,hydblock:6.5,stopper:5.5,jersey:9,drums:9,hedgehog:14,wire:16,guardhut:-5};
+const POLE2WALL={cctv:'cctvwall',dome:'domewall',flood:'wallflood',streetlight:'walllight'};
+const PERIM={post:3.5,tower:4,bunker:3,firepos:2.5};
+function faceDist(x,z){let bd=1e9;S.blds.forEach(b=>{const rects=b.parts&&b.parts.length?b.parts.map(([u1,u2,v1,v2])=>[-b.w/2+u1*b.w,-b.w/2+u2*b.w,-b.d/2+v1*b.d,-b.d/2+v2*b.d]):[[-b.w/2,b.w/2,-b.d/2,b.d/2]];const [lx,lz]=toLocal(b,x,z);
+  rects.forEach(([x1,x2,z1,z2])=>{const dx=Math.max(x1-lx,0,lx-x2),dz=Math.max(z1-lz,0,lz-z2);const inside=lx>x1&&lx<x2&&lz>z1&&lz<z2;bd=Math.min(bd,inside?0:Math.hypot(dx,dz));});});
+  const segD=(a,q)=>{const vx=q[0]-a[0],vz=q[1]-a[1],L2=vx*vx+vz*vz||1;let t=((x-a[0])*vx+(z-a[1])*vz)/L2;t=Math.max(0,Math.min(1,t));return Math.hypot(x-a[0]-vx*t,z-a[1]-vz*t);};
+  for(let i=0;i<S.wall.length;i++)bd=Math.min(bd,segD(S.wall[i],S.wall[(i+1)%S.wall.length]));(S.walls||[]).forEach(w=>{for(let i=0;i<w.pts.length-1;i++)bd=Math.min(bd,segD(w.pts[i],w.pts[i+1]));});return bd;}
+function autoSnap(it,drag){const T=TYPES[it.type];if(!T)return null;
+  if(T.wall){snapWall(it);return it.onWall?'mounted':null;}
+  if(!drag&&POLE2WALL[it.type]&&faceDist(it.x,it.z)<5){const nt=POLE2WALL[it.type];it.type=nt;const T2=TYPES[nt];if(T2.lgt&&it.range==null){it.range=T2.lgt.range;it.fov=T2.lgt.fov;}snapWall(it);return it.onWall?'mounted':null;}
+  if(BARR[it.type]!=null){let g=null,gd=24;S.items.forEach(o=>{if(o===it||!(o.type==='maingate'||o.type==='gate'))return;const d=Math.hypot(o.x-it.x,o.z-it.z);if(d<gd){gd=d;g=o;}});
+    if(g){const r=(g.rot||0)*Math.PI/180;const zx=-Math.sin(r),zz=Math.cos(r);const side=((it.x-g.x)*zx+(it.z-g.z)*zz)>=0?1:-1;const off=BARR[it.type];
+      if(off<0){const span=g.type==='maingate'?12:7;const xx=Math.cos(r),xz=Math.sin(r);it.x=g.x+xx*(span/2+3.5)+zx*side*(-off);it.z=g.z+xz*(span/2+3.5)+zz*side*(-off);it.rot=g.rot||0;return 'gate';}
+      it.x=g.x+zx*side*off;it.z=g.z+zz*side*off;it.rot=g.rot||0;if(LINEAR[it.type])it.len=Math.min(60,(g.type==='maingate'?12:7)+1);return 'gate';}
+    if(it.type==='guardhut')return null;
+    let best=null,bd=12;S.roads.forEach(rd=>{for(let i=0;i<rd.pts.length-1;i++){const a=rd.pts[i],q=rd.pts[i+1];const L=Math.hypot(q[0]-a[0],q[1]-a[1]);if(L<1)continue;const ux=(q[0]-a[0])/L,uz=(q[1]-a[1])/L;let t=(it.x-a[0])*ux+(it.z-a[1])*uz;t=Math.max(0,Math.min(L,t));const px=a[0]+ux*t,pz=a[1]+uz*t;const d=Math.hypot(it.x-px,it.z-pz);if(d<bd){bd=d;best={px,pz,ux,uz,w:rd.w};}}});
+    if(best){it.x=best.px;it.z=best.pz;it.rot=Math.round(Math.atan2(best.uz,best.ux)*180/Math.PI+90);if(LINEAR[it.type])it.len=Math.min(60,best.w+.5);return 'road';}return null;}
+  if(PERIM[it.type]){const W=S.wall;let best=null,bd=16;for(let i=0;i<W.length;i++){const a=W[i],q=W[(i+1)%W.length];const L=Math.hypot(q[0]-a[0],q[1]-a[1]);if(L<1)continue;const ux=(q[0]-a[0])/L,uz=(q[1]-a[1])/L;let t=(it.x-a[0])*ux+(it.z-a[1])*uz;t=Math.max(2,Math.min(L-2,t));const px=a[0]+ux*t,pz=a[1]+uz*t;const d=Math.hypot(it.x-px,it.z-pz);if(d<bd){bd=d;let nx=-uz,nz=ux;if((it.x-px)*nx+(it.z-pz)*nz<0){nx=-nx;nz=-nz;}best={px,pz,nx,nz,ux,uz};}}
+    if(best){const ins=PERIM[it.type];S.items.forEach(g=>{if(!(g.type==='maingate'||g.type==='gate'))return;const half=(g.type==='maingate'?12:7)/2+5;const along=(best.px-g.x)*best.ux+(best.pz-g.z)*best.uz;const perp=Math.abs((best.px-g.x)*best.nx+(best.pz-g.z)*best.nz);if(perp<4&&Math.abs(along)<half){const sg=along>=0?1:-1;best.px=g.x+best.ux*sg*half;best.pz=g.z+best.uz*sg*half;}});it.x=best.px+best.nx*ins;it.z=best.pz+best.nz*ins;it.rot=Math.round(Math.atan2(-best.nz,-best.nx)*180/Math.PI);return 'perim';}}
+  return null;}
+const SNAPMSG={mounted:'Fixed onto the wall.',gate:'Lined up with the gate.',road:'Placed across the road.',perim:'Placed on the inside of the boundary wall, facing out.'};
 function newThing(k,x,z){
   remember();
   if(TYPES[k]){const n=S.items.filter(i=>i.type===k).length+1;const it={id:'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),type:k,name:TYPES[k].label+' '+n,x,z,rot:0,who:'',notes:'',status:'manned'};
-    if(TYPES[k].cam){it.range=TYPES[k].range;it.fov=TYPES[k].fov;}if(TYPES[k].arc){it.range=TYPES[k].arc.range;it.fov=TYPES[k].arc.fov;}if(TYPES[k].light){it.range=TYPES[k].lgt.range;it.fov=TYPES[k].lgt.fov;}if(TYPES[k].zone){it.range=TYPES[k].zone.range;it.fov=360;}if(TYPES[k].wall)snapWall(it);if(TYPES[k].roof){it.y=roofAt(x,z);if(it.y)flash('Placed on the roof.');}if(GATEHW[k]){snapGate(it);}S.items.push(it);renderItem(it);if(GATEHW[k])buildWallSoon();save();select('item',it);if(window.__rebuildChecks)window.__rebuildChecks();if(it.inWall)flash('Gate fixed into the boundary wall.');return;}
+    if(TYPES[k].cam){it.range=TYPES[k].range;it.fov=TYPES[k].fov;}if(TYPES[k].arc){it.range=TYPES[k].arc.range;it.fov=TYPES[k].arc.fov;}if(TYPES[k].light){it.range=TYPES[k].lgt.range;it.fov=TYPES[k].lgt.fov;}if(TYPES[k].zone){it.range=TYPES[k].zone.range;it.fov=360;}let sm=null;if(snapOn&&!GATEHW[k]&&!TYPES[k].roof)sm=autoSnap(it,false);else if(TYPES[k].wall)snapWall(it);if(sm&&SNAPMSG[sm])setTimeout(()=>flash(SNAPMSG[sm]),30);if(TYPES[k].roof){it.y=roofAt(x,z);if(it.y)flash('Placed on the roof.');}if(GATEHW[k]){snapGate(it);}S.items.push(it);renderItem(it);if(GATEHW[k])buildWallSoon();save();select('item',it);if(window.__rebuildChecks)window.__rebuildChecks();if(it.inWall)flash('Gate fixed into the boundary wall.');return;}
   if(NEWB[k]&&NEWB[k].tree){const t=[x,z,NEWB[k].tree==='bush'?1.2:NEWB[k].tree==='palm'?1.6:2.2];if(NEWB[k].tree!=='tree')t[3]=NEWB[k].tree;ownTrees().push(t);rebuildTrees();save();select('tree',t);return;}
   if(k==='nb_ground'){const a={id:'a'+Date.now().toString(36),name:'New ground',info:'',kind:'open',cx:x,cz:z,w:40,d:30,rot:0};S.areas.push(a);buildArea(a);save();select('area',a);return;}
   const spec=NEWB[k].spec;
@@ -2210,7 +2233,7 @@ function doDrag(p){
     const sn=v=>snapOn?Math.round(v*2)/2:v;
     if(sel.kind==='building'){tryMove('building',o,sn(drag.orig.cx+dx),sn(drag.orig.cz+dz));const pr=o.rot;edgeSnap(o);if(o.rot!==pr){buildBld(o);}}else if(sel.kind==='area'){o.cx=sn(drag.orig.cx+dx);o.cz=sn(drag.orig.cz+dz);}
     if(sel.kind==='building'||sel.kind==='area'){if(sel.kind==='building'){o.group.position.set(o.cx,0,o.cz);o.numLabel.position.set(o.cx,o.numLabel.position.y,o.cz);if(o.nameLabel)o.nameLabel.position.set(o.cx,o.nameLabel.position.y,o.cz);}else{o.group.position.set(o.cx,0,o.cz);o.label.position.set(o.cx,3,o.cz);}drawGizmo();}
-    else if(sel.kind==='item'){if(isSolid('item',o))tryMove('item',o,drag.orig.x+dx,drag.orig.z+dz);else{o.x=drag.orig.x+dx;o.z=drag.orig.z+dz;}if(TYPES[o.type].wall){snapWall(o);renderItem(o);}else if(TYPES[o.type].roof){const rh=lastXY?roofHit(lastXY[0],lastXY[1]):null;if(rh){o.x=rh.x;o.z=rh.z;o.y=rh.y;}else{o.y=roofAt(o.x,o.z);}placeItemObjs(o);}else if(GATEHW[o.type]){snapGate(o);placeItemObjs(o);buildWallSoon();}else placeItemObjs(o);drawGizmo();}
+    else if(sel.kind==='item'){if(isSolid('item',o))tryMove('item',o,drag.orig.x+dx,drag.orig.z+dz);else{o.x=drag.orig.x+dx;o.z=drag.orig.z+dz;}if(TYPES[o.type].wall){snapWall(o);renderItem(o);}else if(TYPES[o.type].roof){const rh=lastXY?roofHit(lastXY[0],lastXY[1]):null;if(rh){o.x=rh.x;o.z=rh.z;o.y=rh.y;}else{o.y=roofAt(o.x,o.z);}placeItemObjs(o);}else if(GATEHW[o.type]){snapGate(o);placeItemObjs(o);buildWallSoon();}else{if(snapOn&&(BARR[o.type]!=null||PERIM[o.type]))autoSnap(o,true);if(LINEAR[o.type])renderItem(o);else placeItemObjs(o);}drawGizmo();}
     else if(sel.kind==='road'){o.pts=drag.orig.map(q=>[q[0]+dx,q[1]+dz]);buildRoad(o);drawGizmo();}
     else if(sel.kind==='tree'){o[0]=drag.orig.x+dx;o[1]=drag.orig.z+dz;rebuildTreesSoon();drawGizmo();}
     else if(sel.kind==='cwall'){o.pts=drag.orig.map(q=>[q[0]+dx,q[1]+dz]);buildCWall(o);drawGizmo();}
