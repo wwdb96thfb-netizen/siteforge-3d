@@ -369,6 +369,20 @@ body.nightmode #scalebar{color:#e6e9f2;text-shadow:0 0 3px #000}
 @media (max-width:760px){#camPiP{width:220px;top:calc(var(--hdr) + 84px)}#camPiPv{height:130px}#camPiP .hint3{display:none}}
 #about{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:rgba(30,40,52,.35)}#about[hidden]{display:none}#about .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;box-shadow:0 20px 50px rgba(0,0,0,.25);width:calc(100% - 32px);box-sizing:border-box}#about dl{display:grid;grid-template-columns:100px 1fr;gap:4px 10px;font-size:13px}#about dt{color:var(--muted)}#about dd{margin:0}
 #copyNote{color:var(--muted)}
+#proj.start{background:radial-gradient(ellipse at 30% 20%,#2e3a2a 0%,#1c2419 55%,#121810 100%);z-index:60}
+#proj.start .pcard{background:transparent;border:0;box-shadow:none;width:min(720px,calc(100% - 32px));max-height:92%;color:#e9ede4}
+#proj.start .ph2{display:none}
+#proj.start .stl{display:flex;gap:18px;align-items:center;margin:4px 0 26px}#proj.start .stl img{width:84px;height:84px;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+#proj.start .stn{font:800 34px/1 var(--display,Rajdhani),sans-serif;letter-spacing:.12em;color:#fff}#proj.start .sts{font:600 12px var(--mono);letter-spacing:.32em;color:#b7c2a9;margin-top:6px}
+#proj.start .stq{font:600 11px var(--mono);letter-spacing:.2em;color:#9eab8f;text-transform:uppercase;margin:18px 0 8px}
+#proj.start .stacts{display:grid;gap:10px}#proj.start .stb{display:flex;gap:14px;align-items:center;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:14px 16px;color:#fff;cursor:pointer;font:inherit}
+#proj.start .stb:hover{background:rgba(255,255,255,.12);border-color:#c9a14a}#proj.start .stb>b{width:40px;height:40px;border-radius:9px;display:grid;place-items:center;background:#c9a14a;color:#1c2419;font-size:20px;flex:none}
+#proj.start .stb span{display:flex;flex-direction:column;gap:2px}#proj.start .stb span b{font-size:15px}#proj.start .stb span i{font-style:normal;font-size:12.5px;color:#b7c2a9}
+#proj.start .prow{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;margin-bottom:6px;padding:8px 12px;color:#e9ede4}#proj.start .prow span{color:#a7b39a}#proj.start .prow.cur{display:none}
+#proj.start .hint{color:#a7b39a}#proj.start .btn.ghost{background:transparent;color:#dfe5d6;border-color:rgba(255,255,255,.2)}#proj.start .btn.danger{background:transparent}
+#proj.start .pform{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff}#proj.start .pform input{background:#fff;color:#17212b}
+#proj.start .stf{margin-top:26px;font:11px var(--mono);color:#7f8c71;letter-spacing:.06em}
+body.starting .hud,body.starting #panel,body.starting #minimap,body.starting #rail,body.starting #vcube,body.starting #compass,body.starting .mapctl,body.starting #ldBanner,body.starting #camPiP{visibility:hidden}
 </style>
 
 <div id="scene"></div>
@@ -1452,7 +1466,7 @@ const G3P=(()=>{const DBN='garrison3d',ST='projects';let dbp=null;
   const setCur=id=>{try{localStorage.setItem('g3d-current',id);}catch(_){}};
   async function boot(){window.__PID='builtin';window.__PREC=null;const pid=cur();
     if(pid!=='builtin'){try{const rec=await get(pid);if(rec&&rec.world){Object.assign(WORLD,rec.world);window.__PID=pid;window.__PREC=rec;}else setCur('builtin');}catch(_){}}
-    if(APPMODE&&'serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){try{navigator.serviceWorker.register('sw.js');}catch(_){}}
+    if(APPMODE&&'serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){try{const had=!!navigator.serviceWorker.controller;navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{try{r.update();}catch(_){}});let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!rl&&!unsaved){rl=true;try{sessionStorage.removeItem('g3d-started');}catch(_){}location.reload();}});}catch(_){}}
     window.__MAIN();}
   return {get,put,del,all,cur,setCur,boot};})();
 </script>
@@ -3747,25 +3761,28 @@ function newId(){return 'p'+Date.now().toString(36)+Math.random().toString(36).s
 function worldNow(){const w=clone(Object.assign({},WORLD));delete w.blank;return w;}
 function blankWorld(W,D){W=Math.max(40,Math.min(5000,W||500));D=Math.max(40,Math.min(5000,D||300));const m=Math.min(5,W*.02);return {site:[-W/2,-D/2,W/2,D/2],wall:[[-W/2+m,-D/2+m],[W/2-m,-D/2+m],[W/2-m,D/2-m],[-W/2+m,D/2-m]],blds:[],roads:[],areas:[],trees:[],groundTex:null,polowall:[],rev:1,north:0};}
 function openProj(id){G3P.setCur(id);location.reload();}
+function closeStart(){$('proj').hidden=true;$('proj').classList.remove('start');document.body.classList.remove('starting');}
 function fmtDate(t){try{return new Date(t).toLocaleString([], {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(_){return '';}}
 async function download(name,text){if(window.claude&&window.claude.use){try{const dl=await window.claude.use('downloads');if(dl){try{await dl.save({filename:name,data:new Blob([text])});}catch(e){if(e&&e.code!=='declined')flash('The file could not be saved here.');}return;}}catch(_){}}const blob=new Blob([text],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},3000);}
 function safeName(n){return (n||'project').replace(/[^A-Za-z0-9 _-]+/g,'').trim().replace(/\s+/g,'-')||'project';}
 function exportRec(name,world,layout){download(safeName(name)+'.g3d.json',JSON.stringify({format:'garrison3d-project',v:1,name,exported:new Date().toISOString(),world,layout}));}
 function loadPhoto(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const mx=4096,k=Math.min(1,mx/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res({url:c.toDataURL('image/jpeg',.85),w:im.width,h:im.height});};im.onerror=rej;im.src=fr.result;};fr.onerror=rej;fr.readAsDataURL(file);});}
 let projMode='list';
-async function openProjects(mode){projMode=mode||'list';$('proj').hidden=false;hideCtx();if(!$('projBody').innerHTML)$('projBody').innerHTML='<p class="hint">Loading…</p>';let L=[];try{L=await G3P.all();}catch(_){}L.sort((a,b)=>(b.updated||0)-(a.updated||0));const body=$('projBody');
+async function openProjects(mode){projMode=mode||'list';$('proj').hidden=false;$('proj').classList.toggle('start',projMode==='start');document.body.classList.toggle('starting',projMode==='start');hideCtx();if(!$('projBody').innerHTML)$('projBody').innerHTML='<p class="hint">Loading…</p>';let L=[];try{L=await G3P.all();}catch(_){}L.sort((a,b)=>(b.updated||0)-(a.updated||0));const body=$('projBody');
   const curName=PREC?PREC.name:(APPMODE?'Untitled (not saved)':'Garrison Master Plan (built in)');
   let h='';
+  if(projMode==='start'){const lg=document.querySelector('.brandx img');h+=`<div class="stl"><img src="${lg?lg.src:''}" alt=""><div><div class="stn">SENTINEL 3D</div><div class="sts">TACTICAL SITE PLANNING</div></div></div><div class="stq">Start</div>`;}
   if(projMode==='welcome')h+=`<p class="hint" style="font-size:13px">Welcome. Make a new project (a blank site you build on), or open a project file you were sent — for example your garrison file.</p>`;
-  h+=`<div class="pacts"><button class="btn" id="pj_new">+ New project</button><button class="btn ghost" id="pj_imp">Open a project file…</button><button class="btn ghost" id="pj_saveas">Save current as…</button><button class="btn ghost" id="pj_exp">Export current to a file</button></div>`;
+  h+=projMode==='start'?`<div class="stacts"><button class="stb" id="pj_new"><b>＋</b><span><b>New project</b><i>Start a blank site and build it</i></span></button><button class="stb" id="pj_imp"><b>⤓</b><span><b>Open a project file…</b><i>A .g3d.json file from this or another device</i></span></button>${(PREC||!APPMODE)?`<button class="stb" id="pj_cont"><b>▶</b><span><b>Continue: ${esc(curName.replace(/ \(built in\)$/,''))}</b><i>The project you had open last</i></span></button>`:''}<button class="btn ghost" id="pj_saveas" hidden></button><button class="btn ghost" id="pj_exp" hidden></button></div><div class="stq">Recent projects</div>`:`<div class="pacts"><button class="btn" id="pj_new">+ New project</button><button class="btn ghost" id="pj_imp">Open a project file…</button><button class="btn ghost" id="pj_saveas">Save current as…</button><button class="btn ghost" id="pj_exp">Export current to a file</button></div>`;
   h+=`<div id="pj_form"></div>`;
-  h+=`<div class="ch" style="font:600 10.5px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">Open now</div><div class="prow cur"><div class="pn"><b>${esc(curName)}</b><span>${Math.round(GW)} × ${Math.round(GD)} m${PREC&&PREC.updated?' · saved '+fmtDate(PREC.updated):''}${unsaved?' · unsaved changes':''}</span></div>${PREC?'<button class="btn ghost" id="pj_photo">Background photo…</button><button class="btn ghost" id="pj_size">Site size…</button>':''}</div>`;
-  h+=`<div class="ch" style="font:600 10.5px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:12px">Projects on this device (${L.length+(APPMODE?0:1)})</div>`;
+  if(projMode!=='start')h+=`<div class="ch" style="font:600 10.5px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">Open now</div><div class="prow cur"><div class="pn"><b>${esc(curName)}</b><span>${Math.round(GW)} × ${Math.round(GD)} m${PREC&&PREC.updated?' · saved '+fmtDate(PREC.updated):''}${unsaved?' · unsaved changes':''}</span></div>${PREC?'<button class="btn ghost" id="pj_photo">Background photo…</button><button class="btn ghost" id="pj_size">Site size…</button>':''}</div>`;
+  if(projMode!=='start')h+=`<div class="ch" style="font:600 10.5px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:12px">Projects on this device (${L.length+(APPMODE?0:1)})</div>`;
   if(!APPMODE)h+=`<div class="prow"><div class="pn"><b>Garrison Master Plan (built in)</b><span>the original model on this page</span></div>${PID==='builtin'?'<span class="hint" style="margin:0">open</span>':'<button class="btn ghost" data-open="builtin">Open</button>'}</div>`;
   h+=L.map(r=>`<div class="prow" data-id="${r.id}"><div class="pn"><b>${esc(r.name)}</b><span>${r.world&&r.world.site?Math.round(r.world.site[2]-r.world.site[0])+' × '+Math.round(r.world.site[3]-r.world.site[1])+' m · ':''}${fmtDate(r.updated||r.created)}</span></div>
     ${r.id===PID?'<span class="hint" style="margin:0">open</span>':`<button class="btn" data-open="${r.id}">Open</button>`}<button class="btn ghost" data-ren="${r.id}">Rename</button><button class="btn ghost" data-dup="${r.id}">Copy</button><button class="btn ghost" data-exp="${r.id}">Export</button><button class="btn danger" data-del="${r.id}">Delete</button></div>`).join('')||(APPMODE?'<p class="hint">No projects yet.</p>':'');
-  h+=`<p class="hint" style="margin-top:12px">Projects are kept on this device. To move one to another device (Mac ↔ iPhone), use Export, send the file, then "Open a project file…" there.${unsaved?' You have unsaved changes here — save them before opening another project, or they wait for you as a draft.':''}</p>`;
+  if(projMode==='start')h+=`<div class="stf">Version 2.1.0 · © 2026 Syed Iftikhar Shah. All rights reserved.</div>`;else h+=`<p class="hint" style="margin-top:12px">Projects are kept on this device. To move one to another device (Mac ↔ iPhone), use Export, send the file, then "Open a project file…" there.${unsaved?' You have unsaved changes here — save them before opening another project, or they wait for you as a draft.':''}</p>`;
   body.innerHTML=h;
+  if($('pj_cont'))$('pj_cont').onclick=()=>closeStart();
   const form=$('pj_form');
   const nameForm=(title,def,ok,extra)=>{form.innerHTML=`<div class="pform"><b>${title}</b><label>Name<input type="text" id="pf_name" value="${esc(def||'')}" maxlength="60"></label>${extra||''}<div class="row"><button class="btn" id="pf_ok">OK</button><button class="btn ghost" id="pf_cancel">Cancel</button></div></div>`;$('pf_name').focus();$('pf_name').select();$('pf_cancel').onclick=()=>form.innerHTML='';$('pf_ok').onclick=()=>ok($('pf_name').value.trim());$('pf_name').onkeydown=e=>{if(e.key==='Enter')$('pf_ok').click();};};
   $('pj_new').onclick=()=>nameForm('New project','New site',async nm=>{if(!nm)return;const W=+$('pf_w').value,D=+$('pf_d').value;const world=blankWorld(W,D);const f=$('pf_ph').files[0];if(f){try{const p=await loadPhoto(f);world.groundTex=p.url;}catch(_){}}
@@ -3786,7 +3803,9 @@ async function openProjects(mode){projMode=mode||'list';$('proj').hidden=false;h
   body.querySelectorAll('[data-ren]').forEach(b=>b.onclick=async()=>{const r=await G3P.get(b.dataset.ren);if(!r)return;nameForm('Rename project',r.name,async nm=>{if(!nm)return;r.name=nm;r.updated=Date.now();await G3P.put(r);if(r.id===PID)location.reload();else openProjects(projMode);});});
   body.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='Tap again to delete';setTimeout(()=>{b.dataset.armed='';b.textContent='Delete';},3000);return;}const id=b.dataset.del;await G3P.del(id);try{localStorage.removeItem('garrison3d-draft-v1:'+id);}catch(_){}if(id===PID){G3P.setCur('builtin');location.reload();}else openProjects(projMode);});
   if(projMode==='saveas')$('pj_saveas').click();}
-$('projBtn').onclick=()=>openProjects('list');$('projX').onclick=()=>{$('proj').hidden=true;};$('proj').addEventListener('click',e=>{if(e.target.id==='proj')$('proj').hidden=true;});
+$('projBtn').onclick=()=>openProjects('list');$('projX').onclick=()=>{closeStart();};$('proj').addEventListener('click',e=>{if(e.target.id==='proj'&&projMode!=='start')$('proj').hidden=true;});
+{let first=false;try{first=!sessionStorage.getItem('g3d-started');sessionStorage.setItem('g3d-started','1');}catch(_){first=true;}
+ if(first){document.body.classList.add('starting');setTimeout(()=>{if(typeof setMin==='function'&&innerWidth>760)setMin(true);const p=$('panel');p.classList.add('shut');$('panelToggle').textContent='▸';openProjects('start');},60);}}
 // ---------- studio shell: menus, rail, view cube ----------
 function viewFrom(dir){const t=ctl.target.clone();const r2=Math.max(80,ctl.r);const [nx,nz]=northVec();const E=[-nz,nx];const d={n:[nx,nz],s:[-nx,-nz],e:E,w:[-E[0],-E[1]]}[dir];const a=1.15;flyTo(new THREE.Vector3(t.x+d[0]*r2*Math.sin(a),r2*Math.cos(a),t.z+d[1]*r2*Math.sin(a)),t);}
 document.querySelectorAll('#vcube .f[data-v]').forEach(f=>f.onclick=e=>{e.stopPropagation();const v=f.dataset.v;if(v==='top'){const t=ctl.target.clone();const [nx,nz]=northVec();flyTo(new THREE.Vector3(t.x-nx*2,Math.max(200,ctl.r*1.1),t.z-nz*2),t);}else viewFrom(v);});
@@ -3843,7 +3862,7 @@ function checkDraft(){let d=null;try{d=localStorage.getItem(DKEY);}catch(_){}if(
 $('saveBtn').onclick=commit;$('discardBtn').onclick=discard;
 (async()=>{
   try{db=PID==='builtin'&&!APPMODE&&window.claude&&window.claude.use?await window.claude.use('db'):null;}catch(_){db=null;}
-  if(!db){$('saveNote').textContent=PREC?'Project: '+PREC.name+' · saved on this device':APPMODE?'Not saved yet — press Save to name this project':'Saves in this browser only.';markSaved();if(APPMODE&&PID==='builtin')setTimeout(()=>openProjects('welcome'),400);return;}
+  if(!db){$('saveNote').textContent=PREC?'Project: '+PREC.name+' · saved on this device':APPMODE?'Not saved yet — press Save to name this project':'Saves in this browser only.';markSaved();return;}
   try{const d=await db.doc('layout/main').get();
     if(d.exists){const o=d.data();if(o.v===3){if(!loadInto(clone(o)))dirty=true;}else{if(Array.isArray(o.items))S.items=clone(o.items).filter(x=>TYPES[x.type]);if(Array.isArray(o.wall)&&o.wall.length>=3)S.wall=clone(o.wall);dirty=true;}
       rebuildAll();showOverview();try{localStorage.setItem(LKEY,JSON.stringify(snapshot()));}catch(_){}markSaved();if(dirty){commitSnap=snapshot();flush();}}
