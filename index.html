@@ -3862,7 +3862,7 @@ spinBtn.onclick=()=>{ctl.auto=!ctl.auto;spinBtn.setAttribute('aria-pressed',ctl.
 let anim=null;function flyTo(pos,target){anim={p0:camera.position.clone(),t0:ctl.target.clone(),p1:pos,t1:target,s:performance.now()};}
 function focusOn(x,z){const t=new THREE.Vector3(x,0,z);flyTo(t.clone().add(new THREE.Vector3(55,65,85)),t);}
 const V3=(a,b,c)=>new THREE.Vector3(a,b,c);
-const views={top:[V3(GCX,820*SK,GCZ+1),V3(GCX,0,GCZ)],oblique:[HOME[0].clone(),HOME[1].clone()],low:[V3(GCX-520*SK,60*Math.max(SK,.4),GCZ+250*SK),V3(GCX-120*SK,0,GCZ)]};
+const views={top:[V3(GCX,820*SK,GCZ+1),V3(GCX,0,GCZ)],oblique:HOME,low:[V3(GCX-520*SK,60*Math.max(SK,.4),GCZ+250*SK),V3(GCX-120*SK,0,GCZ)]};
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{ctl.auto=false;spinBtn.setAttribute('aria-pressed','false');flyTo(...views[b.dataset.view].map(v=>v.clone()));});
 
 // ---------- start ----------
@@ -3882,7 +3882,11 @@ $('saveBtn').onclick=commit;$('discardBtn').onclick=discard;
 })();
 
 // ---------- loop ----------
-function resize(){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
+function fitHome(){const asp=Math.max(.3,innerWidth/Math.max(1,innerHeight)),vh=Math.tan(camera.fov*Math.PI/360),hh=vh*asp,ph=.70;
+  const rw=(GW/2/.84)/hh,rd=(GD*.75)/vh;const r=Math.min(1500*Math.max(1,SK)*.98,Math.max(60,rw,rd));
+  HOME[1].set(GCX,0,GCZ);HOME[0].set(GCX,r*Math.cos(ph),GCZ+r*Math.sin(ph));}
+var _homeDone=false;
+function resize(){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();fitHome();if(!_homeDone&&innerWidth>50){_homeDone=true;ctl.target.copy(HOME[1]);camera.position.copy(HOME[0]);csync();}}
 addEventListener('resize',resize);resize();
 let fpsN=0,fpsT=0;
 (function loop(now){requestAnimationFrame(loop);
