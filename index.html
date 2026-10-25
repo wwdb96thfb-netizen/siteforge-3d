@@ -549,6 +549,8 @@ body.starting .hud,body.starting #panel,body.starting #minimap,body.starting #ra
 </div>
 
 <script src="three.min.js"></script>
+<script>if(!window.THREE){document.write('<script src="three.min.js?r='+Date.now()+'"><\/script>');}</script>
+<script>if(!window.THREE){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>');}</script>
 <script>try{( function () {
 
 	/**
@@ -3905,7 +3907,9 @@ let fpsN=0,fpsT=0;
   fpsN++;if(now-fpsT>600){const f=Math.round(fpsN*1000/(now-fpsT));fpsN=0;fpsT=now;const el=$('fps');if(el){el.textContent=f;el.style.color=f>=40?'#7fdc8a':f>=22?'#ffd56b':'#ff7a6a';}}
   updHud();feedFrame++;renderFeeds(now);if(feedFrame%3===0)drawMM();})(0);
 }catch(err){
-  $('pbody').innerHTML='<dl><dt>Problem</dt><dd>3D view could not start: '+String(err&&err.message||err).replace(/</g,'&lt;')+'</dd></dl>';
+  let tried=false;try{tried=sessionStorage.getItem('g3d-fix')==='1';sessionStorage.setItem('g3d-fix','1');}catch(_){}
+  if(!tried&&APPMODE){(async()=>{try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()));}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)));}}catch(_){}location.reload();})();}
+  $('pbody').innerHTML='<dl><dt>Problem</dt><dd>3D view could not start: '+String(err&&err.message||err).replace(/</g,'&lt;')+'</dd></dl><div class="form"><button class="btn" onclick="try{sessionStorage.removeItem(\'g3d-fix\')}catch(e){};location.reload()">Reload</button><p class="hint">If this keeps happening, check the internet connection once and reload.</p></div>';
 }
 });
 </script>
