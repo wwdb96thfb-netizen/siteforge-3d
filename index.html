@@ -1443,9 +1443,9 @@ function migrate(o){if(o.rev===5&&(WORLD.rev||1)===6&&Array.isArray(o.blds)){o.b
   if([87,88,89,90,133,134].includes(n))i.type="Officers' bungalow";else if([202,50,42].includes(n)){i.type="Officers' flats";i.users='Officers';}else if([6,14,15].includes(n)){i.type="Workers' quarters (sanitary)";i.users='Sanitary workers';}else i.type="Soldiers' family quarters";
   if((b.name||'').startsWith('Family quarters'))b.name=b.name.replace('Family quarters',i.type);});o.rev=6;}return o;}
 function mig7(o){if(o.mig7||!Array.isArray(o.blds))return;o.blds.forEach(b=>{const i=b.info||{};if(i.inside==='Outside wall'&&(i.importance==='Normal'||!i.importance))i.importance='Outside / civil';});o.mig7=true;}
-function loadInto(o){migrate(o);mig7(o);const same=(o.rev||1)===(WORLD.rev||1);['blds','roads','areas'].forEach(k=>{if(same&&Array.isArray(o[k]))S[k]=o[k];});if(Array.isArray(o.items))S.items=o.items;if(same&&Array.isArray(o.wall)&&o.wall.length>=3)S.wall=o.wall;S.walls=Array.isArray(o.walls)?o.walls:[];S.trees=Array.isArray(o.trees)?o.trees:null;S.north=typeof o.north==='number'?o.north:(WORLD.north!=null?WORLD.north:270);S.wallH=o.wallH||3;S.wallT=o.wallT||.5;return same;}
+function loadInto(o){migrate(o);mig7(o);const same=(o.rev||1)===(WORLD.rev||1);['blds','roads','areas'].forEach(k=>{if(same&&Array.isArray(o[k]))S[k]=o[k];});if(Array.isArray(o.items))S.items=o.items;if(same&&Array.isArray(o.wall)&&o.wall.length>=3)S.wall=o.wall;S.walls=Array.isArray(o.walls)?o.walls:[];S.trees=Array.isArray(o.trees)?o.trees:null;S.north=typeof o.north==='number'?o.north:(WORLD.north!=null?WORLD.north:270);S.wallTop=o.wallTop||'none';S.wallH=o.wallH||3;S.wallT=o.wallT||.5;return same;}
 let db=null,saveT=null,saving=false,dirty=false;
-const snapshot=()=>({rev:WORLD.rev||1,blds:S.blds.map(cleanB),roads:S.roads.map(cleanR),areas:S.areas.map(cleanA),wall:S.wall.map(p=>[+(+p[0]).toFixed(2),+(+p[1]).toFixed(2)]),mig7:true,north:S.north,trees:S.trees?S.trees.map(t=>[r2(t[0]),r2(t[1]),r2(t[2]),...(t[3]?[t[3]]:[])]):undefined,items:S.items.map(cleanI),walls:(S.walls||[]).map(cleanW),wallH:S.wallH,wallT:S.wallT});
+const snapshot=()=>({rev:WORLD.rev||1,blds:S.blds.map(cleanB),roads:S.roads.map(cleanR),areas:S.areas.map(cleanA),wall:S.wall.map(p=>[+(+p[0]).toFixed(2),+(+p[1]).toFixed(2)]),mig7:true,north:S.north,trees:S.trees?S.trees.map(t=>[r2(t[0]),r2(t[1]),r2(t[2]),...(t[3]?[t[3]]:[])]):undefined,items:S.items.map(cleanI),walls:(S.walls||[]).map(cleanW),wallTop:S.wallTop||'none',wallH:S.wallH,wallT:S.wallT});
 const r2=v=>Math.round(v*100)/100;
 function cleanB(b){const o={num:b.num,cx:r2(b.cx),cz:r2(b.cz),w:r2(b.w),d:r2(b.d),rot:Math.round(b.rot||0),h:r2(b.h),name:b.name,info:b.info};if(b.parts&&b.parts.length)o.parts=b.parts;return o;}
 function cleanW(w){const o={id:w.id,h:r2(w.h),t:r2(w.t),col:w.col||'offwhite',top:w.top||'none',pts:w.pts.map(p=>[r2(p[0]),r2(p[1])])};if(w.outer)o.outer=true;if(w.kind)o.kind=w.kind;return o;}
@@ -1902,7 +1902,7 @@ function solarRoof(g,w,d,y){const along=w>=d,L=along?w:d,D=along?d:w;const rows=
   for(let r=0;r<rows;r++){const off=-D/2+1.4+r*2.6;const p=new THREE.Mesh(new THREE.BoxGeometry(along?pw:1.6,.08,along?1.6:pw),solarMat());p.position.set(along?0:off,y+.45,along?off:0);if(along)p.rotation.x=-.32;else p.rotation.z=.32;p.castShadow=true;g.add(p);}}
 const _gtw={};function glassTower(c){return _gtw[c]||(_gtw[c]=new THREE.MeshStandardMaterial({color:c,roughness:.08,metalness:.35,transparent:true,opacity:.9,emissive:night?0x7a5a2a:0}));}
 
-const MODERN={flats:1,block:1,school:1,office:1,mess:1,dining:1,canteen:1,medical:1,guard:1,kote:1,quarters:1,store:1,barracks:1,workers:1,bungalow:1,club:1,laundry:1,washroom:1,control:1,shed:1,warehouse:1,hall:1,marriage:1,stable:1,cattle:1,shade:1};
+const MODERN={flats:1,block:1,school:1,office:1,mess:1,dining:1,canteen:1,medical:1,guard:1,kote:1,quarters:1,store:1,barracks:1,workers:1,bungalow:1,club:1,laundry:1,washroom:1,control:1,shed:1,warehouse:1,hall:1,marriage:1,shade:1};
 const VAULT={shed:1,shade:1,stable:1,cattle:1,dining:1,laundry:1};
 let _mw=null;function mWhite(){return _mw||(_mw=new THREE.MeshStandardMaterial({color:0xf7f6f2,roughness:.45,metalness:0}));}
 let _msh=null;function mShell(){return _msh||(_msh=new THREE.MeshStandardMaterial({color:0xf4f8fb,roughness:.18,metalness:.1,transparent:true,opacity:.22,depthWrite:false}));}
@@ -1910,7 +1910,7 @@ let _mpad=null;function mPad(){return _mpad||(_mpad=lam(0xe9e8e3,{depthWrite:fal
 let _mgl=null;function mGlass(){return _mgl||(_mgl=new THREE.MeshStandardMaterial({color:0xb9d3e3,roughness:.04,metalness:.45,transparent:true,opacity:.5,depthWrite:false,side:THREE.DoubleSide,emissive:0}));}
 let _mgw=null;function mGlassWire(){return _mgw||(_mgw=new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.75}));}
 
-const SPECIAL={flats:1,bungalow:1,barracks:1,workers:1,office:1,control:1,school:1,mess:1,dining:0,club:1};
+const SPECIAL={flats:1,bungalow:1,barracks:1,workers:1,office:1,control:1,school:0,mess:1,dining:0,club:1};
 function canonFrame(b,w,d){const along=w>=d;let f=null;try{f=mainRoadSide(b);}catch(_){f=null;}let phi;if(along){const sz=f&&f[1]?f[1]:1;phi=sz>0?0:Math.PI;}else{const sx=f&&f[0]?f[0]:1;phi=sx>0?Math.PI/2:-Math.PI/2;}return {L:along?w:d,D:along?d:w,phi};}
 function specialBld(g,b,M,w,d,H,sh){const {L,D,phi}=canonFrame(b,w,d);const c=new THREE.Group();c.rotation.y=phi;g.add(c);
   const W=mWhite(),GL=mGlass(),DK=lam(0x3a3f45),MT=lam(0x8d969e),GR=lam(0x5f9e45),BR=lam(0x9a5a3a),HD=lam(0x3f7a35);
@@ -1930,22 +1930,22 @@ function specialBld(g,b,M,w,d,H,sh){const {L,D,phi}=canonFrame(b,w,d);const c=ne
     bx(7,.35,3.6,W,0,3.6,D/2+1.8);[-3.2,3.2].forEach(x=>bx(.35,3.6,.35,W,x,1.8,D/2+3.3));for(let k=0;k<3;k++)bx(6-k,.18,.6,W,0,.09+k*.18,D/2+4+(2-k)*.6);
     pad(L+10,D+16,0,3);}
   else if(sh==='bungalow'){pad(w-.6,d-.6,0,0,lam(0x7cc04e));const hw=Math.max(6,L*.58),hd=Math.max(5,D*.42),hz=-D*.12;
-    const hb=bx(hw,H,hd,M.wall,0,H/2,hz,true);const rf=hipRoof(hw+1.6,hd+1.6,Math.min(3,hd*.4),tinMat('green'));rf.position.set(0,H,hz);c.add(rf);
-    const vz=hz+hd/2+1.6;{const vr=bx(hw*.85,.2,3.4,tinMat('green'),0,3.35,vz);vr.rotation.x=.12;}for(let k=0;k<5;k++)bx(.45,3.2,.45,BR,-hw*.4+k*hw*.2,1.6,vz+1.4);
+    const hb=bx(hw,H,hd,M.wall,0,H/2,hz,true);const rf=hipRoof(hw+1.6,hd+1.6,Math.min(3,hd*.4),tinMat('grey',SR[M.sens]!=null?SR[M.sens]:0x9aa3aa));rf.position.set(0,H,hz);c.add(rf);
+    const vz=hz+hd/2+1.6;{const vr=bx(hw*.85,.2,3.4,tinMat('grey',SR[M.sens]!=null?SR[M.sens]:0x9aa3aa),0,3.35,vz);vr.rotation.x=.12;}for(let k=0;k<5;k++)bx(.45,3.2,.45,BR,-hw*.4+k*hw*.2,1.6,vz+1.4);
     bx(hw*.85,.3,3.2,W,0,.15,vz);
     const wl=1.1;[[L,0,-D/2],[.25,1,0]].forEach(()=>{});bx(L,wl,.25,W,0,wl/2,-D/2);[-1,1].forEach(sd=>bx(.25,wl,D,W,sd*L/2,wl/2,0));const gw=4;[-1,1].forEach(sd=>{bx((L-gw)/2,wl,.25,W,sd*(gw/2+(L-gw)/4),wl/2,D/2);bx(.6,1.8,.6,W,sd*(gw/2+.3),.9,D/2);});
     pad(gw-.4,D/2-vz-1.4,0,(D/2+vz+1.6)/2,mPad());}
   else if(sh==='barracks'){const vd=Math.min(3.2,D*.25);const bd=bx(L,H,D-vd,M.wall,0,H/2,-vd/2,true);
     const n=Math.max(3,Math.round(L/3.5));for(let k=0;k<=n;k++)bx(.4,H,.4,W,-L/2+.3+k*(L-.6)/n,H/2,D/2-.3);bx(L,.3,vd,W,0,.15,D/2-vd/2);
     if(floors>1)for(let f=1;f<floors;f++)bx(L,.22,vd,W,0,f*fh,D/2-vd/2);
-    gable(L+.8,D+1.2,Math.min(2.6,D*.2),H,tinMat('grey',frost(SR[M.sens]!=null?SR[M.sens]:0xcccccc,.15)));
+    gable(L+.8,D+1.2,Math.min(2.6,D*.2),H,tinMat('grey',SR[M.sens]!=null?SR[M.sens]:0xcccccc));
     pad(L,8,0,D/2+4);[-L*.25,L*.25].forEach(x=>bx(L*.35,.9,.9,HD,x,.45,D/2+8.6));}
   else if(sh==='workers'){const cd=Math.min(1.8,D*.2);const bd=bx(L,H,D-cd,M.wall,0,H/2,-cd/2,true);
     if(floors>1){for(let f=1;f<floors;f++){bx(L,.2,cd,W,0,f*fh,D/2-cd/2);bx(L,.9,.06,DK,0,f*fh+.55,D/2-.03);}
       [-1,1].forEach(sd=>{const x=sd*(L/2+1.4);for(let f=0;f<floors-1;f++){const fl=new THREE.Mesh(new THREE.BoxGeometry(1.2,.15,Math.hypot(fh,3.2)),DK);fl.position.set(x,f*fh+fh/2,D/2-1.6);fl.rotation.x=Math.atan2(fh,3.2)*(f%2?1:-1);fl.castShadow=true;c.add(fl);bx(1.4,.15,1.4,DK,x,(f+1)*fh,D/2-(f%2?3.2:0));}
         [[-.7,-.7],[.7,-.7],[-.7,.7],[.7,.7]].forEach(([a,q])=>bx(.1,H,.1,DK,x+a,H/2,D/2-1.6+q*2));});}
-    gable(L+.6,D+.8,Math.min(2.4,D*.25),H,tinMat('grey',frost(SR[M.sens]!=null?SR[M.sens]:0xcccccc,.15)));pad(L+6,6,0,D/2+3);[0,1,2].forEach(k=>bx(1,1.1,.8,lam([0x2f6b3a,0x3a4f8a,0x55595e][k]),-L/2+3+k*1.3,.55,D/2+5));}
-  else if(sh==='office'){const bd=bx(L,H,D,M.wall,0,H/2,0,true);{const rf=hipRoof(L+1.4,D+1.4,Math.min(3.2,D*.32),tinMat('grey',frost(SR[M.sens]!=null?SR[M.sens]:0xcccccc,.15)));rf.position.y=H;c.add(rf);}
+    gable(L+.6,D+.8,Math.min(2.4,D*.25),H,tinMat('grey',SR[M.sens]!=null?SR[M.sens]:0xcccccc));pad(L+6,6,0,D/2+3);[0,1,2].forEach(k=>bx(1,1.1,.8,lam([0x2f6b3a,0x3a4f8a,0x55595e][k]),-L/2+3+k*1.3,.55,D/2+5));}
+  else if(sh==='office'){const bd=bx(L,H,D,M.wall,0,H/2,0,true);{const rf=hipRoof(L+1.4,D+1.4,Math.min(3.2,D*.32),tinMat('grey',SR[M.sens]!=null?SR[M.sens]:0xcccccc));rf.position.y=H;c.add(rf);}
     const pw=Math.min(14,L*.4),pd=4;for(let k=0;k<6;k++){cyl(.38,H-.6,W,-pw/2+.5+k*(pw-1)/5,(H-.6)/2,D/2+pd-.6,16);}
     bx(pw+.6,.8,pd+.4,W,0,H-.2,D/2+pd/2);const pe=prism(pw+.6,pd+.4,1.6,true,W);pe.position.set(0,H+.2,D/2+pd/2);c.add(pe);
     const sg=new THREE.Mesh(new THREE.BoxGeometry(pw*.8,.7,.1),new THREE.MeshLambertMaterial({map:sign('HEADQUARTERS','#f4f4f0','#1f2a3a')}));sg.position.set(0,H-.2,D/2+pd+.26);c.add(sg);
@@ -1968,7 +1968,7 @@ function specialBld(g,b,M,w,d,H,sh){const {L,D,phi}=canonFrame(b,w,d);const c=ne
     const pz=D/2+12;const cp=new THREE.Mesh(new THREE.CircleGeometry(6,32),mPad());cp.rotation.x=-Math.PI/2;cp.position.set(ex,.06,pz);c.add(cp);flagPole(c,ex,pz,9);pad(cl+4,16,-L/2+ww+cl/2,D/2+8);}
   else if(sh==='mess'){const bd=bx(L,H,D,M.wall,0,H/2,0,true);parapet(L,D,H);
     const vd=3.4;const n=Math.max(3,Math.round(L*.7/3.5));const vl=L*.7;for(let k=0;k<=n;k++)bx(.45,3.4,.45,W,-vl/2+k*vl/n,1.7,D/2+vd-.3);
-    const vr=new THREE.Mesh(new THREE.BoxGeometry(vl+.6,.25,vd+.4),tinMat('green'));vr.position.set(0,3.55,D/2+vd/2);vr.rotation.x=.12;vr.castShadow=true;c.add(vr);bx(vl,.25,vd,W,0,.12,D/2+vd/2);
+    const vr=new THREE.Mesh(new THREE.BoxGeometry(vl+.6,.25,vd+.4),tinMat('grey',SR[M.sens]!=null?SR[M.sens]:0x9aa3aa));vr.position.set(0,3.55,D/2+vd/2);vr.rotation.x=.12;vr.castShadow=true;c.add(vr);bx(vl,.25,vd,W,0,.12,D/2+vd/2);
     pad(L*.4,10,-L*.3,D/2+vd+5,lam(0x7cc04e));pad(L*.4,10,L*.3,D/2+vd+5,lam(0x7cc04e));flagPole(c,L/2+3,D/2+3,9);}
   else if(sh==='club'){const g1=Math.min(4,H*.5),h2=Math.max(3.2,H-g1);
     const gf=bx(L,g1,D,GL,0,g1/2,0);[[L,.25,0,0,g1],[.3,g1,-L/2,0,g1/2],[.3,g1,L/2,0,g1/2]].forEach(([a,hh,x,z,y])=>bx(a,hh,D+.1,W,x,y,z));for(let k=1;k<5;k++)bx(.18,g1,D+.1,W,-L/2+k*L/5,g1/2,0);
@@ -1994,7 +1994,7 @@ function modernBld(g,b,M,w,d,H,sh){
       else{const rf=lowArch(L,S,Math.min(S*.45,Math.max(3,H)),mGlass());if(!along)rf.rotation.y=Math.PI/2;rf.position.y=1.6;sg.add(rf);const ed=new THREE.LineSegments(new THREE.EdgesGeometry(rf.geometry,5),mGlassWire());ed.rotation.copy(rf.rotation);ed.position.copy(rf.position);sg.add(ed);}
       return;}
     if(sh==='marriage'||sh==='warehouse'){const wh=Math.max(4.5,Math.min(H,8));const bd=add(new THREE.Mesh(new THREE.BoxGeometry(rw,wh,rd),M.wall),sg);bd.position.y=wh/2;addEdges(sg,bd,M.edge,20);
-      const rm=tinMat('grey',b.info.roofCol?parseInt(b.info.roofCol.slice(1),16):(sh==='marriage'?0xf2f2ef:0xd7dbde));const rise=Math.min(2.2,S*.1);const rf=prism(L+.6,S+.6,rise,along,rm);{const uv=rf.geometry.attributes.uv;for(let i=0;i<uv.count;i++)uv.setXY(i,uv.getX(i)/9,uv.getY(i)/9);}rf.position.y=wh;rf.castShadow=true;rf.receiveShadow=true;sg.add(rf);
+      const civ=!b.info.importance||b.info.importance==='Outside / civil';const rm=tinMat('grey',civ&&b.info.roofCol?parseInt(b.info.roofCol.slice(1),16):(SR[M.sens]!=null?SR[M.sens]:0xd7dbde));const rise=Math.min(2.2,S*.1);const rf=prism(L+.6,S+.6,rise,along,rm);{const uv=rf.geometry.attributes.uv;for(let i=0;i<uv.count;i++)uv.setXY(i,uv.getX(i)/9,uv.getY(i)/9);}rf.position.y=wh;rf.castShadow=true;rf.receiveShadow=true;sg.add(rf);
       if(sh==='marriage'){let f;try{f=mainRoadSide(b);}catch(_){f=[0,1];}const fx=f[0],fz=f[1];const fl=fx?rd:rw;const fac=new THREE.Mesh(new THREE.BoxGeometry(fx?.6:fl,wh+2.2,fx?fl:.6),mWhite());fac.position.set(fx?fx*(rw/2+.3):0,(wh+2.2)/2,fz?fz*(rd/2+.3):0);fac.castShadow=true;sg.add(fac);
         const gl=new THREE.Mesh(new THREE.BoxGeometry(fx?.1:fl*.5,wh*.55,fx?fl*.5:.1),mGlass());gl.position.set(fx?fx*(rw/2+.65):0,wh*.35,fz?fz*(rd/2+.65):0);sg.add(gl);
         const sg2=new THREE.Mesh(new THREE.BoxGeometry(fx?.12:fl*.7,1.1,fx?fl*.7:.12),new THREE.MeshBasicMaterial({map:sign((b.name&&!/^Marriage hall/.test(b.name)?b.name:'MARQUEE').toUpperCase().slice(0,18),'#7a1f2b','#ffe9a8')}));sg2.position.set(fx?fx*(rw/2+.68):0,wh+1.3,fz?fz*(rd/2+.68):0);sg.add(sg2);}
@@ -2381,7 +2381,15 @@ function wallLen(){let L=0;const w=S.wall;for(let i=0;i<w.length;i++){const a=w[
 function wallGates(){return S.items.filter(i=>GATEHW[i.type]&&i.inWall&&(i.wid||'b')==='b');}
 const GATEHW={maingate:8.4,gate:5.2,door:.8};
 const WCOL={offwhite:['Off-white',0xf3efe2],brick:['Brick',0xa9553d],concrete:['Concrete grey',0xb4b4ac],sand:['Sand',0xd8c49a],camo:['Camouflage',0]};
-const WTOP={none:'Nothing',wire:'Barbed wire',coil:'Razor-wire coil'};
+const WTOP={none:'Nothing',wire:'Barbed wire',coil:'Razor-wire coil',both:'Barbed wire + razor coil'};
+let _bwM=null,_rcM=null;
+function wallTop(g,a,b,H,top,T){if(!top||top==='none')return;const L=Math.hypot(b[0]-a[0],b[1]-a[1]);if(L<.3)return;const ux=(b[0]-a[0])/L,uz=(b[1]-a[1])/L,nx=-uz,nz=ux,ang=-Math.atan2(uz,ux);
+  _bwM=_bwM||lam(0x4a4e52,{metalness:.6,roughness:.5});_rcM=_rcM||lam(0xb9bdc1,{metalness:.8,roughness:.3});
+  if(top==='wire'||top==='both'){const n=Math.max(1,Math.round(L/2.5));const geo=new THREE.BoxGeometry(.05,.75,.05);const im=new THREE.InstancedMesh(geo,_bwM,(n+1)*2);const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),sc=new THREE.Vector3(1,1,1),e=new THREE.Euler();let k=0;
+    for(let i=0;i<=n;i++){const t=i/n;const x=a[0]+(b[0]-a[0])*t,z=a[1]+(b[1]-a[1])*t;[-1,1].forEach(sd=>{e.set(0,ang,0);q.setFromEuler(e);const tilt=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(Math.cos(-ang),0,Math.sin(-ang)),sd*.55);q.premultiply(tilt);m4.compose(new THREE.Vector3(x+nx*sd*.18,H+.33,z+nz*sd*.18),q,sc);im.setMatrixAt(k++,m4);});}
+    im.raycast=()=>{};g.add(im);[-1,1].forEach(sd=>[.2,.42,.64].forEach(dy=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,L,3),_bwM);l.rotation.set(0,ang,Math.PI/2);l.position.set((a[0]+b[0])/2+nx*sd*(.06+dy*.55),H+dy,(a[1]+b[1])/2+nz*sd*(.06+dy*.55));l.raycast=()=>{};g.add(l);}));}
+  if(top==='coil'||top==='both'){const n=Math.max(2,Math.round(L/.45));const geo=new THREE.TorusGeometry(.32,.014,4,14);const im=new THREE.InstancedMesh(geo,_rcM,n);const m4=new THREE.Matrix4(),q=new THREE.Quaternion().setFromEuler(new THREE.Euler(0,ang+Math.PI/2,0)),sc=new THREE.Vector3(1,1,1);
+    const y=H+(top==='both'?.75:.33);for(let i=0;i<n;i++){const t=(i+.5)/n;const w=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(ux,0,uz),(i%2?.25:-.25));m4.compose(new THREE.Vector3(a[0]+(b[0]-a[0])*t,y,a[1]+(b[1]-a[1])*t),w.multiply(q.clone()),sc);im.setMatrixAt(i,m4);}im.raycast=()=>{};g.add(im);}}
 function snapWallPt(x,z,skip,noBoundary){let best=null,bd=2.5;const tryPt=q=>{const d=Math.hypot(q[0]-x,q[1]-z);if(d<bd){bd=d;best=[q[0],q[1]];}};
   (S.walls||[]).forEach(w=>{if(w===skip)return;w.pts.forEach(tryPt);});if(!noBoundary)S.wall.forEach(tryPt);
   S.blds.forEach(b=>{[[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([a,c])=>{const r=(b.rot||0)*Math.PI/180,lx=a*b.w/2,lz=c*b.d/2;tryPt([b.cx+lx*Math.cos(r)+lz*Math.sin(r),b.cz-lx*Math.sin(r)+lz*Math.cos(r)]);});});
@@ -2405,8 +2413,7 @@ function buildCWall(w){if(w.group){G.cwalls.remove(w.group);disposeGroup(w.group
    for(const [t0,t1] of gapPieces(a0,b0,LL,ux,uz,w.id)){const L=t1-t0;if(L<.1)continue;const a=[a0[0]+ux*t0,a0[1]+uz*t0],b=[a0[0]+ux*t1,a0[1]+uz*t1];const cx=(a[0]+b[0])/2,cz=(a[1]+b[1])/2;const ext=(t0<.01?T/2:0)+(t1>LL-.01?T/2:0);
     const m=new THREE.Mesh(new THREE.BoxGeometry(L+ext,H,T),mat);m.position.set(cx+ux*((t1>LL-.01?T/4:0)-(t0<.01?T/4:0)),H/2,cz+uz*((t1>LL-.01?T/4:0)-(t0<.01?T/4:0)));m.rotation.y=ang;m.castShadow=m.receiveShadow=true;m.userData={kind:'cwall',ref:w};g.add(m);
     const c=new THREE.Mesh(new THREE.BoxGeometry(L+T+.08,.12,T+.1),capM);c.position.set(cx,H+.06,cz);c.rotation.y=ang;c.userData={kind:'cwall',ref:w};g.add(c);
-    if(w.top==='wire'){[.2,.4].forEach(dy=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(.015,.015,L,4),wireMat);l.rotation.set(0,ang,Math.PI/2);l.position.set(cx,H+dy,cz);g.add(l);});const n=Math.max(1,Math.round(L/3));for(let k=0;k<=n;k++){const t=k/n;const p=new THREE.Mesh(new THREE.BoxGeometry(.05,.5,.05),wireMat);p.position.set(a[0]+(b[0]-a[0])*t,H+.25,a[1]+(b[1]-a[1])*t);g.add(p);}}
-    if(w.top==='coil'){const cl=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,L,8,1,true),new THREE.MeshLambertMaterial({color:0x9a9ea2,wireframe:true}));cl.rotation.set(0,ang,Math.PI/2);cl.position.set(cx,H+.3,cz);g.add(cl);}}}
+    wallTop(g,a,b,H,w.top);}}
   g.visible=G.cwalls.visible;}
 function cwallLen(w){let L=0;for(let i=0;i<w.pts.length-1;i++)L+=Math.hypot(w.pts[i+1][0]-w.pts[i][0],w.pts[i+1][1]-w.pts[i][1]);return L;}
 const TKIND={tree:'Tree',bush:'Bush / hedge',palm:'Palm tree'};
@@ -2464,7 +2471,7 @@ function buildWall(){
     pieces.forEach(([t0,t1])=>{const L=t1-t0;if(L<.2)return;const cx=a[0]+ux*(t0+t1)/2,cz=a[1]+uz*(t0+t1)/2;
       const WH=S.wallH||3,WT=S.wallT||.5;const seg=new THREE.Mesh(new THREE.BoxGeometry(L,WH,WT),wallMat);seg.position.set(cx,WH/2,cz);seg.rotation.y=ang;seg.castShadow=seg.receiveShadow=true;seg.userData={kind:'wall'};G.wall.add(seg);
       const band=new THREE.Mesh(new THREE.BoxGeometry(L,.5,WT+.06),wallBand);band.position.set(cx,.25,cz);band.rotation.y=ang;band.userData={kind:'wall'};G.wall.add(band);
-      const wire=new THREE.Mesh(new THREE.CylinderGeometry(.28,.28,L,8),wireMat);wire.rotation.set(0,ang,Math.PI/2);wire.position.set(cx,WH+.35,cz);wire.userData={kind:'wall'};G.wall.add(wire);
+      wallTop(G.wall,[a[0]+ux*t0,a[1]+uz*t0],[a[0]+ux*t1,a[1]+uz*t1],WH+.15,S.wallTop||'none');
       const pc=Math.floor(L/4);for(let k=0;k<=pc;k++){const t=t0+L*k/Math.max(1,pc);const pl=new THREE.Mesh(new THREE.BoxGeometry(WT+.2,WH+.3,WT+.2),wallMat);pl.position.set(a[0]+ux*t,(WH+.3)/2,a[1]+uz*t);pl.rotation.y=ang;pl.userData={kind:'wall'};G.wall.add(pl);}});}
 }
 function snapGate(it){let best=null,bd=it.type==='door'?6:12;const h=GATEHW[it.type];
@@ -2920,11 +2927,13 @@ function drawGizmo(){
   }else if(sel.kind==='tree'){const R=Math.max(1.5,o[2]*1.2);const ring=new THREE.Line(new THREE.BufferGeometry().setFromPoints(new THREE.EllipseCurve(0,0,R,R,0,Math.PI*2).getPoints(40).map(v=>new THREE.Vector3(o[0]+v.x,.6,o[1]+v.y))),lineM);ring.renderOrder=39;G.gizmo.add(ring);
   }else if(sel.kind==='item'){
     const R=TYPES[o.type].r||6;const ring=new THREE.Line(new THREE.BufferGeometry().setFromPoints(new THREE.EllipseCurve(0,0,R,R,0,Math.PI*2).getPoints(48).map(v=>new THREE.Vector3(o.x+v.x,.6,o.z+v.y))),lineM);ring.renderOrder=39;G.gizmo.add(ring);
-    if(!editing)return;const r=(o.rot||0)*Math.PI/180;const T=TYPES[o.type];
-    if(T.cam||T.light||T.arc){const Rg=o.range||20;const full=!!TYPES[o.type].full;
+    const r=(o.rot||0)*Math.PI/180;const T=TYPES[o.type];
+    if(T.zone&&!T.arc){const Rg=o.range||40;handle(o.x+Rg,o.z,hRot,{kind:'h-zone'},1.2,2.2);return;}
+    if(T.cam||T.light||T.arc){const Rg=o.range||20;const full=(o.fov||360)>=359;
       handle(o.x+Rg*Math.cos(r),o.z+Rg*Math.sin(r),hRot,{kind:'h-range'},1.2,1.9);
       const rl=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(o.x,1.2,o.z),new THREE.Vector3(o.x+Rg*Math.cos(r),1.2,o.z+Rg*Math.sin(r))]),new THREE.LineBasicMaterial({color:0x3fd0ff,depthTest:false}));rl.renderOrder=39;G.gizmo.add(rl);
-      if(!full){[1,-1].forEach(sg=>{const aa=r+sg*(o.fov||70)*Math.PI/360;handle(o.x+Rg*.85*Math.cos(aa),o.z+Rg*.85*Math.sin(aa),hMat,{kind:'h-arc'},1.2,1.6);});}}
+      if(!full){[1,-1].forEach(sg=>{const aa=r+sg*(o.fov||70)*Math.PI/360;handle(o.x+Rg*.85*Math.cos(aa),o.z+Rg*.85*Math.sin(aa),hMat,{kind:'h-arc'},1.2,2);});}else handle(o.x+Rg*.6*Math.cos(r+.6),o.z+Rg*.6*Math.sin(r+.6),hMat,{kind:'h-arc'},1.2,2);}
+    if(!editing)return;
     else if(!GATEHW[o.type]||!o.inWall)handle(o.x+(R+4)*Math.cos(r),o.z+(R+4)*Math.sin(r),hRot,{kind:'h-rot'},.6,1.9);
   }else if(sel.kind==='road'||sel.kind==='wall'||sel.kind==='cwall'){
     const pts=sel.kind==='wall'?S.wall:o.pts;const closed=sel.kind==='wall';
@@ -3080,17 +3089,19 @@ function showRoad(r){
   $('f_back').onclick=()=>{clearSel();showOverview();};
 }
 function showWall(){
-  if(!editing){setPanel('Boundary','Boundary wall','',`<dl><dt>Length</dt><dd>${fmt(wallLen())}</dd><dt>Corners</dt><dd>${S.wall.length}</dd></dl><div class="form"><div class="row"><button class="btn" id="f_edit">Edit the wall</button><button class="btn ghost" id="f_back">Overview</button></div></div>`);
+  if(!editing){setPanel('Boundary','Boundary wall','',`<dl><dt>Length</dt><dd>${fmt(wallLen())}</dd><dt>Corners</dt><dd>${S.wall.length}</dd><dt>On top</dt><dd>${WTOP[S.wallTop||'none']}</dd></dl><div class="form"><div class="row"><button class="btn" id="f_edit">Edit the wall</button><button class="btn ghost" id="f_back">Overview</button></div></div>`);
     $('f_edit').onclick=()=>{setEdit(true);select('wall',null);};$('f_back').onclick=()=>{clearSel();showOverview();};return;}
   setPanel('Editing','Boundary wall','',`<dl><dt>Length</dt><dd>${fmt(wallLen())}</dd><dt>Corners</dt><dd>${S.wall.length}</dd></dl><div class="form">
    <p class="hint">Drag an orange point to move a corner. Tap a white point to add a corner there. Tap a corner to select it (red) and delete it below. Top-down view is easiest.</p>
    <label>Wall height: <span id="w_hv">${(S.wallH||3).toFixed(1)} m (${((S.wallH||3)*3.2808).toFixed(0)} ft)</span><input type="range" id="w_h" min="1" max="8" step="0.1" value="${S.wallH||3}"></label>
+   <label>On top of the wall<select id="w_top2">${Object.entries(WTOP).map(([k,v])=>`<option value="${k}" ${k===(S.wallTop||'none')?'selected':''}>${v}</option>`).join('')}</select></label>
    <label>Wall thickness: <span id="w_tv">${(S.wallT||.5).toFixed(2)} m</span><input type="range" id="w_t" min="0.2" max="1.5" step="0.05" value="${S.wallT||.5}"></label>
    <div class="row"><button class="btn danger" id="w_del" ${selV<0||S.wall.length<=3?'disabled':''}>Delete selected corner</button><button class="btn ghost" id="w_top">Top-down view</button></div>
    <div class="row"><button class="btn ghost" id="w_reset">Reset to rectangle</button><button class="btn ghost" id="f_back">Done</button></div></div>`);
   $('w_del').onclick=()=>{if(selV>=0&&S.wall.length>3){remember();S.wall.splice(selV,1);selV=-1;buildWall();drawGizmo();save();showWall();}};
   {let lv=false;const ls=()=>{if(!lv){remember();lv=true;}};
    $('w_h').oninput=e=>{ls();S.wallH=+e.target.value;$('w_hv').textContent=S.wallH.toFixed(1)+' m ('+(S.wallH*3.2808).toFixed(0)+' ft)';buildWall();};
+   $('w_top2').onchange=e=>{remember();S.wallTop=e.target.value;buildWall();save();flash(e.target.value==='none'?'Wire removed from the boundary wall.':WTOP[e.target.value]+' fitted along the whole boundary wall.');};
    $('w_t').oninput=e=>{ls();S.wallT=+e.target.value;$('w_tv').textContent=S.wallT.toFixed(2)+' m';buildWall();};
    $('w_h').onchange=$('w_t').onchange=()=>{lv=false;save();};}
   $('w_top').onclick=()=>flyTo(...views.top.map(v=>v.clone()));
@@ -3103,9 +3114,9 @@ function showItem(it){
   setPanel(T.label,it.name,pill,`<div class="form">
    <label>Name<input type="text" id="f_name" value="${esc(it.name)}"></label>
    <label>Facing: <span id="f_rv">${Math.round(it.rot||0)}°</span><input type="range" id="f_r" min="0" max="359" value="${Math.round(it.rot||0)}"></label>
-   ${T.light?`<label>Light reach: <span id="f_rgv">${it.range} m</span><input type="range" id="f_rg" min="4" max="120" value="${it.range}"></label>${!T.full?`<label>Beam width: <span id="f_fv">${it.fov}°</span><input type="range" id="f_f" min="20" max="${T.wall?220:180}" value="${it.fov}"></label>`:''}`:''}${T.wall?`<p class="hint">${it.onWall?(String(it.onWall).startsWith('w:')?(it.onWall==='w:b'?'Fixed on the boundary wall':'Fixed on a wall you drew'):'Fixed on the wall of '+(()=>{const ob=S.blds.find(o=>o.num===it.onWall);return ob?bTitle(ob):'a building';})())+' at '+(it.mh||4).toFixed(1)+' m. Drag it along the wall to move it.':'Drag it onto a building wall to fix it there.'}</p>`:''}
+   ${T.light?`<label>Light reach: <span id="f_rgv">${it.range} m</span><input type="range" id="f_rg" min="4" max="120" value="${it.range}"></label><label>Beam width: <span id="f_fv">${it.fov}°</span><input type="range" id="f_f" min="10" max="360" value="${it.fov}"></label>`:''}${T.wall?`<p class="hint">${it.onWall?(String(it.onWall).startsWith('w:')?(it.onWall==='w:b'?'Fixed on the boundary wall':'Fixed on a wall you drew'):'Fixed on the wall of '+(()=>{const ob=S.blds.find(o=>o.num===it.onWall);return ob?bTitle(ob):'a building';})())+' at '+(it.mh||4).toFixed(1)+' m. Drag it along the wall to move it.':'Drag it onto a building wall to fix it there.'}</p>`:''}
    ${T.arc?`${it.type==='altpos'?`<label>Weapon for this position<select id="f_wpn">${['Machine gun','Sniper','Rifle','LMG'].map(w=>`<option ${w===(it.wpn||'Machine gun')?'selected':''}>${w}</option>`).join('')}</select></label>`:''}<label>Fire range: <span id="f_rgv">${it.range} m</span><input type="range" id="f_rg" min="20" max="1200" step="10" value="${it.range}"></label><label>Arc of fire: <span id="f_fv">${it.fov}°</span><input type="range" id="f_f" min="10" max="360" value="${it.fov}"></label><p class="hint">The red fan shows where this weapon can fire. In Edit, drag the blue handle to aim it and the orange handles to widen the arc.</p>`:''}
-   ${T.cam?`<label>Range: <span id="f_rgv">${it.range} m</span><input type="range" id="f_rg" min="5" max="150" value="${it.range}"></label>${!T.full?`<label>View angle: <span id="f_fv">${it.fov}°</span><input type="range" id="f_f" min="10" max="180" value="${it.fov}"></label>`:''}`:''}
+   ${T.cam?`<label>Range: <span id="f_rgv">${it.range} m</span><input type="range" id="f_rg" min="5" max="150" value="${it.range}"></label><label>View angle: <span id="f_fv">${it.fov}°</span><input type="range" id="f_f" min="10" max="360" value="${it.fov}"></label>`:''}
    ${T.zone?`<label>${T.thr?'Danger radius':it.type==='siren'?'Can be heard up to':it.type==='drone'?'Patrol radius':it.type==='firept'?'Covers buildings within':it.type==='rv'?'Assembly area radius':'Radius'}: <span id="f_rgv">${it.range} m</span><input type="range" id="f_rg" min="5" max="${it.type==='drone'?1500:600}" step="5" value="${it.range}"></label>`:''}${it.type==='drone'?`<label>Flying height: <span id="f_altv">${it.alt||25} m</span><input type="range" id="f_alt" min="10" max="120" value="${it.alt||25}"></label>`:''}${T.thr?'<p class="hint">Threat and weak-point markers are planning notes. Write what you saw or expect in Notes.</p>':''}
    ${LINEAR[it.type]?`<label>Length: <span id="f_lnv">${(it.len||LINEAR[it.type][1]).toFixed(1)} m</span><input type="range" id="f_ln" min="${LINEAR[it.type][0]}" max="60" step="0.5" value="${it.len||LINEAR[it.type][1]}"></label>`:''}${it.type==='sandbags'?`<label>Height: <span id="f_hhv">${(it.hh||1.2).toFixed(2)} m</span><input type="range" id="f_hh" min="0.25" max="2.5" step="0.25" value="${it.hh||1.2}"></label>`:''}
    ${T.roof?`<p class="hint">${it.y?'Deployed on a rooftop, '+it.y.toFixed(1)+' m up. Drag it to another roof or onto the ground.':'On the ground. Drag it onto a building to put it on the roof.'}</p>`:''}
@@ -3247,7 +3258,7 @@ document.addEventListener('pointerup',e=>{
 const tip=$('tip'),spinBtn=$('spinBtn');
 function visibleChain(o){while(o){if(!o.visible)return false;o=o.parent;}return true;}
 function hitAt(cx,cy,gizmoOnly){setRay(cx,cy);
-  if(editing&&G.gizmo.children.length){const h=ray.intersectObjects(G.gizmo.children.filter(o=>o.isMesh))[0];if(h)return h;}
+  if((editing||(sel&&sel.kind==='item'))&&G.gizmo.children.length){const h=ray.intersectObjects(G.gizmo.children.filter(o=>o.isMesh&&o.userData&&o.userData.kind))[0];if(h)return h;}
   if(gizmoOnly)return null;
   const hs=ray.intersectObjects([G.items,G.buildings,G.wall,G.cwalls,G.trees,G.areas,G.roads,G.dirt],true);
   const h=hs.find(h=>h.object.userData&&h.object.userData.kind&&visibleChain(h.object))||null;
@@ -3264,6 +3275,7 @@ cv.addEventListener('pointerdown',e=>{
   if(e.button===0&&!draw&&!tool&&!measuring&&(e.shiftKey||msMode||(editing&&e.pointerType!=='touch'))){const h0=hitAt(e.clientX,e.clientY);const u0=h0&&h0.object.userData;
     const blocks=h0&&(u0.kind.startsWith('h-')||['building','item','cwall'].includes(u0.kind)||(sel&&sel.ref===u0.ref&&u0.ref)||msHas(u0.kind,u0.ref)||(u0.kind==='wall'&&sel&&sel.kind==='wall'));
     if(!blocks){drag={kind:'box',x0:e.clientX,y0:e.clientY,moved:false};gest=null;return;}}
+  if(!editing&&e.button===0&&!draw&&!tool&&sel&&sel.kind==='item'){const hh=hitAt(e.clientX,e.clientY,true);if(hh&&hh.object.userData.kind&&hh.object.userData.kind.startsWith('h-')){setEdit(true);select('item',sel.ref);}}
   if(editing&&e.button===0&&!draw&&!tool){
     const h=hitAt(e.clientX,e.clientY);
     if(h&&MS.length>1&&msHas(h.object.userData.kind,h.object.userData.ref)&&!e.shiftKey){drag={kind:'multi',start:groundAt(e.clientX,e.clientY),moved:false,orig:MS.map(msPos)};gest=null;return;}
@@ -3295,7 +3307,7 @@ cv.addEventListener('pointermove',e=>{
   const h=hitAt(e.clientX,e.clientY);setHover(h&&h.object.userData.kind==='building'?h.object.userData.ref:h&&h.object.userData.kind==='item'?h.object.userData.ref:null);
   if(h){const u=h.object.userData,r=u.ref;let t='';
     if(u.kind==='building')t=`#${r.num} · ${r.name}${r.info.importance?' · '+r.info.importance:''}`;else if(u.kind==='item')t=r.name;else if(u.kind==='area')t=r.name;else if(u.kind==='road')t=RCLS.find(x=>x[0]===r.cls)[1];else if(u.kind==='wall')t='Boundary wall';else if(u.kind==='cwall')t='Wall · '+r.h.toFixed(1)+' m high';else if(u.kind==='tree')t=TKIND[r[3]||'tree'];
-    else if(u.kind==='h-resize')t='Drag to resize';else if(u.kind==='h-range')t='Drag to aim and set the reach';else if(u.kind==='h-arc')t='Drag to widen or narrow the beam';else if(u.kind==='h-rot')t='Drag to turn';else if(u.kind==='h-vert')t='Drag to move this point';else if(u.kind==='h-mid')t='Tap to add a point here';
+    else if(u.kind==='h-resize')t='Drag to resize';else if(u.kind==='h-range')t='Drag to aim and set the reach';else if(u.kind==='h-arc')t='Drag to widen or narrow the arc (drag fully round for 360°)';else if(u.kind==='h-zone')t='Drag to set the radius';else if(u.kind==='h-rot')t='Drag to turn';else if(u.kind==='h-vert')t='Drag to move this point';else if(u.kind==='h-mid')t='Tap to add a point here';
     if(editing&&['building','item','area','road','wall','cwall','tree'].includes(u.kind))t+=' · drag to move';
     tip.textContent=t;tip.hidden=false;tip.style.left=Math.min(innerWidth-260,e.clientX+14)+'px';tip.style.top=(e.clientY+12)+'px';
     cv.style.cursor=editing?(u.kind==='h-rot'?'alias':u.kind.startsWith('h-')?'crosshair':'move'):'pointer';}
@@ -3355,8 +3367,9 @@ function doDrag(p){
     const prev=[o.cx,o.cz,o.w,o.d];const [ncx,ncz]=toWorld(o,(x1+x2)/2,(z1+z2)/2);o.cx=ncx;o.cz=ncz;o.w=x2-x1;o.d=z2-z1;
     if(sel.kind==='building'){const hb=blockedBy('building',o);if(hb){[o.cx,o.cz,o.w,o.d]=prev;blockMsg(hb);return;}}
     if(sel.kind==='building')buildBld(o);else buildArea(o);drawGizmo();return;}
-  if(drag.kind==='h-range'){const a=Math.atan2(p.z-o.z,p.x-o.x);o.rot=Math.round(((a*180/Math.PI)%360+360)%360);o.range=Math.round(Math.max(4,Math.min(TYPES[o.type].arc?1200:150,Math.hypot(p.x-o.x,p.z-o.z))));renderItem(o);drawGizmo();return;}
-  if(drag.kind==='h-arc'){const a=Math.atan2(p.z-o.z,p.x-o.x)*180/Math.PI;let d=((a-(o.rot||0))%360+540)%360-180;const mxf=TYPES[o.type].wall?220:TYPES[o.type].arc?360:180;o.fov=Math.round(Math.max(10,Math.min(mxf,Math.abs(d)*2)));renderItem(o);drawGizmo();return;}
+  if(drag.kind==='h-range'){const a=Math.atan2(p.z-o.z,p.x-o.x);o.rot=Math.round(((a*180/Math.PI)%360+360)%360);o.range=Math.round(Math.max(3,Math.min(TYPES[o.type].arc?1500:250,Math.hypot(p.x-o.x,p.z-o.z))));renderItem(o);drawGizmo();return;}
+  if(drag.kind==='h-zone'){o.range=Math.round(Math.max(5,Math.min(1500,Math.hypot(p.x-o.x,p.z-o.z))));renderItem(o);drawGizmo();return;}
+  if(drag.kind==='h-arc'){const a=Math.atan2(p.z-o.z,p.x-o.x)*180/Math.PI;let d=((a-(o.rot||0))%360+540)%360-180;const mxf=360;o.fov=Math.round(Math.max(10,Math.min(mxf,Math.abs(d)*2)));renderItem(o);drawGizmo();return;}
   if(drag.kind==='h-rot'){
     if(sel.kind==='item'){const a=Math.atan2(p.z-o.z,p.x-o.x);o.rot=snapOn?Math.round(a*180/Math.PI/15)*15:Math.round(a*180/Math.PI);placeItemObjs(o);drawGizmo();return;}
     const a=Math.atan2(p.x-o.cx,p.z-o.cz);let deg=a*180/Math.PI+180;deg=((deg+540)%360)-180;const pr=o.rot;o.rot=snapOn?Math.round(deg/15)*15:Math.round(deg);if(sel.kind==='building'){const hb=blockedBy('building',o);if(hb){o.rot=pr;blockMsg(hb);return;}}if(sel.kind==='building')buildBld(o);else buildArea(o);drawGizmo();return;}
