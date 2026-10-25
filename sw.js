@@ -1,5 +1,5 @@
 // SiteForge 3D app shell: opens from the copy kept on the device (works offline); updates are fetched quietly in the background.
-var CACHE = "garrison3d-v11";
+var CACHE = "garrison3d-v12";
 var SHELL = ["./", "./index.html", "./manifest.json", "./three.min.js", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 self.addEventListener("install", function (e) { e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL.map(function (u) { return new Request(u, { cache: "no-cache" }); })); }).then(function () { return self.skipWaiting(); })); });
 self.addEventListener("activate", function (e) { e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k.indexOf("garrison3d-") === 0 && k !== CACHE; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); })); });
