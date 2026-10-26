@@ -2081,7 +2081,7 @@ function buildArea(a){
   else geo=new THREE.PlaneGeometry(w,d);
   const m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({visible:false}));m.rotation.x=-Math.PI/2;m.position.y=0.05;m.userData={kind:'area',ref:a};g.add(m);
   if(a.fence){const fm=lam(0xf3efe2);[[w,0,0,-d/2],[w,0,0,d/2],[d,1,w/2,0],[d,1,-w/2,0]].forEach(([L,rt,x,z])=>{const f=new THREE.Mesh(new THREE.BoxGeometry(L,1.6,.35),fm);if(rt){f.rotation.y=Math.PI/2;f.position.set(x,.8,0);}else f.position.set(0,.8,z);f.castShadow=true;f.userData={kind:'area',ref:a};g.add(f);});}
-  if(a.track){const tw=a.trackW||5,tm=new THREE.MeshLambertMaterial({color:0x8a8c87,toneMapped:false});const y=.42;
+  if(a.track){const tw=a.trackW||5,tm=new THREE.MeshLambertMaterial({color:0x8a8c87,toneMapped:false});const y=.16;
     {const gm=new THREE.MeshLambertMaterial({color:0x6a9e42,toneMapped:false});const gr=new THREE.Mesh(new THREE.PlaneGeometry(w-2*tw,d-2*tw),gm);gr.rotation.x=-Math.PI/2;gr.position.y=y-.01;gr.receiveShadow=true;gr.userData={kind:'area',ref:a};g.add(gr);}[[w,tw,0,-d/2+tw/2],[w,tw,0,d/2-tw/2],[tw,d-2*tw,-w/2+tw/2,0],[tw,d-2*tw,w/2-tw/2,0]].forEach(([a1,b1,x,z])=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(a1,b1),tm);m.rotation.x=-Math.PI/2;m.position.set(x,y,z);m.receiveShadow=true;m.userData={kind:'area',ref:a};g.add(m);});
     const lm=new THREE.LineBasicMaterial({color:0xf2f2ee});[tw*.5].forEach(o=>{const pts=[[-w/2+o,-d/2+o],[w/2-o,-d/2+o],[w/2-o,d/2-o],[-w/2+o,d/2-o],[-w/2+o,-d/2+o]].map(([x,z])=>new THREE.Vector3(x,y+.02,z));g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),lm));});}
   if(a.kind==='range'){const lanes=Math.max(3,Math.round(w/8));const bm=lam(0xa98b5e);for(let k=0;k<=lanes;k++){const x=-w/2+w*k/lanes;const br=new THREE.Mesh(new THREE.BoxGeometry(1.2,1.2,d*.92),bm);br.position.set(x,.6,0);br.castShadow=true;br.userData={kind:'area',ref:a};g.add(br);}
@@ -2986,7 +2986,7 @@ function fanMesh(r,fov,col,op,dashed){const g=new THREE.Group();const full=fov>=
 function coverMesh(it){const T=TYPES[it.type];const g=new THREE.Group();
   const kind=T.thr||/threat/i.test(T.grp||'')?'threat':it.type==='altpos'?'alt':T.arc?'weapon':'obs';const col=new THREE.Color(ARCCOL[kind]);
   const w=fanMesh(it.range||40,Math.min(360,it.fov||70)*Math.PI/180,col,kind==='threat'?.12:.2,false);w.position.y=.36;g.add(w);
-  if(T.obsArc){if(it.vr==null){it.vr=500;it.vf=Math.max(it.fov||90,120);it.vo=0;}const o=fanMesh(it.vr,Math.min(360,it.vf)*Math.PI/180,new THREE.Color(ARCCOL.obs),.1,true);o.position.y=.33;o.rotation.y=-(it.vo||0)*Math.PI/180;g.add(o);}
+  if(T.obsArc){if(it.vr==null){it.vr=1000;it.vf=Math.max(it.fov||90,120);it.vo=0;}const o=fanMesh(it.vr,Math.min(360,it.vf)*Math.PI/180,new THREE.Color(ARCCOL.obs),.1,true);o.position.y=.33;o.rotation.y=-(it.vo||0)*Math.PI/180;g.add(o);}
   g.position.set(it.x,(it.y||0)+.05,it.z);g.rotation.y=-(it.rot||0)*Math.PI/180;g.traverse(o=>{o.renderOrder=6;});return g;}
 let DUTYMODE='normal';try{DUTYMODE=localStorage.getItem('g3d-duty')==='lockdown'?'lockdown':'normal';}catch(_){}
 const DUTYABLE=t=>{const T=TYPES[t];return !!T&&(T.staff||T.arc||t==='drone'||t==='qrf'||t==='qrfteam');};
@@ -4785,12 +4785,85 @@ const nb=$('nightBtn');if(nb){const o=nb.onclick;nb.onclick=e=>P.soft(()=>o&&o.c
    if(drag.kind==='h-vrange'){o.vo=Math.round((((a-(o.rot||0))%360+540)%360-180)*2)/2;o.vr=Math.round(Math.max(20,Math.min(3000,Math.hypot(p.x-o.x,p.z-o.z))));}
    else{const sg=drag.u.sg;const ctr=(o.rot||0)+(o.vo||0);const eo=ctr-sg*o.vf/2;let span=(((a-eo)*sg)%360+360)%360;if(span<10)span=span<5&&o.vf>180?360:10;span=Math.round(Math.min(360,span));o.vf=span;const nc=eo+sg*span/2;o.vo=Math.round((((nc-(o.rot||0))%360+540)%360-180)*2)/2;}
    renderItem(o);drawGizmo();return;}return _dd.apply(this,arguments);};
- const _si=showItem;showItem=function(it){const r=_si.apply(this,arguments);try{if(!TYPES[it.type].obsArc)return r;if(it.vr==null){it.vr=500;it.vf=Math.max(it.fov||90,120);it.vo=0;}
+ const _si=showItem;showItem=function(it){const r=_si.apply(this,arguments);try{if(!TYPES[it.type].obsArc)return r;if(it.vr==null){it.vr=1000;it.vf=Math.max(it.fov||90,120);it.vo=0;}
    const box=document.createElement('div');box.className='form';box.style.borderTop='1px solid #e1e6eb';
    box.innerHTML=`<p style="margin:2px 0 4px;font-weight:600;color:#0b7fc0">Sentry observation (blue dashed)</p><label>What the sentry can see: <span id="v_rv">${it.vr} m</span><input type="range" id="v_r" min="50" max="2000" step="10" value="${it.vr}"></label><label>Width of view: <span id="v_fv">${it.vf}°</span><input type="range" id="v_f" min="10" max="360" value="${it.vf}"></label><p class="hint" style="margin:2px 0 0">Drag the blue dots on the map to turn the view or move one edge at a time.</p>`;
    const f=pB.querySelector('.form');if(f&&f.parentNode)f.parentNode.insertBefore(box,f.nextSibling);else pB.appendChild(box);
    $('v_r').oninput=e=>{it.vr=+e.target.value;$('v_rv').textContent=it.vr+' m';renderItem(it);drawGizmo();};$('v_r').onchange=()=>{save();};$('v_r').onpointerdown=()=>remember();
    $('v_f').oninput=e=>{it.vf=+e.target.value;$('v_fv').textContent=it.vf+'°';renderItem(it);drawGizmo();};$('v_f').onchange=()=>{save();};$('v_f').onpointerdown=()=>remember();}catch(e){console.error(e);}return r;};
+})();
+// ================= real line-of-sight arcs (viewshed) with day / night visibility =================
+(function(){const P=window.__PRO;const SET=P.SET;
+ if(SET.dayVis==null)SET.dayVis=1000;if(SET.nightVis==null)SET.nightVis=150;if(SET.losTrees==null)SET.losTrees=true;
+ // eye heights (m above the item's base) for observers
+ const EYE={post:5.6,tower:9,bunker:1.5,rifleman:1.6,mg:1.2,sniper:1.0,firepos:1.4,altpos:1.4,snipe:1.6};const TGT=1.0; // target: a crouching man
+ const CELL=1;let HG=null,LG=null,TB=null,TT=null,GW_=0,GD_=0;
+ const idx=(x,z)=>{const i=Math.floor((x-gx1)/CELL),j=Math.floor((z-gz1)/CELL);return (i<0||j<0||i>=GW_||j>=GD_)?-1:j*GW_+i;};
+ P.losH=(x,z)=>{const k=idx(x,z);return k<0?0:HG[k];};
+ function rect(o,lx1,lx2,lz1,lz2,h){const R=(o.rot||0)*Math.PI/180,c=Math.cos(R),s=Math.sin(R);const cs=[[lx1,lz1],[lx2,lz1],[lx2,lz2],[lx1,lz2]].map(([a,b])=>[o.cx+a*c+b*s,o.cz-a*s+b*c]);
+   const xs=cs.map(p=>p[0]),zs=cs.map(p=>p[1]);for(let z=Math.min(...zs);z<=Math.max(...zs);z+=CELL)for(let x=Math.min(...xs);x<=Math.max(...xs);x+=CELL){const dx=x-o.cx,dz=z-o.cz;const lx=dx*c-dz*s,lz=dx*s+dz*c;if(lx>=lx1&&lx<=lx2&&lz>=lz1&&lz<=lz2){const k=idx(x,z);if(k>=0&&HG[k]<h)HG[k]=h;}}}
+ function seg(a,b,h,t){const L=Math.hypot(b[0]-a[0],b[1]-a[1]);const n=Math.max(1,Math.ceil(L/(CELL*.5)));for(let k=0;k<=n;k++){const x=a[0]+(b[0]-a[0])*k/n,z=a[1]+(b[1]-a[1])*k/n;for(let o=-t;o<=t;o+=CELL*.7){const k2=idx(x+o,z),k3=idx(x,z+o);if(k2>=0&&HG[k2]<h)HG[k2]=h;if(k3>=0&&HG[k3]<h)HG[k3]=h;}}}
+ function buildGrid(){GW_=Math.ceil(GW/CELL)+1;GD_=Math.ceil(GD/CELL)+1;HG=new Float32Array(GW_*GD_);LG=new Uint8Array(GW_*GD_);TB=new Float32Array(GW_*GD_);TT=new Float32Array(GW_*GD_);
+   S.blds.forEach(b=>{if(b.group&&!b.group.visible&&false)return;const h=b.h||4;if(b.parts&&b.parts.length)b.parts.forEach(([u1,u2,v1,v2])=>{let a=v1,c=v2;if(b.mir){a=1-v2;c=1-v1;}rect(b,-b.w/2+u1*b.w,-b.w/2+u2*b.w,-b.d/2+a*b.d,-b.d/2+c*b.d,h);});else rect(b,-b.w/2,b.w/2,-b.d/2,b.d/2,h);});
+   const W=S.wall,wh=S.wallH||3;for(let i=0;i<W.length;i++)seg(W[i],W[(i+1)%W.length],wh,.3);
+   (S.walls||[]).forEach(w=>{if(w.kind==='power')return;for(let i=0;i<w.pts.length-1;i++)seg(w.pts[i],w.pts[i+1],w.h||2.4,.2);});
+   // openings and gates let the eye through at ground level
+   S.items.forEach(it=>{if(GATEHW[it.type]&&it.inWall){const hw=GATEHW[it.type];for(let a=-hw;a<=hw;a+=CELL*.5)for(let o=-1;o<=1;o+=CELL*.5){const R=(it.rot||0)*Math.PI/180;const x=it.x+a*Math.cos(R)-o*Math.sin(R),z=it.z+a*Math.sin(R)+o*Math.cos(R);const k=idx(x,z);if(k>=0)HG[k]=it.type==='opening'?0:Math.min(HG[k],1.2);}}});
+   if(SET.losTrees)(S.trees||[]).forEach(t=>{const kind=t[3]||'tree';const rr=t[2]||2;const r=Math.max(.8,rr*.8);let base,top;if(kind==='bush'){base=0;top=rr*1.1;}else if(kind==='palm'){top=Math.max(4,rr*3.2)+rr*.5;base=top-rr*.9;}else{const th=Math.max(1.4,rr*.75);base=th+rr*.1;top=th+rr*1.55;}
+     for(let z=t[1]-r;z<=t[1]+r;z+=CELL)for(let x=t[0]-r;x<=t[0]+r;x+=CELL){if(Math.hypot(x-t[0],z-t[1])>r)continue;const k=idx(x,z);if(k>=0&&TT[k]<top){TT[k]=top;TB[k]=base;}}});
+   // lit ground at night
+   S.items.forEach(it=>{const T=TYPES[it.type];if(!T||!T.light)return;const R=(it.range||(T.lgt&&T.lgt.range)||20);const fov=(it.fov||(T.lgt&&T.lgt.fov)||360)*Math.PI/180;const rot=(it.rot||0)*Math.PI/180;
+     for(let z=it.z-R;z<=it.z+R;z+=CELL)for(let x=it.x-R;x<=it.x+R;x+=CELL){const dx=x-it.x,dz=z-it.z,d=Math.hypot(dx,dz);if(d>R)continue;if(fov<6.2){let a=Math.atan2(dz,dx)-rot;a=Math.atan2(Math.sin(a),Math.cos(a));if(Math.abs(a)>fov/2)continue;}const k=idx(x,z);if(k>=0)LG[k]=1;}});
+   P.gridT=performance.now();}
+ P.buildLosGrid=buildGrid;
+ const nightNow=()=>LOOK==='night'||(night&&LOOK!=='sec');
+ // compute one fan: returns {vis:[...quads], dead:[...quads]} in local polar cells
+ function viewshed(it,R,fovDeg,rotDeg,mode){if(!HG)buildGrid();const eye=(it.y||0)+(EYE[it.type]!=null?EYE[it.type]:1.6);const fov=Math.min(360,fovDeg)*Math.PI/180;
+   const nA=Math.max(8,Math.min(720,Math.round(fovDeg*1.5)));const da=fov/nA;const ds=Math.max(1,R/240);const nS=Math.ceil(R/ds);
+   const isNight=mode==='obs'&&nightNow();const dayR=mode==='obs'?Math.min(R,SET.dayVis):R;const nR=it.nvd?Math.max(SET.nightVis,450):SET.nightVis;
+   const V=[],Dd=[];const base=((it.rot||0)+(rotDeg||0))*Math.PI/180;
+   for(let i=0;i<nA;i++){const a0=-fov/2+i*da,ac=a0+da/2;const ga=base-ac;const cx=Math.cos(ga),cz=Math.sin(ga);let maxS=-1e9;let runV=-1,runD=-1;
+     const flush=(type,s0,s1)=>{(type?V:Dd).push([a0,a0+da,s0*ds,s1*ds]);};const crowns=[];let lastTree=-1;
+     for(let k=1;k<=nS;k++){const d=k*ds;const x=it.x+cx*d,z=it.z+cz*d;const kk=idx(x,z);const h=kk<0?0:HG[kk];const lit=kk<0?0:LG[kk];if(kk>=0&&TT[kk]>0&&kk!==lastTree&&crowns.length<40){crowns.push([d,TB[kk],TT[kk]]);lastTree=kk;}let vis=false;
+       if(d<2.5){vis=true;}else if(h>eye-0.05&&h>0.3){maxS=Math.max(maxS,(h-eye)/d);vis=false;}
+       else{const th_=Math.max(h,0)+TGT;const ts=(th_-eye)/d;vis=ts>=maxS;if(vis&&crowns.length){for(const [dt,cb,ct] of crowns){if(dt>=d-.5)break;const lh=eye+(th_-eye)*dt/d;if(lh>cb&&lh<ct){vis=false;break;}}}if(h>0.3)maxS=Math.max(maxS,(h-eye)/d);}
+       if(vis&&mode==='obs'){if(d>dayR)vis=false;else if(isNight&&d>nR&&!lit)vis=false;}
+       if(vis){if(runD>=0){flush(0,runD,k-1);runD=-1;}if(runV<0)runV=k-1;}else{if(runV>=0){flush(1,runV,k-1);runV=-1;}if(runD<0)runD=k-1;}}
+     if(runV>=0)flush(1,runV,nS);if(runD>=0)flush(0,runD,nS);}
+   return {V,D:Dd};}
+ function quadsMesh(Q,col,op){const pos=[];Q.forEach(([a0,a1,r0,r1])=>{const p=(a,r)=>[r*Math.cos(a),0,-r*Math.sin(a)];const A=p(a0,r0),B=p(a1,r0),C=p(a1,r1),D=p(a0,r1);pos.push(...A,...B,...C,...A,...C,...D);});
+   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));return new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:op,side:THREE.DoubleSide,depthWrite:false,toneMapped:false}));}
+ function edgeLine(R,fov,col,dashed){const pts=[];const f=Math.min(360,fov)*Math.PI/180;const full=f>=6.27;if(!full)pts.push(new THREE.Vector3(0,0,0));for(let i=0;i<=64;i++){const a=-f/2+f*i/64;pts.push(new THREE.Vector3(R*Math.cos(a),0,-R*Math.sin(a)));}if(!full)pts.push(new THREE.Vector3(0,0,0));
+   const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),dashed?new THREE.LineDashedMaterial({color:col,dashSize:Math.max(2,R/50),gapSize:Math.max(1.5,R/70),transparent:true,opacity:.8,toneMapped:false}):new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.7,toneMapped:false}));if(dashed)ln.computeLineDistances();return ln;}
+ const DEADC=0x15181c;
+ const _cm=coverMesh;coverMesh=function(it){const T=TYPES[it.type];if(!T||!T.arc)return _cm.apply(this,arguments);
+   const g=new THREE.Group();const kind=T.thr||/threat/i.test(T.grp||'')?'threat':it.type==='altpos'?'alt':'weapon';const col=ARCCOL[kind];
+   if(kind==='threat'){return _cm.apply(this,arguments);}
+   const R=it.range||40,F=it.fov||70;const w=viewshed(it,R,F,0,'wpn');const wm=quadsMesh(w.V,col,.24);wm.position.y=.36;g.add(wm);if(w.D.length){const dm=quadsMesh(w.D,DEADC,.34);dm.position.y=.35;g.add(dm);}
+   const we=edgeLine(R,F,col,false);we.position.y=.4;g.add(we);it._vs={wv:w.V.length,wd:w.D.length};
+   if(T.obsArc){if(it.vr==null)it.vr=SET.dayVis;if(it.vf==null){it.vf=Math.max(F,120);it.vo=0;}
+     const o=viewshed(it,it.vr,it.vf,it.vo||0,'obs');const om=quadsMesh(o.V,ARCCOL.obs,.12);om.position.y=.33;om.rotation.y=-(it.vo||0)*Math.PI/180;g.add(om);
+     const oe=edgeLine(it.vr,it.vf,ARCCOL.obs,true);oe.position.y=.38;oe.rotation.y=-(it.vo||0)*Math.PI/180;g.add(oe);
+     const area=(Q)=>Q.reduce((s,[a0,a1,r0,r1])=>s+(a1-a0)/2*(r1*r1-r0*r0),0);it._vs.obsA=area(o.V);it._vs.obsDead=area(o.D);}
+   g.position.set(it.x,(it.y||0)+.05,it.z);g.rotation.y=-(it.rot||0)*Math.PI/180;g.traverse(o=>{o.renderOrder=6;});return g;};
+ // keep arcs in step with the model: rebuild after edits, and when day/night changes
+ let rq=null;P.refreshArcs=(rebuild)=>{clearTimeout(rq);rq=setTimeout(()=>{if(rebuild!==false)buildGrid();S.items.forEach(it=>{if(TYPES[it.type]&&TYPES[it.type].arc&&it.cover){const v=it.cover.visible;G.coverage.remove(it.cover);disposeGroup(it.cover);it.cover=coverMesh(it);it.cover.visible=v;G.coverage.add(it.cover);}});},rebuild===false?30:450);};
+ const _sv=save;save=function(){const r=_sv.apply(this,arguments);if(!drag)P.refreshArcs();return r;};
+ const _sn=setNight;setNight=function(){const r=_sn.apply(this,arguments);P.refreshArcs(false);return r;};
+ const _sl=setLook;setLook=function(){const r=_sl.apply(this,arguments);P.refreshArcs(false);return r;};
+ setTimeout(()=>{buildGrid();P.refreshArcs(false);},600);
+ // item panel: what the sentry can actually see
+ const _si=showItem;showItem=function(it){const r=_si.apply(this,arguments);try{const T=TYPES[it.type];if(!T||!T.arc||!it._vs)return r;const box=document.createElement('div');box.className='form';box.style.borderTop='1px solid #e1e6eb';
+   const eye=((it.y||0)+(EYE[it.type]!=null?EYE[it.type]:1.6)).toFixed(1);const pct=(a,b)=>a+b>0?Math.round(a/(a+b)*100):0;
+   box.innerHTML=`<p style="margin:2px 0 4px;font-weight:600">Line of sight (from the model)</p><dl style="padding:0;margin:0"><dt>Eye height</dt><dd>${eye} m</dd>${T.obsArc&&it._vs.obsA!=null?`<dt>Ground it can see</dt><dd>${pct(it._vs.obsA,it._vs.obsDead)}% of its view arc</dd><dt>Seeing distance now</dt><dd>${nightNow()?(it.nvd?Math.max(SET.nightVis,450):SET.nightVis)+' m at night (further in lit areas)':Math.min(it.vr,SET.dayVis)+' m in daylight'}</dd>`:''}</dl>
+     <p class="hint" style="margin:4px 0">Shaded dark parts inside a fan are <b>dead ground</b>: buildings, walls or trees block the view or the line of fire there.</p>${T.obsArc||T.staff?`<label class="sw" style="font-size:12px"><input type="checkbox" id="v_nvd" ${it.nvd?'checked':''}> Has night-vision device (sees about 450 m at night)</label>`:''}`;
+   pB.appendChild(box);const nv=$('v_nvd');if(nv)nv.onchange=e=>{remember();it.nvd=e.target.checked;renderItem(it);save();showItem(it);};}catch(e){console.error(e);}return r;};
+ const _ci=cleanI;cleanI=function(it){const o=_ci.apply(this,arguments);if(it.nvd)o.nvd=true;return o;};
+ // settings: visibility conditions
+ const _st=P.settings;P.settings=function(){_st();const g=document.querySelector('#settings .setgrid');if(!g)return;const sel_=(id,opts,v)=>`<select id="${id}">${opts.map(([k,l])=>`<option value="${k}" ${String(k)===String(v)?'selected':''}>${l}</option>`).join('')}</select>`;
+   const d=document.createElement('div');d.style.display='contents';d.innerHTML=`<div class="seth">Visibility (line-of-sight arcs)</div><label>Daylight visibility</label>${sel_('sDay',[[1500,'Very clear — 1,500 m'],[1000,'Clear day — 1,000 m'],[600,'Haze — 600 m'],[300,'Dust / light fog — 300 m'],[100,'Dust storm / thick fog — 100 m']],SET.dayVis)}<label>Night conditions (no light)</label>${sel_('sNight',[[300,'Full moon — 300 m'],[150,'Half moon — 150 m'],[60,'Dark, no moon — 60 m'],[25,'Overcast, very dark — 25 m']],SET.nightVis)}<label>Trees block the view</label>${sel_('sTrees',[['1','Yes'],['0','No']],SET.losTrees?1:0)}`;
+   g.insertBefore(d,g.querySelector('.seth:last-of-type'));const sv=()=>{try{localStorage.setItem('g3d-settings',JSON.stringify(SET));}catch(_){}};
+   $('sDay').onchange=e=>{SET.dayVis=+e.target.value;S.items.forEach(it=>{if(TYPES[it.type]&&TYPES[it.type].obsArc&&it.vr<SET.dayVis)it.vr=SET.dayVis;});sv();P.refreshArcs(false);};$('sNight').onchange=e=>{SET.nightVis=+e.target.value;sv();P.refreshArcs(false);};$('sTrees').onchange=e=>{SET.losTrees=e.target.value==='1';sv();P.refreshArcs();};};
 })();
 
 }catch(err){
