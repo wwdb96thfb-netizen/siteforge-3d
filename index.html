@@ -3122,7 +3122,7 @@ function runAnalysis(){
   ovCam.material.map.needsUpdate=true;ovLit.material.map.needsUpdate=true;ovAna.material.map.needsUpdate=true;applyOverlayVis();
   if(!sel&&pT.textContent.includes('Overview'))showOverview();
 }
-const DAY={bg:0xe6e9ec,hemi:[0xffffff,0xbdb6a6,0.42],sun:[0xfff4e2,1.0]},NIGHT={bg:0x161a22,hemi:[0x8a94a4,0x2a2622,0.12],sun:[0xa8b4c8,0.1]};
+const DAY={bg:0xe6e9ec,hemi:[0xffffff,0xbdb6a6,0.42],sun:[0xfff4e2,1.0]},NIGHT={bg:0x0e1219,hemi:[0x8a9ab4,0x2a2622,0.24],sun:[0x9fb4d8,0.2]};
 const NX={beams:new THREE.Group(),grid:null,lamps:null,lampPoles:null};scene.add(NX.beams);
 let _lampTex=null;function lampTex(){if(_lampTex)return _lampTex;const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');const gr=x.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,'rgba(255,240,200,1)');gr.addColorStop(.25,'rgba(255,200,120,.7)');gr.addColorStop(1,'rgba(255,170,80,0)');x.fillStyle=gr;x.fillRect(0,0,64,64);return _lampTex=new THREE.CanvasTexture(c);}
 let lampsQ=false;function buildLampsSoon(){if(lampsQ)return;lampsQ=true;setTimeout(()=>{lampsQ=false;buildLamps();},80);}
@@ -3152,7 +3152,7 @@ function buildBeams(){const g=NX.beams;while(g.children.length)g.remove(g.childr
   g.visible=night;}
 function applyLook(on){const P=on?NIGHT:DAY;scene.environment=on?ENV.night:ENV.day;renderer.toneMappingExposure=on?1.0:0.95;scene.background.setHex(P.bg);scene.fog.color.setHex(P.bg);hemi.color.setHex(P.hemi[0]);hemi.groundColor.setHex(P.hemi[1]);hemi.intensity=P.hemi[2];sun.color.setHex(P.sun[0]);sun.intensity=P.sun[1];
   FAC.night.value=on?1:0;Object.values(_gtw).forEach(m=>m.emissive.setHex(on?0x7a5a2a:0));if(_mgl){_mgl.emissive.setHex(on?0x8a6a30:0);_mgl.opacity=on?.6:.42;}if(typeof PLINTH!=='undefined')PLINTH.children[0].material.color.setHex(on?0x8a8880:0xf4f3ee);Object.values(MC).forEach(m=>{m.glass.emissive.setHex(on?0x6b4a12:0);m.edge.color.setHex(on?0x8a7a5a:0x7d8791);m.edge.opacity=on?.22:.3;});
-  G.items.traverse(o=>{if(o.userData&&o.userData.glow)o.visible=on;});NX.beams.visible=false;NX.grid.visible=on;if(NX.lamps)NX.lamps.visible=on;if(NX.path)NX.path.visible=on;if(NX.lampPoles)NX.lampPoles.visible=true;if(typeof land!=='undefined')land.visible=!MODEL;if(NX.plinth)NX.plinth.visible=MODEL;if(typeof ovLit!=='undefined')ovLit.visible=on&&LITON;}
+  G.items.traverse(o=>{if(o.userData&&o.userData.glow)o.visible=on;});NX.beams.visible=false;NX.grid.visible=false;if(NX.lamps)NX.lamps.visible=on;if(NX.path)NX.path.visible=on;if(NX.lampPoles)NX.lampPoles.visible=true;if(typeof land!=='undefined')land.visible=!MODEL;if(NX.plinth)NX.plinth.visible=MODEL;if(typeof ovLit!=='undefined')ovLit.visible=on&&LITON;}
 
 let LOOK='day';const SECBG=0x0b1018;
 function applySecLook(on){const Mv=Object.values(MC);
