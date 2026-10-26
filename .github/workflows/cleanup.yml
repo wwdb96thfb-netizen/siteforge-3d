@@ -1,0 +1,19 @@
+name: Remove public downloads
+# Sentinel 3D installers are not offered on the internet. This removes every release from this public repository.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/cleanup.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Delete all releases and their tags
+        env: { GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
+        run: |
+          for t in $(gh release list --limit 200 --json tagName --jq '.[].tagName'); do gh release delete "$t" --yes --cleanup-tag || true; done
+          for t in $(git ls-remote --tags origin | awk '{print $2}' | sed 's#refs/tags/##' | grep -v '\^{}'); do git push origin ":refs/tags/$t" || true; done
