@@ -1,8 +1,9 @@
 name: Build desktop installers
+# Runs when desktop/release.txt changes (the owner's release switch).
 on:
   push:
     branches: [main]
-    paths: ['desktop/package.json']
+    paths: ['desktop/release.txt']
   workflow_dispatch:
 permissions:
   contents: write
@@ -22,10 +23,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Bundle the app files (offline)
+      - name: Refuse to build without the licence check code
         run: |
-          mkdir -p app
-          cp -r ../index.html ../three.min.js ../fonts ../*.png ../sentinel-logo.jpg app/
+          if grep -q "S3DPUB-PENDING" main.js; then echo "Licence check code missing"; exit 1; fi
       - name: Install build tools
         run: npm ci
       - name: Build and publish installer
@@ -33,14 +33,18 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
         run: npx electron-builder --publish always
-      - name: Keep a copy of the installers
-        uses: actions/upload-artifact@v4
-        with:
-          name: installers-${{ matrix.os }}
-          path: |
-            desktop/dist/*.exe
-            desktop/dist/*.dmg
-            desktop/dist/*.zip
-            desktop/dist/*.yml
-            desktop/dist/*.blockmap
-          if-no-files-found: ignore
+  finish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Attach the Getting Started guide, publish, and remove old unlicensed releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          V=$(node -p "require('./desktop/package.json').version")
+          gh release upload "v$V" "desktop/docs/Sentinel-3D-Getting-Started.pdf" --clobber
+          gh release edit "v$V" --draft=false --latest --title "Sentinel 3D $V" --notes-file desktop/release-notes.md
+          for t in $(gh release list --limit 100 --json tagName --jq '.[].tagName'); do
+            case "$t" in v3.*|v2.*|v1.*) gh release delete "$t" --yes --cleanup-tag || true ;; esac
+          done
