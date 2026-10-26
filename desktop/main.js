@@ -8,7 +8,7 @@ const LC = require('./licence-core');
 
 // ---------------- licence ----------------
 // Public check code from the owner's private Key Generator. It can only CHECK keys, never make them.
-const LICENCE_CHECK_CODE = 'S3DPUB-PENDING';
+const LICENCE_CHECK_CODE = 'S3DPUB-ZC-R1KDc6qx8uHt2Kckdw89SUxmdsvbA75B6Ujp7eHc';
 const SHELL_DIR = path.join(__dirname, 'shell');
 const LIC = { ok: false, why: 'none', lic: null, code: null };
 function licPub() { const c = (!app.isPackaged && process.env.S3D_TEST_CHECK_CODE) || LICENCE_CHECK_CODE; return LC.checkCodeToPub(c); }
