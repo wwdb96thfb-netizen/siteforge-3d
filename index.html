@@ -2265,8 +2265,7 @@ function specialBld(g,b,M,w,d,H,sh){const {L,D,phi}=canonFrame(b,w,d);const c=ne
     bx(pw+.6,.8,pd+.4,W,0,H-.2,D/2+pd/2);const pe=prism(pw+.6,pd+.4,1.6,true,W);pe.position.set(0,H+.2,D/2+pd/2);c.add(pe);
     const sg=new THREE.Mesh(new THREE.BoxGeometry(pw*.8,.7,.1),new THREE.MeshLambertMaterial({map:sign('HEADQUARTERS','#f4f4f0','#1f2a3a')}));sg.position.set(0,H-.2,D/2+pd+.26);c.add(sg);
     for(let k=0;k<3;k++)bx(pw+1-k,.2,.7,W,0,.1+k*.2,D/2+pd+1+(2-k)*.7);
-    [-1,1].forEach(sd=>bx(L*.32,.9,.9,HD,sd*(L*.32),.45,D/2+pd+3.5));const pz=D/2+pd+10;const cp=new THREE.Mesh(new THREE.CircleGeometry(5,32),mPad());cp.rotation.x=-Math.PI/2;cp.position.set(0,.06,pz);c.add(cp);flagPole(c,0,pz,10);pad(L+6,pd+20,0,D/2+(pd+20)/2-1);
-    const px=L/2+10;pad(14,D+8,px,0,lam(0x55595e));[-1,1].forEach(r=>{for(let k=0;k<3;k++)car(px+r*3.3,-D/2+2+k*((D+4)/3),Math.PI/2,[0x2b3138,0xdfe2e5,0x6d7680][k]);});}
+    [-1,1].forEach(sd=>bx(L*.32,.9,.9,HD,sd*(L*.32),.45,D/2+pd+3.5));const pz=D/2+pd+10;const cp=new THREE.Mesh(new THREE.CircleGeometry(5,32),mPad());cp.rotation.x=-Math.PI/2;cp.position.set(0,.06,pz);c.add(cp);flagPole(c,0,pz,10);pad(L+6,pd+20,0,D/2+(pd+20)/2-1);}
   else if(sh==='control'){pad(L+12,D+12,0,0,lam(0xa7a59e));const fn=new THREE.Mesh(new THREE.BoxGeometry(L+11,2.4,D+11),new THREE.MeshLambertMaterial({color:0x8a9096,wireframe:true}));fn.position.y=1.2;c.add(fn);
     const bd=bx(L,H,D,M.wall,0,H/2,0,true);bx(L+.3,.35,D+.3,W,0,H*.5,0);parapet(L,D,H);
     const mast=new THREE.Mesh(new THREE.CylinderGeometry(.35,1.6,18,4,6,true),new THREE.MeshBasicMaterial({color:0x5a5f66,wireframe:true}));mast.position.set(L*.18,H+9.4,-D*.1);c.add(mast);
