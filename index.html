@@ -1721,14 +1721,14 @@ function migrate(o){if(o.rev===5&&(WORLD.rev||1)===6&&Array.isArray(o.blds)){o.b
   if([87,88,89,90,133,134].includes(n))i.type="Officers' bungalow";else if([202,50,42].includes(n)){i.type="Officers' flats";i.users='Officers';}else if([6,14,15].includes(n)){i.type="Workers' quarters (sanitary)";i.users='Sanitary workers';}else i.type="Soldiers' family quarters";
   if((b.name||'').startsWith('Family quarters'))b.name=b.name.replace('Family quarters',i.type);});o.rev=6;}return o;}
 function mig7(o){if(o.mig7||!Array.isArray(o.blds))return;o.blds.forEach(b=>{const i=b.info||{};if(i.inside==='Outside wall'&&(i.importance==='Normal'||!i.importance))i.importance='Outside / civil';});o.mig7=true;}
-function loadInto(o){migrate(o);mig7(o);const same=(o.rev||1)===(WORLD.rev||1);['blds','roads','areas'].forEach(k=>{if(same&&Array.isArray(o[k]))S[k]=o[k];});if(Array.isArray(o.items))S.items=o.items;if(same&&Array.isArray(o.wall)&&o.wall.length>=3)S.wall=o.wall;S.walls=Array.isArray(o.walls)?o.walls:[];S.trees=Array.isArray(o.trees)?o.trees:null;S.north=typeof o.north==='number'?o.north:(WORLD.north!=null?WORLD.north:270);S.wallTop=o.wallTop||'none';S.wallH=o.wallH||3;S.wallT=o.wallT||.5;S.views=Array.isArray(o.views)?o.views:[];S.notes=Array.isArray(o.notes)?o.notes:[];return same;}
+function loadInto(o){migrate(o);mig7(o);const same=(o.rev||1)===(WORLD.rev||1);['blds','roads','areas'].forEach(k=>{if(same&&Array.isArray(o[k]))S[k]=o[k];});if(Array.isArray(o.items))S.items=o.items;if(same&&Array.isArray(o.wall)&&o.wall.length>=3)S.wall=o.wall;S.walls=Array.isArray(o.walls)?o.walls:[];S.trees=Array.isArray(o.trees)?o.trees:null;S.north=typeof o.north==='number'?o.north:(WORLD.north!=null?WORLD.north:270);S.wallTop=o.wallTop||'none';S.wallH=o.wallH||3;S.wallT=o.wallT||.5;S.views=Array.isArray(o.views)?o.views:[];S.decalV=o.decalV||0;S.notes=Array.isArray(o.notes)?o.notes:[];return same;}
 let db=null,saveT=null,saving=false,dirty=false;
-const snapshot=()=>({rev:WORLD.rev||1,blds:S.blds.map(cleanB),roads:S.roads.map(cleanR),areas:S.areas.map(cleanA),wall:S.wall.map(p=>[+(+p[0]).toFixed(2),+(+p[1]).toFixed(2)]),mig7:true,north:S.north,trees:S.trees?S.trees.map(t=>[r2(t[0]),r2(t[1]),r2(t[2]),...(t[3]?[t[3]]:[])]):undefined,items:S.items.map(cleanI),walls:(S.walls||[]).map(cleanW),wallTop:S.wallTop||'none',wallH:S.wallH,wallT:S.wallT,views:S.views||[],notes:S.notes||[]});
+const snapshot=()=>({rev:WORLD.rev||1,blds:S.blds.map(cleanB),roads:S.roads.map(cleanR),areas:S.areas.map(cleanA),wall:S.wall.map(p=>[+(+p[0]).toFixed(2),+(+p[1]).toFixed(2)]),mig7:true,north:S.north,trees:S.trees?S.trees.map(t=>[r2(t[0]),r2(t[1]),r2(t[2]),...(t[3]?[t[3]]:[])]):undefined,items:S.items.map(cleanI),walls:(S.walls||[]).map(cleanW),wallTop:S.wallTop||'none',wallH:S.wallH,wallT:S.wallT,views:S.views||[],notes:S.notes||[],decalV:S.decalV||undefined});
 const r2=v=>Math.round(v*100)/100;
 function cleanB(b){const o={mir:b.mir||undefined,num:b.num,cx:r2(b.cx),cz:r2(b.cz),w:r2(b.w),d:r2(b.d),rot:Math.round(b.rot||0),h:r2(b.h),name:b.name,info:b.info};if(b.parts&&b.parts.length)o.parts=b.parts;return o;}
 function cleanW(w){const o={id:w.id,h:r2(w.h),t:r2(w.t),col:w.col||'offwhite',top:w.top||'none',pts:w.pts.map(p=>[r2(p[0]),r2(p[1])])};if(w.outer)o.outer=true;if(w.kind)o.kind=w.kind;return o;}
 function cleanR(r){return {id:r.id,cls:r.cls,w:r.w,pts:r.pts.map(p=>[r2(p[0]),r2(p[1])])};}
-function cleanA(a){const o=cleanA0(a);if(a.fence)o.fence=true;if(a.track)o.track=true;if(a.trackW)o.trackW=a.trackW;return o;}
+function cleanA(a){const o=cleanA0(a);if(a.fence)o.fence=true;if(a.track)o.track=true;if(a.trackW)o.trackW=a.trackW;if(a.texCut)o.texCut=a.texCut;return o;}
 function cleanA0(a){return {id:a.id,name:a.name,info:a.info,kind:a.kind,cx:r2(a.cx),cz:r2(a.cz),w:r2(a.w),d:r2(a.d),rot:Math.round(a.rot||0)};}
 function cleanI(it){const o={id:it.id,type:it.type,name:it.name,x:r2(it.x),z:r2(it.z),rot:Math.round(it.rot||0),who:it.who||'',notes:it.notes||'',status:it.status||'manned'};if(it.onWall){o.onWall=it.onWall;o.mh=it.mh;}if(it.inWall)o.inWall=true;if(it.wid)o.wid=it.wid;if(it.online===false)o.online=false;if(it.y)o.y=r2(it.y);if(it.len)o.len=r2(it.len);if(it.people!=null)o.people=+it.people;if(it.wpn)o.wpn=it.wpn;if(it.hh)o.hh=r2(it.hh);if(it.range!=null){o.range=it.range;o.fov=it.fov;}if(it.alt)o.alt=it.alt;if(it.duty)o.duty=it.duty;if(it.mir)o.mir=true;if(it.path&&it.path.length)o.path=it.path.map(p=>[r2(p[0]),r2(p[1])]);if(it.speed)o.speed=it.speed;return o;}
 function save(){scheduleAnalysis();if(typeof buildBeamsSoon==='function')buildBeamsSoon();if(typeof buildLinks==='function'){mmDirty=true;buildLinks();if(ctrlMode)buildTiles();}
@@ -4646,6 +4646,64 @@ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&(e.key==='p'|
  add('analysis',[['Schedules (tables)…','',()=>P.schedules()],['Security report…','',()=>P.report()],['Compare with earlier version…','',()=>P.versions(true)],['Drill playback','',()=>P.scenario()],['Select by type…','',()=>P.filterDlg()]]);
  add('insert',[['Dimension','',()=>P.startDim()],['Text note','',()=>P.startNote()],['Save current view','',()=>P.saveView()]]);
  add('help',[['Guided tour','',()=>P.tour(0)],['Settings…','',()=>P.settings()]]);})();
+// ================= wall sections, vector grounds, browser on start, fuller right-click =================
+(function(){const P=window.__PRO;
+// ---- browser filled on start and whenever its tab opens
+const _st=showTab;showTab=function(k){const r=_st.apply(this,arguments);if(k==='browser')setTimeout(()=>P.browser(),0);return r;};
+setTimeout(()=>{try{P.browser();}catch(_){}},300);
+// ---- boundary wall sections
+let WSEG=-1,lastWall=null;P.wseg=()=>WSEG;
+const segAt=(x,z)=>{let best=-1,bd=1e9;const W=S.wall;for(let i=0;i<W.length;i++){const a=W[i],b=W[(i+1)%W.length];const vx=b[0]-a[0],vz=b[1]-a[1],L2=vx*vx+vz*vz||1;let t=((x-a[0])*vx+(z-a[1])*vz)/L2;t=Math.max(0,Math.min(1,t));const d=Math.hypot(x-a[0]-vx*t,z-a[1]-vz*t);if(d<bd){bd=d;best=i;}}return best;};
+const segLen=i=>{const W=S.wall,a=W[i],b=W[(i+1)%W.length];return Math.hypot(b[0]-a[0],b[1]-a[1]);};
+cv.addEventListener('pointerdown',e=>{try{const h=hitAt(e.clientX,e.clientY,false,true);lastWall=h&&h.object.userData.kind==='wall'?[h.point.x,h.point.z]:null;}catch(_){lastWall=null;}},true);
+const _sel=select;select=function(kind,ref){WSEG=(kind==='wall'&&lastWall)?segAt(lastWall[0],lastWall[1]):(kind==='wall'?WSEG:-1);return _sel.apply(this,arguments);};
+const _dg=drawGizmo;drawGizmo=function(){const r=_dg.apply(this,arguments);if(sel&&sel.kind==='wall'&&WSEG>=0&&WSEG<S.wall.length){const W=S.wall,a=W[WSEG],b=W[(WSEG+1)%W.length];const L=Math.hypot(b[0]-a[0],b[1]-a[1]);
+  const m=new THREE.Mesh(new THREE.BoxGeometry(L,(S.wallH||3)+.6,1.2),new THREE.MeshBasicMaterial({color:0xffb020,transparent:true,opacity:.45,depthWrite:false}));m.position.set((a[0]+b[0])/2,(S.wallH||3)/2,(a[1]+b[1])/2);m.rotation.y=-Math.atan2(b[1]-a[1],b[0]-a[0]);m.renderOrder=41;m.raycast=()=>{};m.userData.fixed=true;G.gizmo.add(m);}return r;};
+function splitWallAt(x,z){const i=segAt(x,z);if(i<0)return;const W=S.wall,a=W[i],b=W[(i+1)%W.length];const vx=b[0]-a[0],vz=b[1]-a[1],L2=vx*vx+vz*vz||1;let t=((x-a[0])*vx+(z-a[1])*vz)/L2;
+  if(t<.04||t>.96){flash('Too close to a corner — choose a point further along this section.');return;}remember();const p=[+(a[0]+vx*t).toFixed(2),+(a[1]+vz*t).toFixed(2)];W.splice(i+1,0,p);buildWall();
+  S.items.forEach(it=>{if(it.inWall&&(it.wid||'b')==='b'){snapGate(it);renderItem(it);}if(it.onWall==='b'||it.onWall===true){try{snapWall(it);renderItem(it);}catch(_){}}});
+  save();if(!editing)setEdit(true);lastWall=null;WSEG=i+1;_sel('wall',null);selV=i+1;drawGizmo();showWall();flash('Wall split at this point. Drag the new orange corner to bend it, or select a section to change it.');}
+P.splitWallAt=splitWallAt;
+function removeCornerNear(x,z){const W=S.wall;let k=-1,bd=8;W.forEach((p,i)=>{const d=Math.hypot(p[0]-x,p[1]-z);if(d<bd){bd=d;k=i;}});if(k<0||W.length<=3)return false;remember();W.splice(k,1);buildWall();save();WSEG=-1;drawGizmo();if(sel&&sel.kind==='wall')showWall();flash('Corner removed — the two sections are joined into one straight wall.');return true;}
+const _sw=showWall;showWall=function(){const r=_sw.apply(this,arguments);if(WSEG>=0&&WSEG<S.wall.length){const L=segLen(WSEG);const box=document.createElement('div');box.className='form';box.style.borderTop='1px solid #e1e6eb';
+   box.innerHTML=`<p style="margin:2px 0 6px;font-weight:600">Selected section ${WSEG+1} of ${S.wall.length} · ${fmt(L)}</p><div class="row"><button class="btn ghost" id="ws_split">Split in the middle</button><button class="btn ghost" id="ws_open">Opening in the middle</button><button class="btn ghost" id="ws_gate">Gate in the middle</button><button class="btn ghost" id="ws_all">Whole wall</button></div>`;
+   pB.insertBefore(box,pB.firstChild);const W=S.wall,a=W[WSEG],b=W[(WSEG+1)%W.length],mx=(a[0]+b[0])/2,mz=(a[1]+b[1])/2;
+   $('ws_split').onclick=()=>splitWallAt(mx,mz);$('ws_open').onclick=()=>gateAt('opening',mx,mz);$('ws_gate').onclick=()=>gateAt('gate',mx,mz);$('ws_all').onclick=()=>{WSEG=-1;drawGizmo();showWall();};}return r;};
+// ---- fuller right-click menu
+const _oc2=openCtx;openCtx=function(e){const h=hitAt(e.clientX,e.clientY,false,true);const r=_oc2.apply(this,arguments);if(ctx.hidden||!h)return r;const u=h.object.userData;const px=h.point.x,pz=h.point.z;
+  const mk=(label,fn,st)=>{const b=document.createElement('button');b.innerHTML=label;if(st)b.style.cssText=st;b.onclick=()=>{hideCtx();try{fn();}catch(err){console.error(err);}};return b;};
+  const first=ctx.querySelector('hr');const ins=(b)=>{if(first)ctx.insertBefore(b,first);else ctx.appendChild(b);};
+  ins(mk('Properties',()=>{openPanel();if(isPro())document.body.classList.remove('nopanels');}));
+  if(u.kind==='wall'){const i=segAt(px,pz);WSEG=i;lastWall=[px,pz];_sel('wall',null);drawGizmo();const hd=ctx.querySelector('.ch');if(hd)hd.textContent='Boundary wall · section '+(i+1)+' · '+fmt(segLen(i));
+    const hr=document.createElement('hr');ctx.appendChild(hr);
+    ctx.appendChild(mk('Split the wall here (add a corner)',()=>splitWallAt(px,pz),'font-weight:600;color:var(--accent)'));
+    ctx.appendChild(mk('Select only this section',()=>{if(!editing)setEdit(true);WSEG=i;_sel('wall',null);drawGizmo();showWall();openPanel();}));
+    const near=S.wall.some(p=>Math.hypot(p[0]-px,p[1]-pz)<8);if(near&&S.wall.length>3)ctx.appendChild(mk('Remove the corner here (straighten)',()=>removeCornerNear(px,pz)));
+    ctx.appendChild(mk('Wall height and top (barbed wire)…',()=>{if(!editing)setEdit(true);WSEG=-1;_sel('wall',null);drawGizmo();showWall();openPanel();}));}
+  if(['area','road','cwall'].includes(u.kind)&&!MS.length){ins(mk('Select all like this',()=>{MS=[];if(u.kind==='area')S.areas.forEach(a=>{if(a.kind===u.ref.kind)MS.push({kind:'area',ref:a});});if(u.kind==='cwall')(S.walls||[]).forEach(w=>{if((w.kind||'')===(u.ref.kind||''))MS.push({kind:'cwall',ref:w});});if(u.kind==='road'){flash('Roads cannot be multi-selected yet — select them one by one.');return;}sel=null;afterMS();flash(MS.length+' selected.');}));}
+  const rr=ctx.getBoundingClientRect();ctx.style.left=Math.min(innerWidth-rr.width-8,e.clientX)+'px';ctx.style.top=Math.max(8,Math.min(innerHeight-rr.height-8,e.clientY))+'px';return r;};
+const isPro=()=>innerWidth>=1100;
+// ---- vector grounds: cut each painted ground out of the map picture and make it a real object
+const DECAL={parade:1,riding:1,sports:1,turf:1,field:1,range:1};const decTex={};
+function fillCut(g,W,H,a){const px=(x)=>(x-gx1)/GW*W,pz=(z)=>(z-gz1)/GD*H;const [cx,cz,w,d,rot]=a.texCut;const m=Math.max(2,(a.trackW||0));
+  // sample the ground colour just outside the rectangle
+  const samp=[];const R=(rot||0)*Math.PI/180;for(let k=0;k<40;k++){const t=k/40*Math.PI*2;const lx=Math.cos(t)*(w/2+6),lz=Math.sin(t)*(d/2+6);const x=cx+lx*Math.cos(R)+lz*Math.sin(R),z=cz-lx*Math.sin(R)+lz*Math.cos(R);const X=Math.round(px(x)),Y=Math.round(pz(z));if(X<0||Y<0||X>=W||Y>=H)continue;const p=g.getImageData(X,Y,1,1).data;samp.push([p[0],p[1],p[2]]);}
+  samp.sort((p,q)=>(p[0]+p[1]+p[2])-(q[0]+q[1]+q[2]));const md=samp[Math.floor(samp.length/2)]||[200,184,150];
+  g.save();g.translate(px(cx),pz(cz));g.rotate(-R);g.fillStyle=`rgb(${md[0]},${md[1]},${md[2]})`;g.fillRect(-(w/2+.6)/GW*W,-(d/2+.6)/GD*H,(w+1.2)/GW*W,(d+1.2)/GD*H);
+  g.globalAlpha=.07;for(let k=0;k<Math.min(4000,w*d/6);k++){g.fillStyle=Math.random()<.5?'#000':'#fff';g.fillRect((Math.random()-.5)*w/GW*W,(Math.random()-.5)*d/GD*H,2,2);}g.restore();}
+function crop(img,W,H,a){const [cx,cz,w,d,rot]=a.texCut;const sx=W/GW,sz=H/GD;const cw=Math.max(8,Math.round(w*sx)),ch=Math.max(8,Math.round(d*sz));const c=document.createElement('canvas');c.width=cw;c.height=ch;const g=c.getContext('2d');
+  const R=(rot||0)*Math.PI/180;g.translate(cw/2,ch/2);g.rotate(R);g.drawImage(img,-(cx-gx1)*sx,-(cz-gz1)*sz);const t=new THREE.CanvasTexture(c);t.anisotropy=renderer.capabilities.getMaxAnisotropy();return t;}
+P.vectorGrounds=function(){if(!WORLD.groundTex)return;const img=new Image();img.onload=()=>{try{const W=img.naturalWidth,H=img.naturalHeight;const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d',{willReadFrequently:true});g.drawImage(img,0,0);
+   if(!S.decalV){S.areas.forEach(a=>{if(DECAL[a.kind]&&!a.texCut)a.texCut=[+a.cx.toFixed(2),+a.cz.toFixed(2),+a.w.toFixed(2),+a.d.toFixed(2),Math.round(a.rot||0),a.kind];});S.decalV=1;}
+   S.areas.forEach(a=>{if(a.texCut){decTex[a.id]=crop(img,W,H,a);}});S.areas.forEach(a=>{if(a.texCut)fillCut(g,W,H,a);});
+   gTex.image=c;gTex.needsUpdate=true;S.areas.forEach(buildArea);mmDirty=true;}catch(err){console.error(err);}};img.src=WORLD.groundTex;};
+const _ba=buildArea;buildArea=function(a){const r=_ba.apply(this,arguments);try{if(!a.group)return r;let tex=null;const cut=a.texCut&&a.texCut[5]===a.kind;
+   if(cut&&decTex[a.id])tex=decTex[a.id];else if(a.kind&&a.kind!=='open')tex=linesTex(a.kind);
+   if(tex){const m=new THREE.Mesh(new THREE.PlaneGeometry(a.w,a.d),new THREE.MeshLambertMaterial({map:tex,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-1}));m.rotation.x=-Math.PI/2;m.position.y=.06;m.receiveShadow=true;m.userData={kind:'area',ref:a};a.group.add(m);}}catch(_){}return r;};
+// when a project is restored or loaded, decals follow
+const _rs=restore;restore=function(){const r=_rs.apply(this,arguments);P.vectorGrounds();return r;};
+P.vectorGrounds();
+})();
 
 }catch(err){
   let tried=false;try{tried=sessionStorage.getItem('g3d-fix')==='1';sessionStorage.setItem('g3d-fix','1');}catch(_){}
