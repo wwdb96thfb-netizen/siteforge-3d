@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <title>Sentinel 3D</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#404938">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#071428">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Sentinel 3D">
 <link rel="apple-touch-icon" sizes="180x180" href="sentinel-icon-180.png?v=4"><link rel="apple-touch-icon" sizes="512x512" href="sentinel-icon-512.png?v=4"><link rel="icon" type="image/png" sizes="192x192" href="sentinel-icon-192.png?v=4"><link rel="icon" type="image/png" sizes="512x512" href="sentinel-icon-512.png?v=4">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -591,6 +591,27 @@ table.sched td.num{font-family:var(--mono);text-align:right}
   @page{size:A4 landscape;margin:10mm}
 }
 @media (max-width:1099px){#setBtn{display:none!important}}
+/* ===== welcome screen: navy blueprint theme matching the logo ===== */
+body #proj.start{background:
+  radial-gradient(ellipse at 28% 30%,rgba(43,212,255,.16) 0%,rgba(43,212,255,0) 45%),
+  radial-gradient(circle at 50% 50%,transparent 0 30%,rgba(43,212,255,.05) 30.2% 30.5%,transparent 30.7% 45%,rgba(43,212,255,.05) 45.2% 45.5%,transparent 45.7%),
+  linear-gradient(rgba(43,212,255,.05) 1px,transparent 1px) 0 0/48px 48px,
+  linear-gradient(90deg,rgba(43,212,255,.05) 1px,transparent 1px) 0 0/48px 48px,
+  linear-gradient(160deg,#071428 0%,#030b1a 60%,#020814 100%)!important}
+body #proj.start .pcard{color:#e6f1fb}
+body #proj.start .stl img{box-shadow:0 0 0 1px rgba(43,212,255,.35),0 10px 34px rgba(43,212,255,.25)}
+body #proj.start .stn{color:#fff;font-family:var(--body);font-weight:800;letter-spacing:.14em}
+body #proj.start .sts{color:#8fb3cf}
+body #proj.start .stq{color:#5fb8e6}
+body #proj.start .stb{background:rgba(12,32,58,.72);border:1px solid rgba(43,212,255,.22);backdrop-filter:blur(4px)}
+body #proj.start .stb:hover{background:rgba(20,52,90,.85);border-color:#2bd4ff;box-shadow:0 0 0 1px rgba(43,212,255,.25),0 0 22px rgba(43,212,255,.18)}
+body #proj.start .stb>b{background:linear-gradient(160deg,#2bd4ff,#1f6feb);color:#fff;box-shadow:0 0 14px rgba(43,212,255,.35)}
+body #proj.start .stb span i{color:#8fb3cf}
+body #proj.start .prow{background:rgba(12,32,58,.6);border-color:rgba(43,212,255,.15);color:#e6f1fb}
+body #proj.start .prow span,body #proj.start .hint{color:#8fb3cf}
+body #proj.start .btn.ghost{color:#cfe6f7;border-color:rgba(43,212,255,.3)}
+body #proj.start .pform{background:rgba(12,32,58,.8);border-color:rgba(43,212,255,.25)}
+body #proj.start .stf{color:#5f7f9c}
 
 </style>
 
