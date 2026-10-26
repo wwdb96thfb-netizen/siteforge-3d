@@ -392,6 +392,206 @@ body.starting .hud,body.starting #panel,body.starting #minimap,body.starting #ra
 @media (max-width:1100px){#allMenus{display:flex;align-items:center}}
 @media (max-width:760px){#allMenus span{display:none!important}}
 @media (max-width:1240px){#ldBanner span{display:none}#ldBanner{left:calc(50% - 60px)}}
+
+/* ================= SENTINEL PRO LAYOUT ================= */
+#ribbon,#sbHint,.qat{display:none}
+.modal{position:fixed;inset:0;z-index:60;background:rgba(14,20,28,.45);display:grid;place-items:center;padding:18px}
+.modal[hidden]{display:none}
+.modal .mcard{background:#fff;color:#17212b;border:1px solid #c9d2db;border-radius:8px;box-shadow:0 24px 60px rgba(10,20,30,.35);width:min(1080px,100%);max-height:calc(100vh - 36px);display:flex;flex-direction:column;overflow:hidden}
+.modal .mhead{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #e1e6eb;background:linear-gradient(#fbfcfd,#f2f5f8)}
+.modal .mhead h3{margin:0;font:700 17px var(--body);letter-spacing:.01em;flex:1}
+.modal .mbody{overflow:auto;padding:14px 16px;flex:1;font-size:13px}
+.modal .mfoot{display:flex;gap:8px;justify-content:flex-end;padding:10px 16px;border-top:1px solid #e1e6eb;background:#f7f9fb}
+.pbtn{height:32px;padding:0 14px;border-radius:5px;border:1px solid #c5ced7;background:#fff;color:#17212b;font:600 12.5px var(--body);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.pbtn svg{width:15px;height:15px;flex:none}
+.pbtn:hover{background:#eef4ff;border-color:#9dbcf0}
+.pbtn.pri{background:#1f6feb;border-color:#1f6feb;color:#fff}
+.pbtn.pri:hover{background:#1a5fcc}
+.pbtn.dng{color:#c0392b}
+.ptabs{display:flex;gap:2px;border-bottom:1px solid #dde3e9;margin:-4px 0 10px}
+.ptabs button{background:none;border:0;border-bottom:2px solid transparent;padding:8px 12px;font:600 12.5px var(--body);color:#5d6b78;cursor:pointer}
+.ptabs button.on{color:#1f6feb;border-bottom-color:#1f6feb}
+table.sched{border-collapse:collapse;width:100%;font-size:12.5px}
+table.sched th{position:sticky;top:-14px;background:#eef2f6;text-align:left;font-weight:600;padding:7px 8px;border-bottom:1px solid #cfd8e1;cursor:pointer;white-space:nowrap;color:#2b3a49}
+table.sched th:hover{background:#e2eaf3}
+table.sched td{padding:6px 8px;border-bottom:1px solid #eef1f4;white-space:nowrap;max-width:260px;overflow:hidden;text-overflow:ellipsis}
+table.sched tr:hover td{background:#f4f8ff;cursor:pointer}
+table.sched td.num{font-family:var(--mono);text-align:right}
+.dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px;border:1px solid rgba(0,0,0,.15)}
+.setgrid{display:grid;grid-template-columns:220px 1fr;gap:12px 18px;align-items:center}
+.setgrid label{font-weight:600;color:#2b3a49}
+.setgrid select,.setgrid input[type=text]{height:32px;border:1px solid #c5ced7;border-radius:5px;padding:0 8px;font:13px var(--body);background:#fff;color:#17212b;min-width:240px}
+.seth{grid-column:1/-1;font:700 11px var(--mono);letter-spacing:.12em;color:#7a8896;text-transform:uppercase;border-bottom:1px solid #e6ebf0;padding-bottom:4px;margin-top:6px}
+.vlist{display:flex;flex-direction:column;gap:6px}
+.vrow{display:flex;align-items:center;gap:10px;border:1px solid #e1e6eb;border-radius:6px;padding:8px 10px}
+.vrow b{flex:1}
+.vrow span{color:#6b7885;font-size:12px}
+.rep{font:13.5px/1.55 var(--body);color:#17212b;max-width:860px;margin:0 auto}
+.rep h1{font:700 22px var(--body);margin:0 0 2px}
+.rep h2{font:700 15px var(--body);margin:20px 0 6px;padding-bottom:4px;border-bottom:2px solid #1f6feb;color:#0f1b27}
+.rep .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.rep .kpi{border:1px solid #dde3e9;border-radius:6px;padding:8px 10px}
+.rep .kpi b{display:block;font:700 22px var(--body)}
+.rep .kpi span{font-size:11.5px;color:#5d6b78}
+.rep .bad{color:#c0392b}.rep .ok{color:#1e8e3e}.rep .warn{color:#c77800}
+.rep ul{margin:4px 0;padding-left:20px}
+.rep img{width:100%;border:1px solid #dde3e9;border-radius:4px}
+.classbar{background:#c0392b;color:#fff;text-align:center;font:700 12px var(--mono);letter-spacing:.3em;padding:3px}
+/* print sheet */
+#sheet .sheetwrap{display:grid;grid-template-columns:1fr 250px;border:2px solid #17212b;background:#fff;aspect-ratio:1.414;width:100%}
+#sheet .sheetimg{position:relative;border-right:2px solid #17212b;overflow:hidden;background:#fff}
+#sheet .sheetimg img{width:100%;height:100%;object-fit:cover;display:block}
+#sheet .tblock{display:flex;flex-direction:column;font-size:11px}
+#sheet .tblock>div{border-bottom:1px solid #17212b;padding:8px 10px}
+#sheet .tblock .lab{font:600 9px var(--mono);letter-spacing:.1em;color:#5d6b78;text-transform:uppercase}
+#sheet .tblock .val{font:700 13px var(--body)}
+#sheet .narrow{width:46px;height:46px;position:absolute;right:12px;top:12px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+/* scenario bar */
+#scen{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--sb) + 14px);z-index:20;background:#101821;color:#e6eef6;border:1px solid #2c3e52;border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.4);width:min(760px,calc(100vw - 40px));padding:10px 12px;font-size:12.5px}
+#scen[hidden]{display:none}
+#scen .top{display:flex;align-items:center;gap:10px}
+#scen .clk{font:700 20px var(--mono);color:#ffcf5c;min-width:96px}
+#scen .ev{flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#scen .bar{height:6px;background:#2a3846;border-radius:3px;margin-top:8px;position:relative;cursor:pointer}
+#scen .bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#ff5a4a,#ffcf5c);border-radius:3px}
+#scen .ticks{position:relative;height:16px;font:10px var(--mono);color:#8aa0b4}
+#scen .ticks span{position:absolute;transform:translateX(-50%);top:3px;white-space:nowrap}
+#scen button{background:#1d2b39;border:1px solid #3a516a;color:#e6eef6;border-radius:5px;height:30px;padding:0 12px;font:600 12px var(--body);cursor:pointer}
+#scen button:hover{background:#28405a}
+/* tour */
+#tour{position:fixed;inset:0;z-index:70;pointer-events:none}
+#tour[hidden]{display:none}
+#tour .ring{position:fixed;border:2px solid #1f6feb;border-radius:8px;box-shadow:0 0 0 9999px rgba(10,16,24,.55);transition:all .25s ease}
+#tour .tip{position:fixed;pointer-events:auto;background:#fff;color:#17212b;border-radius:8px;box-shadow:0 18px 44px rgba(0,0,0,.35);width:320px;padding:14px 16px;font-size:13px;line-height:1.5}
+#tour .tip h4{margin:0 0 6px;font:700 15px var(--body)}
+#tour .tip .row2{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:12px}
+#tour .tip .row2 span{margin-right:auto;color:#7a8896;font:11px var(--mono)}
+/* browser tree */
+.brw{font-size:12.5px}
+.brw input.bq{width:100%;box-sizing:border-box;height:30px;border:1px solid #c9d2db;border-radius:5px;padding:0 8px;margin-bottom:8px;font:12.5px var(--body)}
+.brw details{margin:0}
+.brw summary{cursor:pointer;padding:5px 4px;font-weight:600;color:#1d2a37;list-style:none;display:flex;align-items:center;gap:6px;border-radius:4px;user-select:none}
+.brw summary::-webkit-details-marker{display:none}
+.brw summary:before{content:'▸';font-size:10px;color:#7a8896;width:10px}
+.brw details[open]>summary:before{content:'▾'}
+.brw summary:hover{background:#eef3f8}
+.brw summary em{margin-left:auto;font:500 11px var(--mono);color:#7a8896;font-style:normal}
+.brw details details{margin-left:12px}
+.brw details details summary{font-weight:500}
+.brw .lf{display:flex;align-items:center;gap:6px;padding:3px 4px 3px 26px;cursor:pointer;border-radius:4px;color:#2b3a49;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brw .lf:hover{background:#e8f0fe;color:#0f1b27}
+.brw .lf.on{background:#d6e6ff;color:#0b4fc0;font-weight:600}
+.brw .lf .x{margin-left:auto;border:0;background:none;color:#a0aab4;cursor:pointer;font-size:13px;padding:0 4px}
+.brw .lf .x:hover{color:#c0392b}
+.brw .addv{margin:4px 0 4px 26px}
+
+@media (min-width:1100px){
+  body.pro{--hdr:142px}
+  body.pro .appbar{height:40px!important;background:#1d2631!important;border-bottom:1px solid #0f151c!important;box-shadow:none!important;padding:0 10px!important;gap:8px!important}
+  body.pro .brandx b{background:none!important;color:#fff!important;-webkit-text-fill-color:#fff;font-size:16px!important;letter-spacing:.14em!important}
+  body.pro .brandx img{width:26px!important;height:26px!important;border-radius:6px!important}
+  body.pro .brandx div{display:block!important}
+  body.pro .brandx span{display:block!important;color:#8fa3b7!important;font-size:10px!important;max-width:260px}
+  body.pro .menus,body.pro #allMenus,body.pro .appbar>.tools,body.pro #rail,body.pro #menuBtn{display:none!important}
+  body.pro .qat{display:flex;align-items:center;gap:2px;margin-left:14px;padding-left:14px;border-left:1px solid #33414f;flex:1}
+  body.pro .qat button{height:30px;min-width:30px;padding:0 8px;display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid transparent;border-radius:4px;color:#d5dee8;cursor:pointer;font:500 12px var(--body)}
+  body.pro .qat button:hover:not(:disabled){background:#2c3846;border-color:#3b4b5c}
+  body.pro .qat button:disabled{opacity:.35;cursor:default}
+  body.pro .qat button.dirty{color:#ffb35c}
+  body.pro .qat svg{width:17px;height:17px}
+  body.pro .qat .pname{margin-left:auto;margin-right:auto;color:#9fb0c1;font:500 12px var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40vw}
+  body.pro .hright .tb{color:#d5dee8!important;height:32px!important}
+  body.pro .hright .tb:hover{background:#2c3846}
+  body.pro #search{background:#2a3542!important;border:1px solid #3b4b5c!important;color:#e6eef6!important;height:28px!important;border-radius:4px}
+  body.pro #search::placeholder{color:#8fa3b7}
+  body.pro #ribbon{display:flex;flex-direction:column;position:fixed;top:40px;left:0;right:0;height:102px;z-index:9;background:#f5f7f9;border-bottom:1px solid #c9d2db;box-shadow:0 2px 6px rgba(20,30,40,.06)}
+  #ribbon .rtabs{display:flex;align-items:flex-end;height:28px;background:#e7ebef;border-bottom:1px solid #c9d2db;padding:0 6px;gap:1px}
+  #ribbon .rtabs button{height:25px;padding:0 15px;border:1px solid transparent;border-bottom:0;border-radius:4px 4px 0 0;background:none;font:600 11.5px var(--body);letter-spacing:.06em;color:#3c4a58;cursor:pointer;text-transform:uppercase}
+  #ribbon .rtabs button:hover{color:#0f1b27;background:#f0f3f6}
+  #ribbon .rtabs button.on{background:#f5f7f9;border-color:#c9d2db;color:#0f1b27;margin-bottom:-1px;height:26px}
+  #ribbon .rtabs button.file{background:#1f6feb;color:#fff;border-radius:4px 4px 0 0;margin-right:6px}
+  #ribbon .rtabs button.file:hover{background:#1a5fcc}
+  #ribbon .rpanel{flex:1;display:flex;align-items:stretch;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;padding:0 4px}
+  #ribbon .rgrp{display:flex;flex-direction:column;border-right:1px solid #dde3e9;padding:4px 6px 0;flex:none}
+  #ribbon .rgrp .rbs{display:flex;align-items:flex-start;gap:1px;flex:1}
+  #ribbon .rgrp .rcap{font:500 10px var(--body);color:#7a8896;text-align:center;padding:1px 0 3px;letter-spacing:.02em}
+  #ribbon .rb{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;width:58px;height:52px;padding:4px 2px 0;border:1px solid transparent;border-radius:4px;background:none;color:#22303d;font:500 10.5px/1.15 var(--body);cursor:pointer;text-align:center}
+  #ribbon .rb svg{width:22px;height:22px;flex:none;color:#2e5f9e}
+  #ribbon .rb:hover{background:#e3edfb;border-color:#b9d0f3}
+  #ribbon .rb[aria-pressed="true"]{background:#d3e4fd;border-color:#8fb5ee}
+  #ribbon .rb.red svg{color:#c0392b}
+  #ribbon .rb.org svg{color:#d9730d}
+  #ribbon .rb.grn svg{color:#1e8e3e}
+  #ribbon .rcol{display:flex;flex-direction:column;gap:1px;justify-content:flex-start}
+  #ribbon .rs{display:flex;align-items:center;gap:6px;height:17px;padding:0 6px 0 3px;border:1px solid transparent;border-radius:3px;background:none;color:#22303d;font:500 11px var(--body);cursor:pointer;white-space:nowrap}
+  #ribbon .rs svg{width:13px;height:13px;color:#2e5f9e;flex:none}
+  #ribbon .rs:hover{background:#e3edfb;border-color:#b9d0f3}
+  #ribbon .rs[aria-pressed="true"]{background:#d3e4fd;border-color:#8fb5ee}
+  body.pro .hud{position:fixed!important;left:0!important;top:var(--hdr)!important;bottom:var(--sb)!important;width:272px!important;max-height:none!important;transform:none!important;border-radius:0!important;border:0!important;border-right:1px solid #c9d2db!important;background:#fbfcfd!important;box-shadow:none!important;display:flex!important;flex-direction:column;overflow:hidden!important;z-index:6}
+  body.pro .hud .tabs{border-radius:0!important;background:#eef2f6;border:0;border-bottom:1px solid #c9d2db;flex:none}
+  body.pro .hud .tabs button[role=tab]{font:600 11px var(--body)!important;letter-spacing:.06em;text-transform:uppercase}
+  body.pro .hud .box{border:0!important;border-radius:0!important;background:none!important;overflow:auto;flex:1;box-shadow:none!important}
+  body.pro .hud .box[hidden]{display:none!important}
+  body.pro .hud.min .box:not([hidden]){display:block!important}
+  body.pro #panel.shut #pbody{display:block!important}
+  body.pro #panelToggle{display:none!important}
+  body.pro #panel .ph{border-bottom:1px solid #e1e6eb!important}
+  body.pro #hudMin,body.pro #hudClose{display:none!important}
+  body.pro #panel{left:auto!important;right:0!important;top:var(--hdr)!important;bottom:var(--sb)!important;width:318px!important;max-height:none!important;border-radius:0!important;border:0!important;border-left:1px solid #c9d2db!important;box-shadow:none!important;background:#fbfcfd!important;backdrop-filter:none!important}
+  body.pro #panel .ph{background:#fbfcfd!important;padding-top:26px!important;position:sticky}
+  body.pro #panel .ph:before{content:'PROPERTIES';position:absolute;left:0;right:0;top:0;height:22px;line-height:22px;padding-left:14px;background:#eef2f6;border-bottom:1px solid #dde3e9;font:600 10.5px var(--body);letter-spacing:.12em;color:#5d6b78}
+  body.pro #panel h3{font-size:19px!important}
+  body.pro #vcube{right:338px!important;top:calc(var(--hdr) + 16px)!important;display:block!important}
+  body.pro #compass{right:420px!important;top:calc(var(--hdr) + 14px)!important;bottom:auto!important}
+  body.pro .mapctl{right:330px!important;display:flex!important}
+  body.pro #minimap{right:384px!important;display:block!important}
+  body.pro #scalebar{left:290px!important;display:flex!important}
+  body.pro #ldBanner{left:calc(272px + (100vw - 590px)/2)!important;top:calc(var(--hdr) + 10px)!important}
+  body.pro #editBanner{left:calc(272px + (100vw - 590px)/2)!important;top:calc(var(--hdr) + 48px)!important}
+  body.pro .cmpLbl{top:calc(var(--hdr) + 60px)!important}
+  body.pro #searchRes{top:34px!important}
+  body.pro #camPiP{left:calc(272px + (100vw - 590px)/2)!important;transform:translateX(-50%)}
+  body.pro #vwall{left:282px!important;right:328px!important}
+  body.pro .statusbar{background:#1d2631!important;color:#9fb0c1!important;border-top:1px solid #0f151c!important}
+  body.pro .statusbar b{color:#e6eef6!important}
+  body.pro #sbHint{display:inline-block;color:#ffd27a;font-weight:500;min-width:0;max-width:40vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  body.pro.nopanels .hud,body.pro.nopanels #panel{display:none!important}
+  body.pro.nopanels #vcube{right:16px!important}
+  body.pro.nopanels .mapctl{right:12px!important}
+  body.pro.nopanels #minimap{right:66px!important}
+  body.pro.nopanels #compass{right:98px!important}
+  body.pro.nopanels #scalebar{left:16px!important}
+  body.pro.starting #ribbon{visibility:hidden}
+  /* dark ribbon theme */
+  body.pro.dark #ribbon{background:#26303b;border-bottom-color:#0f151c}
+  body.pro.dark #ribbon .rtabs{background:#1d2631;border-bottom-color:#0f151c}
+  body.pro.dark #ribbon .rtabs button{color:#a9b8c7}
+  body.pro.dark #ribbon .rtabs button.on{background:#26303b;border-color:#0f151c;color:#fff}
+  body.pro.dark #ribbon .rtabs button.file{color:#fff}
+  body.pro.dark #ribbon .rgrp{border-right-color:#36424f}
+  body.pro.dark #ribbon .rb,body.pro.dark #ribbon .rs{color:#e2e9f0}
+  body.pro.dark #ribbon .rb svg,body.pro.dark #ribbon .rs svg{color:#7fb4ff}
+  body.pro.dark #ribbon .rb:hover,body.pro.dark #ribbon .rs:hover{background:#334252;border-color:#46607a}
+  body.pro.dark #ribbon .rb[aria-pressed="true"],body.pro.dark #ribbon .rs[aria-pressed="true"]{background:#1f4f8f;border-color:#3f7fd6}
+  body.pro.dark #ribbon .rcap{color:#8a9aab}
+  body.pro.dark .hud,body.pro.dark #panel{background:#f3f5f8!important}
+}
+@media (max-width:1099px){#scen{bottom:calc(var(--sb) + 8px)}.setgrid{grid-template-columns:1fr}}
+@media print{
+  body.printing>*:not(#sheet){display:none!important}
+  body.printing #sheet{position:static!important;background:#fff!important;padding:0!important;display:block!important}
+  body.printing #sheet .mhead,body.printing #sheet .mfoot{display:none!important}
+  body.printing #sheet .mcard{box-shadow:none!important;border:0!important;max-height:none!important;width:100%!important}
+  body.printing #sheet .mbody{overflow:visible!important;padding:0!important}
+  body.reporting>*:not(#report){display:none!important}
+  body.reporting #report{position:static!important;background:#fff!important;padding:0!important;display:block!important}
+  body.reporting #report .mhead,body.reporting #report .mfoot{display:none!important}
+  body.reporting #report .mcard{box-shadow:none!important;border:0!important;max-height:none!important}
+  body.reporting #report .mbody{overflow:visible!important}
+  @page{size:A4 landscape;margin:10mm}
+}
+@media (max-width:1099px){#setBtn{display:none!important}}
+
 </style>
 
 <div id="scene"></div>
@@ -529,7 +729,7 @@ body.starting .hud,body.starting #panel,body.starting #minimap,body.starting #ra
 <div id="draftBar" hidden><span>You have unsaved changes from last time.</span><button class="btn" id="draftYes">Bring them back</button><button class="btn ghost" id="draftNo">Throw away</button></div>
 <div id="about" hidden><div class="card" style="max-width:560px">
 <div style="display:flex;gap:14px;align-items:center"><img id="aboutLogo" alt="" style="width:64px;height:64px;border-radius:14px"><div><h3 style="margin:0;letter-spacing:.08em">SENTINEL 3D</h3><div style="font:600 12px var(--mono);color:var(--muted);letter-spacing:.12em">TACTICAL SITE PLANNING</div></div></div>
-<dl style="margin:14px 0 6px"><dt>Version</dt><dd>2.1.0 · build 2026.10.25</dd><dt>Created by</dt><dd><b>Syed Iftikhar Shah</b></dd><dt>Purpose</dt><dd>3D modelling and security planning of garrisons and military sites: buildings, perimeter, posts, cameras, lighting, weapons coverage, QRF, drones and lockdown drills.</dd></dl>
+<dl style="margin:14px 0 6px"><dt>Version</dt><dd>3.0.0 Professional · build 2026.10.26</dd><dt>Created by</dt><dd><b>Syed Iftikhar Shah</b></dd><dt>Purpose</dt><dd>3D modelling and security planning of garrisons and military sites: buildings, perimeter, posts, cameras, lighting, weapons coverage, QRF, drones and lockdown drills.</dd></dl>
 <div style="font-size:12.5px;line-height:1.55;color:var(--fg);max-height:42vh;overflow:auto;border-top:1px solid var(--line);padding-top:10px">
 <p style="margin:0 0 8px"><b>Copyright © 2026 Syed Iftikhar Shah. All rights reserved.</b></p>
 <p style="margin:0 0 8px">Sentinel 3D, its name, logo, design, source code, 3D models and documentation are the intellectual property of Syed Iftikhar Shah and are protected by copyright law, including the Copyright Ordinance, 1962 (Pakistan) and international copyright treaties.</p>
@@ -1500,9 +1700,9 @@ function migrate(o){if(o.rev===5&&(WORLD.rev||1)===6&&Array.isArray(o.blds)){o.b
   if([87,88,89,90,133,134].includes(n))i.type="Officers' bungalow";else if([202,50,42].includes(n)){i.type="Officers' flats";i.users='Officers';}else if([6,14,15].includes(n)){i.type="Workers' quarters (sanitary)";i.users='Sanitary workers';}else i.type="Soldiers' family quarters";
   if((b.name||'').startsWith('Family quarters'))b.name=b.name.replace('Family quarters',i.type);});o.rev=6;}return o;}
 function mig7(o){if(o.mig7||!Array.isArray(o.blds))return;o.blds.forEach(b=>{const i=b.info||{};if(i.inside==='Outside wall'&&(i.importance==='Normal'||!i.importance))i.importance='Outside / civil';});o.mig7=true;}
-function loadInto(o){migrate(o);mig7(o);const same=(o.rev||1)===(WORLD.rev||1);['blds','roads','areas'].forEach(k=>{if(same&&Array.isArray(o[k]))S[k]=o[k];});if(Array.isArray(o.items))S.items=o.items;if(same&&Array.isArray(o.wall)&&o.wall.length>=3)S.wall=o.wall;S.walls=Array.isArray(o.walls)?o.walls:[];S.trees=Array.isArray(o.trees)?o.trees:null;S.north=typeof o.north==='number'?o.north:(WORLD.north!=null?WORLD.north:270);S.wallTop=o.wallTop||'none';S.wallH=o.wallH||3;S.wallT=o.wallT||.5;return same;}
+function loadInto(o){migrate(o);mig7(o);const same=(o.rev||1)===(WORLD.rev||1);['blds','roads','areas'].forEach(k=>{if(same&&Array.isArray(o[k]))S[k]=o[k];});if(Array.isArray(o.items))S.items=o.items;if(same&&Array.isArray(o.wall)&&o.wall.length>=3)S.wall=o.wall;S.walls=Array.isArray(o.walls)?o.walls:[];S.trees=Array.isArray(o.trees)?o.trees:null;S.north=typeof o.north==='number'?o.north:(WORLD.north!=null?WORLD.north:270);S.wallTop=o.wallTop||'none';S.wallH=o.wallH||3;S.wallT=o.wallT||.5;S.views=Array.isArray(o.views)?o.views:[];S.notes=Array.isArray(o.notes)?o.notes:[];return same;}
 let db=null,saveT=null,saving=false,dirty=false;
-const snapshot=()=>({rev:WORLD.rev||1,blds:S.blds.map(cleanB),roads:S.roads.map(cleanR),areas:S.areas.map(cleanA),wall:S.wall.map(p=>[+(+p[0]).toFixed(2),+(+p[1]).toFixed(2)]),mig7:true,north:S.north,trees:S.trees?S.trees.map(t=>[r2(t[0]),r2(t[1]),r2(t[2]),...(t[3]?[t[3]]:[])]):undefined,items:S.items.map(cleanI),walls:(S.walls||[]).map(cleanW),wallTop:S.wallTop||'none',wallH:S.wallH,wallT:S.wallT});
+const snapshot=()=>({rev:WORLD.rev||1,blds:S.blds.map(cleanB),roads:S.roads.map(cleanR),areas:S.areas.map(cleanA),wall:S.wall.map(p=>[+(+p[0]).toFixed(2),+(+p[1]).toFixed(2)]),mig7:true,north:S.north,trees:S.trees?S.trees.map(t=>[r2(t[0]),r2(t[1]),r2(t[2]),...(t[3]?[t[3]]:[])]):undefined,items:S.items.map(cleanI),walls:(S.walls||[]).map(cleanW),wallTop:S.wallTop||'none',wallH:S.wallH,wallT:S.wallT,views:S.views||[],notes:S.notes||[]});
 const r2=v=>Math.round(v*100)/100;
 function cleanB(b){const o={mir:b.mir||undefined,num:b.num,cx:r2(b.cx),cz:r2(b.cz),w:r2(b.w),d:r2(b.d),rot:Math.round(b.rot||0),h:r2(b.h),name:b.name,info:b.info};if(b.parts&&b.parts.length)o.parts=b.parts;return o;}
 function cleanW(w){const o={id:w.id,h:r2(w.h),t:r2(w.t),col:w.col||'offwhite',top:w.top||'none',pts:w.pts.map(p=>[r2(p[0]),r2(p[1])])};if(w.outer)o.outer=true;if(w.kind)o.kind=w.kind;return o;}
@@ -1631,7 +1831,7 @@ const ICON={
   hedgehog:'<svg viewBox="0 0 26 26"><g stroke="#8a8f86" stroke-width="2.4"><path d="M5 22 L21 6"/><path d="M5 6 L21 22"/><path d="M13 4 V24"/></g></svg>',
   rifleman:'<svg viewBox="0 0 26 26"><circle cx="10" cy="5" r="2.6" fill="#4b5232"/><rect x="8" y="8" width="4.5" height="8" fill="#6b7046"/><rect x="8" y="16" width="2" height="8" fill="#6b7046"/><rect x="10.5" y="16" width="2" height="8" fill="#6b7046"/><rect x="11" y="9.5" width="13" height="1.6" fill="#222"/></svg>',
   mg:'<svg viewBox="0 0 26 26"><ellipse cx="13" cy="20" rx="11" ry="4" fill="#c9b27a"/><rect x="9" y="11" width="15" height="2" fill="#222"/><path d="M12 13 L8 19 M12 13 L15 19" stroke="#222" stroke-width="1.4"/><circle cx="6" cy="10" r="2.5" fill="#4b5232"/></svg>',
-  door:'<svg viewBox="0 0 26 26"><rect x="1" y="8" width="7" height="15" fill="#e8e3d0"/><rect x="18" y="8" width="7" height="15" fill="#e8e3d0"/><rect x="9" y="9" width="8" height="14" fill="#2c3a2a" stroke="#d9b44a" stroke-width=".8"/><circle cx="15" cy="16" r=".8" fill="#d9b44a"/></svg>',
+  door:'<svg viewBox="0 0 26 26"><rect x="1" y="8" width="7" height="15" fill="#e8e3d0"/><rect x="18" y="8" width="7" height="15" fill="#e8e3d0"/><rect x="9" y="9" width="8" height="14" fill="#2c3a2a" stroke="#d9b44a" stroke-width=".8"/><circle cx="15" cy="16" r=".8" fill="#d9b44a"/></svg>',opening:'<svg viewBox="0 0 26 26"><rect x="1" y="8" width="8" height="12" fill="#d8d2c0" stroke="#8d8778"/><rect x="17" y="8" width="8" height="12" fill="#d8d2c0" stroke="#8d8778"/><path d="M10 14h6" stroke="#1f6feb" stroke-width="2" stroke-dasharray="2 2"/></svg>',
   altpos:'<svg viewBox="0 0 26 26"><ellipse cx="13" cy="18" rx="10" ry="4.5" fill="none" stroke="#e8a23a" stroke-width="2" stroke-dasharray="3 2"/><path d="M13 15 L13 5 M13 5 L9 9 M13 5 L17 9" stroke="#e8a23a" stroke-width="2" fill="none"/></svg>',
   sniper:'<svg viewBox="0 0 26 26"><rect x="2" y="16" width="14" height="4" rx="2" fill="#6b7046"/><circle cx="17" cy="16" r="2.3" fill="#4b5232"/><rect x="14" y="14" width="11" height="1.4" fill="#222"/><rect x="16" y="12" width="4" height="1.6" fill="#222"/></svg>',
   jeep:'<svg viewBox="0 0 26 26"><rect x="2" y="12" width="21" height="6" fill="#7d8b4e"/><rect x="5" y="7" width="10" height="5" fill="#5f6b3a"/><circle cx="7" cy="19" r="2.6" fill="#222"/><circle cx="19" cy="19" r="2.6" fill="#222"/></svg>',
@@ -3567,7 +3767,7 @@ document.addEventListener('keydown',e=>{
 (function(){
   const KINDS=[['stable','Horse stables'],['kennel','Dog kennels'],['petrol','Petrol stations'],['club','Club'],['cattle','Cattle sheds'],['washroom','Washrooms'],['school','Schools and classrooms'],['office','Offices'],['mess','Messes'],['dining','Dining halls'],['canteen','Canteens and shops'],['medical','MI room'],['guard','Guard rooms'],['kote','Kotes'],['quarters','Family quarters'],['store','Stores'],['marriage','Marriage halls'],['filter','Filtration plants'],['laundry','Dhobi ghat'],['flats',"Officers' flats"],['bungalow',"Officers' bungalows"],['barracks','Barracks'],['workers',"Workers' quarters"],['control','Control room'],['comms','Signals / comms'],['magazine','Ammo stores'],['pol','Fuel points'],['block','Other buildings'],['shed','Open sheds'],['warehouse','Warehouses and factories'],['hall','Gym / sports halls'],['shade','Open shades'],['mosque','Mosques'],['tank','Water tanks'],['power','Generators'],['pool','Swimming pool']];
   const layer=k=>({get:()=>G[k].visible,set:v=>{G[k].visible=v;}});
-  let E=[];const VKEY='garrison3d-view-v2';
+  let E=[];const VKEY='garrison3d-view-v3';
   function build(){
     E=[];const add=(grp,o)=>{o.grp=grp;E.push(o);};
     add('Site',Object.assign({id:'wall',label:'Boundary wall',color:'#f3efe2'},layer('wall')));
@@ -3612,7 +3812,7 @@ document.addEventListener('keydown',e=>{
   window.__updCounts=()=>E.forEach(e=>{if(e.count){const b=$('cn_'+e.id);if(b)b.textContent=e.count();}});
   window.__rebuildChecks=()=>build();
   build();
-  try{const o=JSON.parse(localStorage.getItem(VKEY)||'null');if(o){E.forEach(e=>{if(e.id in o)e.set(!!o[e.id]);});applyAll(true);}}catch(_){}
+  try{const o=JSON.parse(localStorage.getItem(VKEY)||'null');if(o){E.forEach(e=>{if(e.id in o)e.set(!!o[e.id]);});applyAll(true);}else{['fire','cover','zones','lit'].forEach(id=>{const e=E.find(x=>x.id===id);if(e)e.set(false);});applyAll(true);}}catch(_){}
   $('natBtn').onclick=ev=>{natural=!natural;ev.currentTarget.setAttribute('aria-pressed',natural);S.blds.forEach(buildBld);};
 })();
 
@@ -3840,7 +4040,7 @@ async function openProjects(mode){projMode=mode||'list';$('proj').hidden=false;$
   if(!APPMODE)h+=`<div class="prow"><div class="pn"><b>Garrison Master Plan (built in)</b><span>the original model on this page</span></div>${PID==='builtin'?'<span class="hint" style="margin:0">open</span>':'<button class="btn ghost" data-open="builtin">Open</button>'}</div>`;
   h+=L.map(r=>`<div class="prow" data-id="${r.id}"><div class="pn"><b>${esc(r.name)}</b><span>${r.world&&r.world.site?Math.round(r.world.site[2]-r.world.site[0])+' × '+Math.round(r.world.site[3]-r.world.site[1])+' m · ':''}${fmtDate(r.updated||r.created)}</span></div>
     ${r.id===PID?'<span class="hint" style="margin:0">open</span>':`<button class="btn" data-open="${r.id}">Open</button>`}<button class="btn ghost" data-ren="${r.id}">Rename</button><button class="btn ghost" data-dup="${r.id}">Copy</button><button class="btn ghost" data-exp="${r.id}">Export</button><button class="btn danger" data-del="${r.id}">Delete</button></div>`).join('')||(APPMODE?'<p class="hint">No projects yet.</p>':'');
-  if(projMode==='start')h+=`<div class="stf">Version 2.1.0 · © 2026 Syed Iftikhar Shah. All rights reserved.</div>`;else h+=`<p class="hint" style="margin-top:12px">Projects are kept on this device. To move one to another device (Mac ↔ iPhone), use Export, send the file, then "Open a project file…" there.${unsaved?' You have unsaved changes here — save them before opening another project, or they wait for you as a draft.':''}</p>`;
+  if(projMode==='start')h+=`<div class="stf">Version 3.0.0 Professional · © 2026 Syed Iftikhar Shah. All rights reserved.</div>`;else h+=`<p class="hint" style="margin-top:12px">Projects are kept on this device. To move one to another device (Mac ↔ iPhone), use Export, send the file, then "Open a project file…" there.${unsaved?' You have unsaved changes here — save them before opening another project, or they wait for you as a draft.':''}</p>`;
   body.innerHTML=h;
   if($('pj_cont'))$('pj_cont').onclick=()=>closeStart();
   const form=$('pj_form');
@@ -3974,6 +4174,458 @@ let fpsN=0,fpsT=0;
      G.gizmo.visible=keep[0];ovCam.visible=keep[2];}}
   fpsN++;if(now-fpsT>600){const f=Math.round(fpsN*1000/(now-fpsT));fpsN=0;fpsT=now;const el=$('fps');if(el){el.textContent=f;el.style.color=f>=40?'#7fdc8a':f>=22?'#ffd56b':'#ff7a6a';}}
   updHud();feedFrame++;renderFeeds(now);if(feedFrame%3===0)drawMM();})(0);
+
+// ================= SENTINEL PRO: ribbon, docks, browser, schedules, versions, reports, scenario =================
+(function(){
+const PRO={};window.__PRO=PRO;
+const SETK='g3d-settings';
+const SET=Object.assign({theme:'light',autosave:5,unitName:'',preparedBy:'',classif:'RESTRICTED',tour:false},(()=>{try{return JSON.parse(localStorage.getItem(SETK)||'{}');}catch(_){return {};}})());
+const saveSet=()=>{try{localStorage.setItem(SETK,JSON.stringify(SET));}catch(_){}};
+PRO.SET=SET;
+document.body.classList.add('pro');document.body.classList.toggle('dark',SET.theme==='dark');
+const isPro=()=>innerWidth>=1100;
+// ---------- icons ----------
+const IP={
+ new:'<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M12 11v6M9 14h6"/>',
+ open:'<path d="M3 7a1 1 0 0 1 1-1h5l2 2h8a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>',
+ save:'<path d="M5 3h11l3 3v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/>',
+ saveas:'<path d="M5 3h11l3 3v6M12 21H6a1 1 0 0 1-1-1V3"/><path d="M8 3v5h7V3M16 15l4 4M15 20l1-4 4 4z"/>',
+ export:'<path d="M12 3v12M7 8l5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>',
+ undo:'<path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>',
+ redo:'<path d="m15 14 5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h3"/>',
+ copy:'<rect x="8" y="8" width="13" height="13" rx="1"/><path d="M16 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/>',
+ trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/>',
+ pointer:'<path d="m5 3 14 7-6 2-2 6z"/>',
+ edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/>',
+ multi:'<rect x="3" y="3" width="8" height="8" rx="1" stroke-dasharray="2 2"/><rect x="13" y="13" width="8" height="8" rx="1"/><path d="M13 7h3M7 13v3"/>',
+ filter:'<path d="M3 5h18l-7 8v6l-4 2v-8z"/>',
+ all:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
+ rotl:'<path d="M3 4v6h6"/><path d="M5.5 15A8 8 0 1 0 6 7l-3 3"/>',
+ rotr:'<path d="M21 4v6h-6"/><path d="M18.5 15A8 8 0 1 1 18 7l3 3"/>',
+ mirror:'<path d="M12 3v18M8 7 3 12l5 5zM16 7l5 5-5 5z"/>',
+ split:'<path d="M4 12h6M14 12h6M12 4v4M12 16v4"/><circle cx="12" cy="12" r="2"/>',
+ ruler:'<rect x="2" y="8" width="20" height="8" rx="1"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/>',
+ magnet:'<path d="M6 3v9a6 6 0 0 0 12 0V3h-4v9a2 2 0 0 1-4 0V3z"/><path d="M6 7h4M14 7h4"/>',
+ solid:'<rect x="4" y="9" width="7" height="11"/><rect x="13" y="4" width="7" height="16"/>',
+ bld:'<path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6M9 10h1M14 10h1"/>',
+ house:'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10M10 20v-5h4v5"/>',
+ hq:'<path d="M4 21V5h11v16M15 9h5v12M4 21h17"/><path d="M8 9h3M8 13h3M8 17h3M6 5V3"/>',
+ truck:'<path d="M2 6h11v10H2zM13 10h4l3 3v3h-7"/><circle cx="6" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
+ cup:'<path d="M4 8h13v5a6 6 0 0 1-12 0zM17 9h2a2 2 0 0 1 0 4h-2M8 2v3M12 2v3"/>',
+ bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+ gate:'<path d="M3 21V6l3-2 3 2v15M15 21V6l3-2 3 2v15M9 10h6M9 15h6"/>',
+ block:'<path d="M3 17h18M5 17l2-6h10l2 6M8 11V8M16 11V8"/>',
+ soldier:'<circle cx="12" cy="6" r="3"/><path d="M6 21v-5a6 6 0 0 1 12 0v5M9 4l6 0"/>',
+ lamp:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 1 4 10.5V16H8v-2.5A6 6 0 0 1 12 3z"/>',
+ cam:'<path d="M3 8h12l3 3-3 3H3zM18 11h3M6 14v5M3 19h6"/>',
+ shield:'<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/>',
+ siren:'<path d="M7 17V11a5 5 0 0 1 10 0v6M5 21h14v-4H5zM12 2v2M4 6l1.5 1.5M20 6l-1.5 1.5"/>',
+ warn:'<path d="M12 3 2 20h20z"/><path d="M12 9v5M12 17v.5"/>',
+ road:'<path d="M8 3 4 21M16 3l4 18M12 5v3M12 11v3M12 17v3"/>',
+ wall:'<path d="M3 6h18v12H3zM3 12h18M9 6v6M15 12v6M6 12v6M18 6v6"/>',
+ power:'<path d="M7 21 12 3l5 18M8 9h8M6 14h12"/>',
+ ground:'<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M12 5v14M3 12h18"/><circle cx="12" cy="12" r="2.5"/>',
+ tree:'<path d="M12 3a5 5 0 0 1 5 5 4 4 0 0 1-1 7H8a4 4 0 0 1-1-7 5 5 0 0 1 5-5zM12 15v6"/>',
+ dim:'<path d="M3 12h18M3 8v8M21 8v8M6 9l-3 3 3 3M18 9l3 3-3 3"/>',
+ note:'<path d="M4 4h16v12H9l-5 4z"/><path d="M8 8h8M8 12h5"/>',
+ lock:'<rect x="4" y="10" width="16" height="11" rx="1"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+ normal:'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+ play:'<circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4z"/>',
+ target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/>',
+ radar:'<circle cx="12" cy="12" r="9"/><path d="M12 12 18 6M12 3v2M12 12a4 4 0 1 0 4 0"/>',
+ monitor:'<rect x="2" y="4" width="20" height="13" rx="1"/><path d="M8 21h8M12 17v4"/>',
+ eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+ eyeoff:'<path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c6 0 10 6 10 6a17 17 0 0 1-3 3.6M6.6 6.6C3.7 8.3 2 12 2 12s4 6 10 6a9 9 0 0 0 4.4-1.1"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M5 19l1.4-1.4M17.6 6.4 19 5"/>',
+ moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+ dark:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/>',
+ arcs:'<path d="M12 20 5 6a12 12 0 0 1 14 0z"/>',
+ rings:'<circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="10"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>',
+ wallchk:'<path d="M3 10h18v8H3zM3 14h18M9 10v4M15 14v4"/><path d="m8 5 2 2 4-4"/>',
+ heat:'<path d="M12 2c3 4 6 6.5 6 11a6 6 0 0 1-12 0c0-3 2-4.5 2-7 2 1 3 2.5 3 4 1-2 1-5 1-8z"/>',
+ table:'<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 9h18M3 14h18M9 4v16M15 4v16"/>',
+ report:'<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M8 13h8M8 17h5M8 9h3"/>',
+ history:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
+ compare:'<rect x="3" y="4" width="7" height="16" rx="1"/><rect x="14" y="4" width="7" height="16" rx="1"/><path d="M10 9h4M10 15h4"/>',
+ home:'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>',
+ top:'<rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 8v8M8 12h8"/>',
+ oblique:'<path d="M3 9 12 4l9 5-9 5z"/><path d="M3 9v6l9 5 9-5V9M12 14v6"/>',
+ low:'<path d="M2 18h20M5 18l3-7 4 4 3-6 4 9"/>',
+ north:'<path d="M12 2 6 20l6-4 6 4z"/>',
+ spin:'<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',
+ bookmark:'<path d="M6 3h12v18l-6-4-6 4z"/>',
+ split2:'<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M12 4v16"/>',
+ split3:'<rect x="2" y="4" width="20" height="16" rx="1"/><path d="M8.7 4v16M15.3 4v16"/>',
+ palette:'<path d="M12 3a9 9 0 0 0 0 18c1.5 0 2-1 2-2 0-1.5 1-2 2.5-2H18a3 3 0 0 0 3-3c0-6-4-11-9-11z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/>',
+ people:'<circle cx="9" cy="8" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1M16 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 5v1"/>',
+ cube:'<path d="M12 3 4 7.5v9L12 21l8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/>',
+ leaf:'<path d="M5 19C5 9 11 4 20 4c0 9-5 15-15 15zM5 19l8-8"/>',
+ map:'<path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/>',
+ photo:'<rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-8 8"/>',
+ tag:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+ tagoff:'<path d="M3 12V4h8l10 10-8 8z"/><path d="M3 3l18 18"/>',
+ panels:'<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M8 4v16M16 4v16"/>',
+ full:'<path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6"/>',
+ gauge:'<path d="M12 14l4-4M3 18a9 9 0 1 1 18 0"/>',
+ print:'<path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2"/><rect x="6" y="14" width="12" height="7"/>',
+ image:'<rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>',
+ xls:'<rect x="3" y="3" width="18" height="18" rx="1"/><path d="m8 8 8 8M16 8l-8 8"/>',
+ file:'<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/>',
+ help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17v.5"/>',
+ key:'<rect x="2" y="6" width="20" height="12" rx="1"/><path d="M6 10h1M10 10h1M14 10h1M18 10h1M7 14h10"/>',
+ gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
+ info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+ tour:'<path d="M4 21V4M4 4h12l-2 4 2 4H4"/>',
+ drone:'<circle cx="5" cy="5" r="2.5"/><circle cx="19" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M7 7l2 2M17 7l-2 2M7 17l2-2M17 17l-2-2"/>',
+ qrf:'<path d="M3 17h2l2-6h8l3 6h3"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M9 11V8h4"/>',
+};
+const ic=(k,cls)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"${cls?' class="'+cls+'"':''}>${IP[k]||IP.info}</svg>`;
+PRO.ic=ic;
+// ---------- helpers ----------
+const clk=id=>{const e=$(id);if(e)e.click();};
+const palGo=id=>{if(!editing)setEdit(true);showTab('add');setMin(false);setTimeout(()=>{const el=$(id);if(el){const h=el.previousElementSibling||el;h.scrollIntoView({block:'start',behavior:'smooth'});}},60);};
+const needSel=()=>{if(!sel){flash('Select something first.');return false;}return true;};
+const fs=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}catch(_){}};
+const viewGo=k=>{ctl.auto=false;flyTo(...views[k].map(v=>v.clone()));};
+const projName=()=>(PREC&&PREC.name)||'Garrison Master Plan';
+const nowStr=()=>new Date().toLocaleString([], {year:'numeric',month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+const dateStr=()=>new Date().toLocaleDateString([], {year:'numeric',month:'long',day:'numeric'});
+// ---------- ribbon definition ----------
+const RIB=[
+ ['Home',[
+  ['Project',[['new','New',()=>{openProjects('list').then(()=>clk('pj_new'));},null,'New project'],['open','Open',()=>openProjects('list'),null,'Open a project (P)'],['save','Save',()=>clk('saveBtn'),null,'Save changes (Ctrl+S)'],['s:saveas','Save as',()=>openProjects('saveas')],['s:export','Export file',()=>exportRec(projName(),worldNow(),snapshot())],['s:history','Versions',()=>PRO.versions()]]],
+  ['Clipboard',[['undo','Undo',()=>clk('undoBtn'),null,'Undo (Ctrl+Z)'],['redo','Redo',()=>clk('redoBtn'),null,'Redo (Ctrl+Y)'],['s:copy','Duplicate',()=>{if(MS.length>1&&$('ms_dup'))clk('ms_dup');else if(needSel())dupSel();}],['s:trash','Delete',()=>{if(MS.length)msDelete();else if(sel){if(!editing)setEdit(true);const d=$('f_del');if(d)d.click();}else flash('Select something first.');}]]],
+  ['Select',[['pointer','Select',()=>{setMeasure(false);setEdit(false);},()=>!editing&&!measuring,'Select and inspect (V)'],['edit','Edit layout',()=>setEdit(!editing),()=>editing,'Move, resize and add (E)'],['multi','Multi-select',()=>setMS(!msMode),()=>msMode,'Select several things'],['s:filter','By type…',()=>PRO.filterDlg()],['s:all','All buildings',()=>{MS=S.blds.filter(b=>b.group&&b.group.visible).map(b=>({kind:'building',ref:b}));sel=null;afterMS();}],['s:eyeoff','Clear',()=>{clearSel();showOverview();}]]],
+  ['Modify',[['rotl','Turn left',()=>{if(needSel()){if(!editing)setEdit(true);turnSel(-15);}},null,'Turn 15° left (Shift+R)'],['rotr','Turn right',()=>{if(needSel()){if(!editing)setEdit(true);turnSel(15);}},null,'Turn 15° right (R)'],['mirror','Mirror',()=>{if(!needSel())return;if(!editing)setEdit(true);const b=$('f_mirb')||$('f_mir');if(b)b.click();else flash('This cannot be mirrored.');}],['split','Split',()=>startSplit(),null,'Split a wall or road: then tap it'],['ruler','Measure',()=>setMeasure(!measuring),()=>measuring,'Measure distance (M)'],['s:magnet','Snap',()=>clk('snapChk'),()=>snapOn],['s:solid','Solid',()=>clk('solidChk'),()=>collideOn]]],
+ ]],
+ ['Build',[
+  ['Buildings',[['house','Housing',()=>palGo('palB0')],['hq','Command',()=>palGo('palB1')],['truck','Logistics',()=>palGo('palB2')],['cup','Messing',()=>palGo('palB3')],['bolt','Utilities',()=>palGo('palB4')]]],
+  ['Security items',[['gate','Gates & posts',()=>palGo('palSec')],['block','Obstacles',()=>palGo('palObs')],['soldier','Troops',()=>palGo('palTrp')],['cam','Cameras',()=>palGo('palCam')],['lamp','Lights',()=>palGo('palLgt')],['shield','Duties',()=>palGo('palDuty')],['siren','Alarms',()=>palGo('palEmg')],['warn','Threats',()=>palGo('palThr')]]],
+  ['Site',[['road','Road',()=>startDraw('road'),null,'Draw a road: tap points, then Enter'],['wall','Wall',()=>startDraw('wall'),null,'Draw a wall: tap points, then Enter'],['power','Power line',()=>startDraw('power')],['ground','Ground',()=>{setEdit(true);setTool('nb_ground');}],['tree','Tree',()=>{setEdit(true);setTool('nb_tree');}]]],
+  ['Annotate',[['dim','Dimension',()=>PRO.startDim(),()=>PRO.annMode==='dim','Click two points to add a dimension'],['note','Text note',()=>PRO.startNote(),()=>PRO.annMode==='note','Click where the note goes']]],
+ ]],
+ ['Security',[
+  ['Readiness',[['normal','Normal',()=>setDuty('normal'),()=>DUTYMODE==='normal','Normal routine: on-duty positions only'],['lock','Lockdown',()=>setDuty(DUTYMODE==='lockdown'?'normal':'lockdown'),()=>DUTYMODE==='lockdown','Garrison lockdown (K)','red'],['play','Drill playback',()=>PRO.scenario(),()=>!!PRO.scen,'Play a lockdown drill minute by minute','org']]],
+  ['Views',[['target','Planning',()=>tacticalView(),()=>TACT,'Security planning view (T)'],['shield','Security look',()=>{if(LOOK==='sec')setNight(false);else setLook('sec');},()=>LOOK==='sec','Glowing by security level (S)'],['monitor','Control room',()=>setCtrl(!ctrlMode),()=>ctrlMode,'All camera feeds (C)']]],
+  ['Overlays',[['s:cam','Camera coverage',()=>clickCk('cover'),()=>ckOn('cover')],['s:eyeoff','Blind spots',()=>clickCk('blind'),()=>ckOn('blind')],['s:arcs','Weapon arcs',()=>clickCk('fire'),()=>ckOn('fire')],['s:lamp','Light at night',()=>clickCk('lit'),()=>ckOn('lit')],['s:moon','Dark areas',()=>clickCk('dark'),()=>ckOn('dark')],['s:rings','Ranges',()=>clickCk('zones'),()=>ckOn('zones')],['s:qrf','QRF times',()=>clickCk('qrfr'),()=>ckOn('qrfr')],['s:wallchk','Wall watch',()=>clickCk('wallchk'),()=>ckOn('wallchk')],['s:heat','Heat map',()=>{HEATON=!HEATON;buildHeat();if(SECX.heat)SECX.heat.visible=LOOK==='sec'&&HEATON;},()=>HEATON]]],
+ ]],
+ ['Analyse',[
+  ['Tables',[['table','Schedules',()=>PRO.schedules(),null,'Lists of buildings, items and cameras']]],
+  ['Reports',[['report','Security report',()=>PRO.report(),null,'Automatic security appreciation']]],
+  ['Versions',[['history','History',()=>PRO.versions(),null,'Saved versions: restore or compare'],['compare','Compare',()=>PRO.versions(true),()=>!!PRO.diffOn,'Compare with an earlier version']]],
+  ['Measure',[['ruler','Measure',()=>setMeasure(!measuring),()=>measuring],['dim','Dimension',()=>PRO.startDim(),()=>PRO.annMode==='dim']]],
+ ]],
+ ['View',[
+  ['Camera',[['home','Home',()=>flyTo(HOME[0].clone(),HOME[1].clone()),null,'Whole site'],['top','Top',()=>viewGo('top')],['oblique','3D',()=>viewGo('oblique')],['s:low','Low pass',()=>viewGo('low')],['s:north','North up',()=>northUp()],['s:spin','Auto-rotate',()=>clk('spinBtn'),()=>ctl.auto]]],
+  ['Saved views',[['bookmark','Save view',()=>PRO.saveView(),null,'Remember this camera position'],['s:eye','Show list',()=>{showTab('browser');setMin(false);PRO.openBranch('views');}]]],
+  ['Look',[['sun','Day',()=>{setCompare(false);setCompare3(false);setNight(false);},()=>LOOK==='day'&&!compare&&!compare3],['moon','Night',()=>setNight(!night||LOOK==='sec'?true:false),()=>LOOK==='night'&&!compare&&!compare3,'Night view (N)'],['s:split2','Day | night',()=>setCompare(!compare),()=>compare],['s:split3','3 views',()=>setCompare3(!compare3),()=>compare3]]],
+  ['Colours',[['s:shield','Security level',()=>{if(natural)clk('natBtn');setColorBy('sec');},()=>COLORBY==='sec'&&!natural],['s:people','People',()=>{if(natural)clk('natBtn');setColorBy('ppl');},()=>COLORBY==='ppl'&&!natural],['s:cube','White model',()=>{if(natural)clk('natBtn');setColorBy('model');},()=>COLORBY==='model'&&!natural],['s:leaf','Natural',()=>{if(!natural)clk('natBtn');},()=>natural]]],
+  ['Ground',[['s:map','Drawn map',()=>setGround('map'),()=>GROUNDMODE!=='photo'],['s:photo','Aerial photo',()=>setGround('photo'),()=>GROUNDMODE==='photo']]],
+  ['Labels',[['s:tagoff','Off',()=>setLabelMode('off'),()=>LBLMODE==='off'],['s:tag','Key places',()=>setLabelMode('key'),()=>LBLMODE==='key'],['s:tag','All',()=>setLabelMode('all'),()=>LBLMODE==='all']]],
+  ['Window',[['panels','Panels',()=>clk('hidePanels'),()=>!document.body.classList.contains('nopanels'),'Show or hide side panels (H)'],['full','Full screen',fs],['s:gauge','High quality',()=>setQuality(!HQ),()=>HQ]]],
+ ]],
+ ['Output',[
+  ['Print',[['print','Print sheet',()=>PRO.sheet(),null,'Print or save a PDF sheet with title block'],['image','Save image',()=>PRO.saveImage(),null,'Save the current view as a picture']]],
+  ['Export',[['xls','Excel tables',()=>PRO.schedules(true),null,'Export schedules for Excel'],['report','Report',()=>PRO.report()],['file','Project file',()=>exportRec(projName(),worldNow(),snapshot())]]],
+ ]],
+ ['Help',[
+  ['Learn',[['tour','Guided tour',()=>PRO.tour(0)],['key','Shortcuts',()=>{$('help').hidden=false;}]]],
+  ['Application',[['gear','Settings',()=>PRO.settings()],['info','About',()=>{$('about').hidden=false;}]]],
+ ]],
+];
+// ---------- build ribbon ----------
+const rib=document.createElement('div');rib.id='ribbon';
+rib.innerHTML='<div class="rtabs"><button class="file" data-rt="file" title="File menu">File</button>'+RIB.map((t,i)=>`<button data-rt="${i}">${t[0]}</button>`).join('')+'</div><div class="rpanel"></div>';
+document.body.appendChild(rib);
+const RBTN=[];let curTab=0;
+try{curTab=+(localStorage.getItem('g3d-rtab')||0)||0;}catch(_){}
+function drawTab(i){curTab=i;try{localStorage.setItem('g3d-rtab',i);}catch(_){}RBTN.length=0;
+  rib.querySelectorAll('.rtabs [data-rt]').forEach(b=>b.classList.toggle('on',b.dataset.rt===String(i)));
+  const P=rib.querySelector('.rpanel');P.innerHTML='';
+  RIB[i][1].forEach(([cap,btns])=>{const g=document.createElement('div');g.className='rgrp';const bs=document.createElement('div');bs.className='rbs';
+    let col=null;
+    btns.forEach(([icn,label,act,on,tip,cls])=>{const small=icn.startsWith('s:');const k=small?icn.slice(2):icn;const b=document.createElement('button');
+      b.className=(small?'rs':'rb')+(cls?' '+cls:'');b.innerHTML=ic(k)+(small?`<span>${label}</span>`:`<span>${label}</span>`);b.title=tip||label;
+      b.onclick=e=>{e.stopPropagation();try{act();}catch(err){console.error(err);flash('That did not work here.');}setTimeout(syncRib,60);};
+      if(on)RBTN.push([b,on]);
+      if(small){if(!col||col.childElementCount>=3){col=document.createElement('div');col.className='rcol';bs.appendChild(col);}col.appendChild(b);}else{col=null;bs.appendChild(b);}});
+    g.appendChild(bs);const c=document.createElement('div');c.className='rcap';c.textContent=cap;g.appendChild(c);P.appendChild(g);});
+  syncRib();}
+function syncRib(){RBTN.forEach(([b,f])=>{let v=false;try{v=!!f();}catch(_){}b.setAttribute('aria-pressed',v);});
+  const sv=$('qSave');if(sv){sv.disabled=!unsaved&&!(APPMODE&&PID==='builtin');sv.classList.toggle('dirty',!!unsaved);}const u=$('qUndo');if(u)u.disabled=$('undoBtn').disabled;const r=$('qRedo');if(r)r.disabled=$('redoBtn').disabled;
+  const pn=$('qName');if(pn)pn.textContent=projName()+(unsaved?' •':'');}
+PRO.syncRib=syncRib;
+rib.querySelectorAll('.rtabs [data-rt]').forEach(b=>b.onclick=e=>{e.stopPropagation();if(b.dataset.rt==='file'){if(openMenu==='file')closeMenu();else showMenu(document.querySelector('.menus>button[data-m=file]'),b);return;}drawTab(+b.dataset.rt);});
+drawTab(Math.min(curTab,RIB.length-1));
+setInterval(syncRib,500);
+// quick access toolbar + project name in title bar
+{const q=document.createElement('div');q.className='qat';
+  q.innerHTML=`<button id="qSave" title="Save (Ctrl+S)">${ic('save')}</button><button id="qUndo" title="Undo (Ctrl+Z)">${ic('undo')}</button><button id="qRedo" title="Redo (Ctrl+Y)">${ic('redo')}</button><button id="qOpen" title="Open project (P)">${ic('open')}</button><span class="pname" id="qName"></span>`;
+  const hr=document.querySelector('.appbar .hright');hr.parentNode.insertBefore(q,hr);
+  $('qSave').onclick=()=>clk('saveBtn');$('qUndo').onclick=()=>clk('undoBtn');$('qRedo').onclick=()=>clk('redoBtn');$('qOpen').onclick=()=>openProjects('list');
+  const g=document.createElement('button');g.className='tb';g.id='setBtn';g.title='Settings';g.innerHTML=ic('gear');g.onclick=()=>PRO.settings();hr.insertBefore(g,$('helpBtn'));
+  $('brandSub').textContent='Tactical Site Planning';}
+// status bar hint mirrors tool prompts
+{const sb=document.querySelector('.statusbar');const h=document.createElement('span');h.id='sbHint';h.textContent='Ready';sb.insertBefore(h,sb.firstChild);
+  const upd=()=>{const t=(statusEl.textContent||'').trim();h.textContent=t||(draw?'Tap points, then press Enter to finish · Esc to cancel':tool?'Tap the ground to place it · Esc to cancel':measuring?'Click points to measure · Esc to finish':PRO.annMode==='dim'?'Click the first and second point of the dimension · Esc to cancel':PRO.annMode==='note'?'Click where the note should go · Esc to cancel':editing?'Edit layout: drag to move · orange handles resize · right-click for more':'Ready');};
+  new MutationObserver(upd).observe(statusEl,{childList:true,characterData:true,subtree:true});setInterval(upd,700);}
+// docks: add Browser tab
+{const tabs=document.querySelector('.hud .tabs');const b=document.createElement('button');b.setAttribute('role','tab');b.dataset.tab='browser';b.setAttribute('aria-selected','false');b.textContent='Browser';tabs.insertBefore(b,tabs.querySelector('[data-tab="show"]'));
+  const bx=document.createElement('div');bx.className='box';bx.dataset.k='browser';bx.hidden=true;bx.innerHTML='<div class="bb brw" id="brw"></div>';document.querySelector('.hud').insertBefore(bx,document.querySelector('.hud .box[data-k="show"]'));
+  b.onclick=()=>{setMin(false);showTab('browser');PRO.browser();};
+  if(isPro()){setMin(false);const pp=$('panel');pp.classList.remove('shut');$('panelToggle').textContent='▾';let t='browser';try{t=localStorage.getItem('g3d-tab')||'browser';}catch(_){}showTab(t);}}
+// ---------- notes & dimensions, saved views ----------
+G.notes=new THREE.Group();scene.add(G.notes);G.diff=new THREE.Group();scene.add(G.diff);
+function txtSprite(text,col){const c=document.createElement('canvas'),g=c.getContext('2d');const f='600 28px "IBM Plex Sans", Arial, sans-serif';g.font=f;const w=Math.ceil(g.measureText(text).width)+24;c.width=w;c.height=44;
+  g.fillStyle='rgba(255,255,255,.96)';g.fillRect(0,0,w,44);g.strokeStyle=col||'#1f6feb';g.lineWidth=3;g.strokeRect(1.5,1.5,w-3,41);g.fillStyle='#0f1b27';g.font=f;g.textBaseline='middle';g.fillText(text,12,23);
+  const t=new THREE.CanvasTexture(c);t.minFilter=THREE.LinearFilter;const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:false,sizeAttenuation:false}));sp.scale.set(w*0.00055,44*0.00055,1);sp.renderOrder=50;sp.raycast=()=>{};return sp;}
+function buildNotes(){while(G.notes.children.length){const c=G.notes.children[0];G.notes.remove(c);c.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){if(o.material.map)o.material.map.dispose();o.material.dispose();}});}
+  (S.notes||[]).forEach(n=>{const g=new THREE.Group();if(n.type==='dim'){const [a,b]=n.pts;const y=.8;const L=Math.hypot(b[0]-a[0],b[1]-a[1]);const ux=(b[0]-a[0])/(L||1),uz=(b[1]-a[1])/(L||1),nx=-uz,nz=ux;const m=new THREE.LineBasicMaterial({color:0x1f6feb,depthTest:false});
+      const pts=[[a[0],a[1]],[b[0],b[1]]];const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts.map(p=>new THREE.Vector3(p[0],y,p[1]))),m);ln.renderOrder=49;g.add(ln);
+      [a,b].forEach(p=>{const t=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(p[0]-nx*2,y,p[1]-nz*2),new THREE.Vector3(p[0]+nx*2,y,p[1]+nz*2)]),m);t.renderOrder=49;g.add(t);});
+      const sp=txtSprite(n.text||fmt(L),'#1f6feb');sp.position.set((a[0]+b[0])/2,y+1,(a[1]+b[1])/2);g.add(sp);}
+    else{const p=n.pts[0];const sp=txtSprite(n.text,'#f08a24');sp.center.set(.5,0);sp.position.set(p[0],3,p[1]);g.add(sp);const st=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(p[0],0.1,p[1]),new THREE.Vector3(p[0],3,p[1])]),new THREE.LineBasicMaterial({color:0xf08a24,depthTest:false}));st.renderOrder=49;g.add(st);}
+    G.notes.add(g);});}
+PRO.buildNotes=buildNotes;
+PRO.annMode=null;let annPts=[];
+PRO.startDim=()=>{setMeasure(false);setTool(null);PRO.annMode='dim';annPts=[];flash('Dimension: click the first point, then the second.');};
+PRO.startNote=()=>{setMeasure(false);setTool(null);PRO.annMode='note';annPts=[];flash('Text note: click where the note should go.');};
+function askText(x,y,cb){const d=document.createElement('div');d.style.cssText=`position:fixed;left:${Math.min(x,innerWidth-300)}px;top:${Math.min(y,innerHeight-90)}px;z-index:65;background:#fff;border:1px solid #c5ced7;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:10px;display:flex;gap:6px`;
+  d.innerHTML='<input placeholder="Type the note…" style="width:200px;height:30px;border:1px solid #c5ced7;border-radius:4px;padding:0 8px;font:13px var(--body)"><button class="pbtn pri">Add</button>';document.body.appendChild(d);const i=d.querySelector('input');i.focus();
+  const done=v=>{d.remove();if(v)cb(v);};d.querySelector('button').onclick=()=>done(i.value.trim());i.onkeydown=e=>{e.stopPropagation();if(e.key==='Enter')done(i.value.trim());if(e.key==='Escape')done('');};}
+cv.addEventListener('pointerup',e=>{if(!PRO.annMode||e.button!==0||!down)return;if(Math.hypot(e.clientX-down.x,e.clientY-down.y)>6)return;const p=groundAt(e.clientX,e.clientY);if(!p)return;
+  if(PRO.annMode==='dim'){annPts.push([+p.x.toFixed(2),+p.z.toFixed(2)]);if(annPts.length===1){flash('Now click the second point.');return;}
+    remember();if(!S.notes)S.notes=[];const L=Math.hypot(annPts[1][0]-annPts[0][0],annPts[1][1]-annPts[0][1]);S.notes.push({id:'n'+Date.now().toString(36),type:'dim',pts:annPts.slice(),text:fmt(L)});PRO.annMode=null;annPts=[];buildNotes();save();PRO.browserSoon();flash('Dimension added: '+fmt(L)+'. It is listed in the Browser under Notes.');}
+  else if(PRO.annMode==='note'){const pt=[+p.x.toFixed(2),+p.z.toFixed(2)];PRO.annMode=null;askText(e.clientX,e.clientY,t=>{remember();if(!S.notes)S.notes=[];S.notes.push({id:'n'+Date.now().toString(36),type:'text',pts:[pt],text:t});buildNotes();save();PRO.browserSoon();flash('Note added.');});}},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&PRO.annMode){PRO.annMode=null;annPts=[];flash('Cancelled.');}});
+PRO.saveView=()=>{const p=document.createElement('div');askText(innerWidth/2-150,innerHeight/2-40,name=>{remember();if(!S.views)S.views=[];S.views.push({id:'v'+Date.now().toString(36),name,pos:camera.position.toArray().map(v=>+v.toFixed(2)),tgt:ctl.target.toArray().map(v=>+v.toFixed(2))});save();PRO.browserSoon();flash('View "'+name+'" saved. Find it in the Browser.');});const i=document.querySelector('body>div:last-child input');if(i)i.placeholder='Name this view, e.g. Main gate approach';};
+PRO.goView=v=>{ctl.auto=false;flyTo(new THREE.Vector3(...v.pos),new THREE.Vector3(...v.tgt));};
+// ---------- project browser ----------
+let brwQ='';const openSet=new Set(['views','bld']);
+PRO.openBranch=k=>{openSet.add(k);PRO.browser();};
+const vis=()=>{const b=document.querySelector('.hud .box[data-k="browser"]');return b&&!b.hidden&&!document.body.classList.contains('nopanels');};
+let bT=null;PRO.browserSoon=()=>{clearTimeout(bT);bT=setTimeout(()=>{if(vis())PRO.browser();},250);};
+PRO.browser=()=>{const el=$('brw');if(!el)return;const q=brwQ.toLowerCase();const m=s=>!q||String(s).toLowerCase().includes(q);
+  const det=(k,title,count,inner)=>`<details data-k="${k}" ${openSet.has(k)||q?'open':''}><summary>${title}<em>${count}</em></summary>${inner}</details>`;
+  const lf=(kind,idx,label,x)=>`<div class="lf" data-kind="${kind}" data-i="${idx}" title="${esc(label)}">${esc(label)}${x?'<button class="x" data-x="'+kind+'" data-i="'+idx+'" title="Delete">✕</button>':''}</div>`;
+  let h=`<input class="bq" placeholder="Filter the browser…" value="${esc(brwQ)}">`;
+  const V=(S.views||[]);h+=det('views','Saved views',V.length,V.filter(v=>m(v.name)).map(v=>lf('view',S.views.indexOf(v),v.name,1)).join('')+`<div class="addv"><button class="pbtn" data-act="addview">${ic('bookmark')} Save current view</button></div>`);
+  const N=(S.notes||[]);h+=det('notes','Notes and dimensions',N.length,N.filter(n=>m(n.text)).map(n=>lf('note',S.notes.indexOf(n),(n.type==='dim'?'↔ ':'✎ ')+n.text,1)).join('')||'<div class="lf" style="color:#8a96a3">None yet — Build ▸ Dimension / Text note</div>');
+  const bt={};S.blds.forEach((b,i)=>{const t=b.info.type||'Other';if(!m(bTitle(b))&&!m(t)&&!m(b.name))return;(bt[t]=bt[t]||[]).push(i);});
+  h+=det('bld','Buildings',S.blds.length,Object.keys(bt).sort().map(t=>det('bt:'+t,esc(t),bt[t].length,bt[t].sort((a,c)=>(S.blds[a].num||0)-(S.blds[c].num||0)).map(i=>lf('building',i,(S.blds[i].num?'#'+S.blds[i].num+' ':'')+bTitle(S.blds[i]))).join(''))).join(''));
+  const ig={};S.items.forEach((it,i)=>{const T=TYPES[it.type];if(!T)return;if(!m(it.name)&&!m(T.label))return;const g=T.grp||'Other';(ig[g]=ig[g]||{});(ig[g][T.label]=ig[g][T.label]||[]).push(i);});
+  h+=det('items','Security items',S.items.length,Object.keys(ig).map(g=>{const n=Object.values(ig[g]).reduce((a,c)=>a+c.length,0);return det('ig:'+g,esc(g),n,Object.keys(ig[g]).map(t=>det('it:'+t,esc(t),ig[g][t].length,ig[g][t].map(i=>lf('item',i,S.items[i].name)).join(''))).join(''));}).join(''));
+  const W=(S.walls||[]);h+=det('walls','Walls and power lines',W.length+1,lf('wall',-1,'Boundary wall')+W.map((w,i)=>lf('cwall',i,(w.kind==='power'?'Power line ':'Wall ')+(i+1)+' · '+fmt(cwallLen(w)))).join(''));
+  h+=det('roads','Roads',S.roads.length,S.roads.map((r,i)=>lf('road',i,'Road '+(i+1)+' · '+(r.cls||'road'))).join(''));
+  h+=det('areas','Grounds and areas',S.areas.length,S.areas.filter(a=>m(a.name)).map(a=>lf('area',S.areas.indexOf(a),a.name)).join(''));
+  el.innerHTML=h;
+  const bq=el.querySelector('.bq');bq.oninput=()=>{brwQ=bq.value;const pos=bq.selectionStart;PRO.browser();const n=$('brw').querySelector('.bq');n.focus();n.setSelectionRange(pos,pos);};bq.onkeydown=e=>e.stopPropagation();
+  el.querySelectorAll('details').forEach(d=>d.ontoggle=()=>{if(d.open)openSet.add(d.dataset.k);else openSet.delete(d.dataset.k);});
+  el.querySelectorAll('[data-act=addview]').forEach(b=>b.onclick=()=>PRO.saveView());
+  el.querySelectorAll('.lf[data-kind]').forEach(d=>d.onclick=e=>{if(e.target.closest('.x'))return;const k=d.dataset.kind,i=+d.dataset.i;
+    if(k==='view'){PRO.goView(S.views[i]);return;}if(k==='note'){const n=S.notes[i];const p=n.pts[0];focusOn(p[0],p[1]);return;}
+    const ref=k==='building'?S.blds[i]:k==='item'?S.items[i]:k==='cwall'?S.walls[i]:k==='road'?S.roads[i]:k==='area'?S.areas[i]:null;if(k!=='wall'&&!ref)return;
+    if(k==='road')ROADSEG=-1;select(k,ref);focusSel();openPanel();el.querySelectorAll('.lf.on').forEach(x=>x.classList.remove('on'));d.classList.add('on');});
+  el.querySelectorAll('.x[data-x]').forEach(b=>b.onclick=e=>{e.stopPropagation();const k=b.dataset.x,i=+b.dataset.i;remember();if(k==='view')S.views.splice(i,1);else if(k==='note'){S.notes.splice(i,1);buildNotes();}save();PRO.browser();});};
+// hook save / loadInto so views+notes travel with the layout
+const _save=save;save=function(){const r=_save.apply(this,arguments);PRO.browserSoon();return r;};
+const _restore=restore;restore=function(j){const r=_restore.apply(this,arguments);buildNotes();PRO.browserSoon();return r;};
+const _li=loadInto;loadInto=function(o){const r=_li.apply(this,arguments);setTimeout(buildNotes,0);return r;};
+buildNotes();
+// ---------- modal helper ----------
+function modal(id,title,body,foot,wide){let m=$(id);if(!m){m=document.createElement('div');m.id=id;m.className='modal';document.body.appendChild(m);m.addEventListener('pointerdown',e=>{if(e.target===m)m.hidden=true;});m.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape')m.hidden=true;});}
+  m.innerHTML=`<div class="mcard" style="${wide?'width:min('+wide+'px,100%)':''}"><div class="mhead"><h3>${title}</h3><button class="pbtn" data-close>Close</button></div><div class="mbody">${body}</div>${foot?'<div class="mfoot">'+foot+'</div>':''}</div>`;
+  m.hidden=false;m.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>{m.hidden=true;});m.tabIndex=-1;m.focus();return m;}
+PRO.modal=modal;
+// ---------- schedules ----------
+const levelOf=b=>{const s=SENS.find(x=>x[0]===(b.info.importance||''));return s?[s[1],hex(s[2])]:['Not marked','#f4f4f1'];};
+const camTypes=()=>Object.keys(TYPES).filter(t=>TYPES[t].cam);
+const SCH={
+ bld:{name:'Buildings',cols:[['No','num'],['Name','name'],['Type','type'],['Security level','lvl'],['Storeys','st'],['People','ppl'],['Size (m)','size'],['Location','loc'],['Unit / user','unit']],
+  rows:()=>S.blds.map((b,i)=>{const L=levelOf(b);return {_k:'building',_i:i,num:b.num||'',name:bTitle(b),type:b.info.type||'',lvl:L[0],_c:L[1],st:b.info.storeys||'',ppl:typeof peopleB==='function'?peopleB(b):(b.info.residents||0),size:Math.round(b.w)+' × '+Math.round(b.d),loc:b.info.inside||'',unit:b.info.unit||b.info.users||''};})},
+ items:{name:'Security items',cols:[['Name','name'],['Type','type'],['Group','grp'],['Status','status'],['Duty','duty'],['Manned by','who'],['Range (m)','range'],['Position (m)','pos']],
+  rows:()=>S.items.map((it,i)=>{const T=TYPES[it.type]||{};return {_k:'item',_i:i,name:it.name,type:T.label||it.type,_c:T.col,grp:T.grp||'',status:it.status||'',duty:DUTYABLE(it.type)?(it.duty==='standby'?'Stand-to (rest)':'On duty'):'',who:it.who||'',range:it.range?Math.round(it.range):'',pos:Math.round(it.x-GCX)+', '+Math.round(GCZ-it.z)};})},
+ cams:{name:'Cameras',cols:[['Name','name'],['Type','type'],['Range (m)','range'],['Field of view','fov'],['Facing','rot'],['Online','onl'],['On','on']],
+  rows:()=>S.items.map((it,i)=>[it,i]).filter(([it])=>TYPES[it.type]&&TYPES[it.type].cam).map(([it,i])=>({_k:'item',_i:i,name:it.name,type:TYPES[it.type].label,range:Math.round(it.range||0),fov:(it.fov||0)+'°',rot:Math.round(it.rot||0)+'°',onl:it.online===false?'OFFLINE':'Yes',on:it.onWall?'Wall':it.y?'Roof':'Ground'}))},
+ walls:{name:'Walls and roads',cols:[['Name','name'],['Kind','kind'],['Length','len'],['Height (m)','h'],['Top','top']],
+  rows:()=>[{_k:'wall',_i:-1,name:'Boundary wall',kind:'Perimeter',len:fmt(wallLen()),h:S.wallH||3,top:S.wallTop||'none'}].concat((S.walls||[]).map((w,i)=>({_k:'cwall',_i:i,name:(w.kind==='power'?'Power line ':'Wall ')+(i+1),kind:w.kind==='power'?'Power line':(w.outer?'Outer wall':'Inner wall'),len:fmt(cwallLen(w)),h:w.h,top:w.top||'none'}))).concat(S.roads.map((r,i)=>({_k:'road',_i:i,name:'Road '+(i+1),kind:r.cls||'road',len:fmt(r.pts.reduce((a,p,k)=>k?a+Math.hypot(p[0]-r.pts[k-1][0],p[1]-r.pts[k-1][1]):0,0)),h:'',top:''})))},
+};
+let schTab='bld',schSort=null;
+PRO.schedules=(exportNow)=>{const draw=()=>{const D=SCH[schTab];let R=D.rows();if(schSort){const [k,dir]=schSort;R.sort((a,b)=>{const x=a[k],y=b[k];return (typeof x==='number'&&typeof y==='number'?x-y:String(x).localeCompare(String(y),undefined,{numeric:true}))*dir;});}
+    const body=`<div class="ptabs">${Object.keys(SCH).map(k=>`<button data-st="${k}" class="${k===schTab?'on':''}">${SCH[k].name} (${SCH[k].rows().length})</button>`).join('')}</div><table class="sched"><thead><tr>${D.cols.map(([l,k])=>`<th data-k="${k}">${l}${schSort&&schSort[0]===k?(schSort[1]>0?' ▲':' ▼'):''}</th>`).join('')}</tr></thead><tbody>${R.map(r=>`<tr data-k="${r._k}" data-i="${r._i}">${D.cols.map(([l,k],ci)=>`<td class="${typeof r[k]==='number'?'num':''}">${ci===0&&r._c?`<i class="dot" style="background:${r._c}"></i>`:''}${k==='lvl'?`<i class="dot" style="background:${r._c}"></i>`:''}${esc(r[k])}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    const m=modal('sched','Schedules — '+esc(projName()),body,`<span style="margin-right:auto;color:#6b7885;font-size:12px">Click a row to find it on the model · click a heading to sort</span><button class="pbtn" id="schCsv">${ic('xls')} Export this table (Excel)</button><button class="pbtn pri" id="schAll">${ic('xls')} Export all tables</button>`,1180);
+    m.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{schTab=b.dataset.st;schSort=null;draw();});
+    m.querySelectorAll('th[data-k]').forEach(th=>th.onclick=()=>{const k=th.dataset.k;schSort=schSort&&schSort[0]===k?[k,-schSort[1]]:[k,1];draw();});
+    m.querySelectorAll('tbody tr').forEach(tr=>tr.onclick=()=>{const k=tr.dataset.k,i=+tr.dataset.i;const ref=k==='building'?S.blds[i]:k==='item'?S.items[i]:k==='cwall'?S.walls[i]:k==='road'?S.roads[i]:null;m.hidden=true;select(k,ref);focusSel();openPanel();});
+    $('schCsv').onclick=()=>csv([schTab]);$('schAll').onclick=()=>csv(Object.keys(SCH));};
+  const csv=keys=>{const q=v=>{v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};let out='';keys.forEach(k=>{const D=SCH[k];out+=(keys.length>1?q(D.name)+'\n':'')+D.cols.map(c=>q(c[0])).join(',')+'\n'+D.rows().map(r=>D.cols.map(c=>q(r[c[1]])).join(',')).join('\n')+'\n\n';});
+    download(safeName(projName())+(keys.length>1?' - schedules':' - '+SCH[keys[0]].name)+'.csv','﻿'+out);flash('Saved as a CSV file — it opens in Excel.');};
+  draw();if(exportNow===true)setTimeout(()=>csv(Object.keys(SCH)),100);};
+// ---------- selection filter ----------
+PRO.filterDlg=()=>{const bt={},lv={},it={};S.blds.forEach(b=>{const t=b.info.type||'Other';bt[t]=(bt[t]||0)+1;const L=levelOf(b)[0];lv[L]=(lv[L]||0)+1;});S.items.forEach(i=>{const T=TYPES[i.type];if(T)it[i.type]=(it[i.type]||0)+1;});
+  const sec=(t,o,f)=>`<div class="seth" style="margin:12px 0 6px">${t}</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 14px">`+Object.keys(o).sort().map(k=>`<label style="display:flex;gap:8px;align-items:center;font-size:12.5px"><input type="checkbox" data-f="${f}" value="${esc(k)}">${esc(f==='it'?TYPES[k].label:k)}<span style="margin-left:auto;color:#8a96a3;font:11px var(--mono)">${o[k]}</span></label>`).join('')+'</div>';
+  const m=modal('filt','Select by type',sec('Buildings by security level',lv,'lv')+sec('Buildings by type',bt,'bt')+sec('Security items by type',it,'it'),`<button class="pbtn" id="fNone">Clear ticks</button><button class="pbtn pri" id="fGo">Select</button>`,900);
+  $('fNone').onclick=()=>m.querySelectorAll('input').forEach(i=>i.checked=false);
+  $('fGo').onclick=()=>{const g=f=>[...m.querySelectorAll(`input[data-f=${f}]:checked`)].map(i=>i.value);const L=g('lv'),B=g('bt'),I=g('it');
+    MS=[];S.blds.forEach(b=>{if((L.length&&L.includes(levelOf(b)[0]))||(B.length&&B.includes(b.info.type||'Other')))MS.push({kind:'building',ref:b});});S.items.forEach(i=>{if(I.includes(i.type))MS.push({kind:'item',ref:i});});
+    m.hidden=true;sel=null;if(!MS.length){flash('Nothing matched.');return;}afterMS();flash(MS.length+' selected. Use the panel on the right to change them together.');};};
+PRO.selectLike=(kind,ref)=>{MS=[];if(kind==='building')S.blds.forEach(b=>{if((b.info.type||'')===(ref.info.type||''))MS.push({kind:'building',ref:b});});else if(kind==='item')S.items.forEach(i=>{if(i.type===ref.type)MS.push({kind:'item',ref:i});});sel=null;afterMS();flash(MS.length+' selected.');};
+// ---------- image capture ----------
+function grab(top){const keep=[camera.position.clone(),ctl.target.clone()];const gz=G.gizmo.visible;G.gizmo.visible=false;
+  if(top){const tv=Math.tan(camera.fov*Math.PI/360),asp=camera.aspect||1.6;const h=Math.max(GD/2/tv,GW/2/(tv*asp))*1.04;camera.position.set(GCX,h,GCZ+.01);camera.lookAt(GCX,0,GCZ);camera.updateMatrixWorld();}
+  renderer.render(scene,camera);const url=renderer.domElement.toDataURL('image/jpeg',.9);G.gizmo.visible=gz;if(top){camera.position.copy(keep[0]);camera.lookAt(keep[1]);}return url;}
+PRO.saveImage=async()=>{const url=grab(false);const bin=atob(url.split(',')[1]);const u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
+  if(window.claude&&window.claude.use){try{const dl=await window.claude.use('downloads');if(dl){await dl.save({filename:safeName(projName())+' view.jpg',data:new Blob([u8],{type:'image/jpeg'})});return;}}catch(_){}}
+  const a=document.createElement('a');a.href=url;a.download=safeName(projName())+' view.jpg';document.body.appendChild(a);a.click();a.remove();flash('Picture saved.');};
+// ---------- print sheet ----------
+const legendHTML=()=>SENS.filter(s=>s[0]!=='').map(s=>`<div style="display:flex;align-items:center;gap:6px;margin:2px 0"><i class="dot" style="background:${hex(s[2])}"></i>${s[1]}</div>`).join('');
+PRO.sheet=()=>{const img=grab(false);const ang=(ctl.th+(S.north||0)*Math.PI/180)*180/Math.PI;const cls=esc(SET.classif||'');
+  const body=`${cls?`<div class="classbar">${cls}</div>`:''}<div class="sheetwrap"><div class="sheetimg"><img src="${img}"><svg class="narrow" viewBox="0 0 46 46"><g transform="rotate(${ang.toFixed(1)} 23 23)"><path d="M23 5 16 30l7-5 7 5z" fill="#c0392b"/><text x="23" y="42" text-anchor="middle" font-size="9" font-weight="700" font-family="Arial">N</text></g></svg></div>
+   <div class="tblock"><div style="display:flex;gap:8px;align-items:center"><img src="${(document.querySelector('.brandx img')||{}).src||''}" style="width:34px;height:34px;border-radius:6px"><div><div class="val" style="letter-spacing:.1em">SENTINEL 3D</div><div class="lab">Tactical site planning</div></div></div>
+   <div><div class="lab">Project</div><div class="val">${esc(projName())}</div></div><div><div class="lab">Unit / formation</div><div class="val">${esc(SET.unitName||'—')}</div></div><div><div class="lab">Sheet title</div><div class="val" contenteditable="true">Site layout — 3D view</div></div>
+   <div><div class="lab">Prepared by</div><div class="val">${esc(SET.preparedBy||'—')}</div></div><div><div class="lab">Date</div><div class="val">${dateStr()}</div></div>
+   <div><div class="lab">Security level key</div>${legendHTML()}</div><div style="flex:1"><div class="lab">Notes</div><div contenteditable="true" style="min-height:40px;font-size:11px">Click to type notes before printing.</div></div>
+   <div><div class="lab">Scale</div><div class="val">Not to scale — 3D view</div></div></div></div>${cls?`<div class="classbar">${cls}</div>`:''}`;
+  const m=modal('sheet','Print sheet',body,`<span style="margin-right:auto;color:#6b7885;font-size:12px">Sheet title and notes can be typed into directly. Choose "Save as PDF" in the print window to make a PDF.</span><button class="pbtn" id="shImg">${ic('image')} Save picture</button><button class="pbtn pri" id="shPrint">${ic('print')} Print / PDF</button>`,1200);
+  $('shImg').onclick=()=>PRO.saveImage();$('shPrint').onclick=()=>{document.body.classList.add('printing');setTimeout(()=>{window.print();setTimeout(()=>document.body.classList.remove('printing'),500);},50);};};
+// ---------- security report ----------
+function nearest(x,z,f){let d=1e9;S.items.forEach(i=>{if(f(i)){const q=Math.hypot(i.x-x,i.z-z);if(q<d)d=q;}});return d;}
+PRO.report=()=>{const cams=S.items.filter(i=>TYPES[i.type]&&TYPES[i.type].cam);const offl=cams.filter(i=>i.online===false);const gates=S.items.filter(i=>['maingate','gate'].includes(i.type));
+  const thr=S.items.filter(i=>/threat|weak/i.test((TYPES[i.type]||{}).grp||'')||/threat|weak/i.test(i.type));const qrf=S.items.filter(i=>/qrf/.test(i.type));const drones=S.items.filter(i=>/drone/.test(i.type));const posts=S.items.filter(i=>(TYPES[i.type]||{}).staff);
+  const c=dutyCounts();const vit=S.blds.filter(b=>b.info.importance==='Top priority');const hi=S.blds.filter(b=>b.info.importance==='High');
+  const camNear=(x,z)=>nearest(x,z,i=>TYPES[i.type]&&TYPES[i.type].cam&&i.online!==false);
+  const vitNoCam=vit.filter(b=>camNear(b.cx,b.cz)>Math.max(b.w,b.d)/2+40);const gateNoCam=gates.filter(g=>camNear(g.x,g.z)>40);
+  const ww=STATS.wallW,cov=Math.round(STATS.cov||0),lit=Math.round(STATS.lit||0);
+  const cl=(v,a,b)=>v==null?'':v>=b?'ok':v>=a?'warn':'bad';
+  const R=[];if(ww!=null&&ww<80)R.push(`Only <b>${ww}%</b> of the boundary wall is watched — ${fmt(STATS.wallGap||0)} is not seen by any post or camera. Add sentry posts or wall cameras along the red sections (turn on Security ▸ Wall watch).`);
+  if(cov<30)R.push(`CCTV covers only <b>${cov}%</b> of open ground inside the wall. Add cameras at road junctions, gates and approaches to vital buildings.`);
+  if(lit<40)R.push(`Only <b>${lit}%</b> of open ground is lit at night. Add flood lights along the wall and street lights on internal roads (Security ▸ Dark areas shows the gaps).`);
+  if(vitNoCam.length)R.push(`${vitNoCam.length} critical building(s) have no working camera within 40 m: ${vitNoCam.slice(0,8).map(b=>esc(bTitle(b))).join(', ')}${vitNoCam.length>8?'…':''}.`);
+  if(gateNoCam.length)R.push(`${gateNoCam.length} gate(s) have no camera within 40 m: ${gateNoCam.map(g=>esc(g.name)).join(', ')}.`);
+  if(offl.length)R.push(`${offl.length} camera(s) are marked offline: ${offl.map(i=>esc(i.name)).join(', ')}. Repair or replace.`);
+  if(!qrf.length)R.push('No QRF is placed on the model. Mark the QRF location so response times can be checked.');
+  if(!drones.length)R.push('No drone is on the model. A drone with a set flight path improves observation of the perimeter.');
+  if(thr.length)R.push(`${thr.length} threat / weak point(s) are marked. Each should have an assigned post or camera and an obstacle plan.`);
+  if(!R.length)R.push('No major gaps found by the automatic checks. Verify on the ground.');
+  const img=grab(true);const cls=esc(SET.classif||'');
+  const body=`<div class="rep">${cls?`<div class="classbar">${cls}</div>`:''}<div style="display:flex;justify-content:space-between;align-items:flex-end;margin:12px 0 4px"><div><h1>Security appreciation — ${esc(projName())}</h1><div style="color:#5d6b78">${esc(SET.unitName||'')}${SET.unitName?' · ':''}Prepared ${dateStr()}${SET.preparedBy?' by '+esc(SET.preparedBy):''} · Sentinel 3D automatic report</div></div></div>
+   <div class="kpis"><div class="kpi"><b class="${cl(ww,60,80)}">${ww!=null?ww+'%':'—'}</b><span>Boundary wall watched</span></div><div class="kpi"><b class="${cl(cov,15,30)}">${cov}%</b><span>CCTV coverage (open ground)</span></div><div class="kpi"><b class="${cl(lit,25,40)}">${lit}%</b><span>Lit at night</span></div><div class="kpi"><b>${c.on}</b><span>Positions on duty (${c.pon} people)</span></div></div>
+   <img src="${img}" alt="Site plan">
+   <h2>1. Perimeter</h2><ul><li>Boundary wall length: <b>${fmt(wallLen())}</b>, height ${S.wallH||3} m, top: ${esc(S.wallTop||'none')}.</li><li>Wall not watched by anyone: <b class="${ww!=null&&ww<80?'bad':''}">${fmt(STATS.wallGap||0)}</b>.</li><li>Gates: <b>${gates.length}</b> (${gates.map(g=>esc(g.name)).join(', ')||'none'}).</li><li>Sentry posts and manned positions: <b>${posts.length}</b>.</li></ul>
+   <h2>2. Surveillance and lighting</h2><ul><li>Cameras: <b>${cams.length}</b> (${offl.length} offline). Coverage of open ground: <b>${cov}%</b>.</li><li>Lights: <b>${STATS.lights||0}</b>. Ground lit at night: <b>${lit}%</b>.</li><li>Drones: <b>${drones.length}</b>${drones.length?' ('+drones.filter(d=>d.path&&d.path.length).length+' with a flight path)':''}.</li></ul>
+   <h2>3. Manning and response</h2><ul><li>Normal routine: <b>${c.on}</b> positions on duty (${c.pon} people); <b>${c.sb}</b> stand-to positions at rest (${c.psb} people).</li><li>Lockdown strength: <b>${c.on+c.sb}</b> positions, <b>${c.pon+c.psb}</b> people.</li><li>QRF: <b>${qrf.length}</b> ${qrf.length?'('+qrf.map(q=>esc(q.name)).join(', ')+')':''}.</li></ul>
+   <h2>4. Vital and high-value buildings</h2><ul><li>Critical: <b>${vit.length}</b> — ${vit.map(b=>esc(bTitle(b))).join(', ')||'none marked'}.</li><li>High: <b>${hi.length}</b>.</li></ul>
+   <h2>5. Threats and weak points</h2><ul>${thr.length?thr.map(t=>`<li>${esc(t.name)}${t.notes?' — '+esc(t.notes):''}</li>`).join(''):'<li>None marked.</li>'}</ul>
+   <h2>6. Recommendations</h2><ol>${R.map(r=>`<li style="margin:4px 0">${r}</li>`).join('')}</ol>
+   <p style="color:#6b7885;font-size:12px;margin-top:18px">Figures are estimates from the model and must be confirmed on the ground before operational use.</p>${cls?`<div class="classbar">${cls}</div>`:''}</div>`;
+  const m=modal('report','Security report',body,`<button class="pbtn" id="repDl">${ic('export')} Save as file</button><button class="pbtn pri" id="repPr">${ic('print')} Print / PDF</button>`,980);
+  $('repPr').onclick=()=>{document.body.classList.add('reporting');setTimeout(()=>{window.print();setTimeout(()=>document.body.classList.remove('reporting'),500);},50);};
+  $('repDl').onclick=()=>{const html='<!doctype html><html><head><meta charset="utf-8"><title>Security report</title><style>body{font-family:Arial,sans-serif;margin:24px}'+[...document.styleSheets].map(()=> '').join('')+'.classbar{background:#c0392b;color:#fff;text-align:center;font-weight:700;letter-spacing:.3em;padding:3px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.kpi{border:1px solid #ddd;border-radius:6px;padding:8px}.kpi b{display:block;font-size:22px}.bad{color:#c0392b}.ok{color:#1e8e3e}.warn{color:#c77800}h2{border-bottom:2px solid #1f6feb;font-size:16px;padding-bottom:4px}img{width:100%}</style></head><body>'+m.querySelector('.rep').innerHTML+'</body></html>';download(safeName(projName())+' - security report.html',html);};};
+// ---------- version history (IndexedDB) ----------
+const VDB={db:null,open(){return this.db?Promise.resolve(this.db):new Promise((res,rej)=>{const r=indexedDB.open('G3V',1);r.onupgradeneeded=()=>{const d=r.result;if(!d.objectStoreNames.contains('v')){const s=d.createObjectStore('v',{keyPath:'id'});s.createIndex('pid','pid');}};r.onsuccess=()=>{this.db=r.result;res(this.db);};r.onerror=()=>rej(r.error);});},
+ async put(rec){const d=await this.open();return new Promise((res,rej)=>{const t=d.transaction('v','readwrite');t.objectStore('v').put(rec);t.oncomplete=res;t.onerror=()=>rej(t.error);});},
+ async list(pid){const d=await this.open();return new Promise((res,rej)=>{const t=d.transaction('v');const q=t.objectStore('v').index('pid').getAll(pid);q.onsuccess=()=>res(q.result||[]);q.onerror=()=>rej(q.error);});},
+ async del(id){const d=await this.open();return new Promise(res=>{const t=d.transaction('v','readwrite');t.objectStore('v').delete(id);t.oncomplete=res;});}};
+const vpid=()=>PID||'builtin';
+async function addVersion(note){try{const snap=snapshot();const L=await VDB.list(vpid());const last=L.sort((a,b)=>b.t-a.t)[0];const js=JSON.stringify(snap);if(last&&JSON.stringify(last.snap)===js)return;
+  await VDB.put({id:vpid()+':'+Date.now(),pid:vpid(),t:Date.now(),note:note||'Saved',snap,nb:snap.blds.length,ni:snap.items.length});
+  const all=(await VDB.list(vpid())).sort((a,b)=>b.t-a.t);for(const v of all.slice(40))await VDB.del(v.id);}catch(_){}}
+PRO.addVersion=addVersion;
+const _commit=commit;commit=function(){const r=_commit.apply(this,arguments);if(!(APPMODE&&PID==='builtin'))addVersion('Saved');return r;};
+setTimeout(()=>{VDB.list(vpid()).then(L=>{if(!L.length)addVersion('Opened (starting point)');}).catch(()=>{});},4000);
+// autosave
+setInterval(()=>{const n=+SET.autosave||0;if(!n||!unsaved)return;PRO._asT=(PRO._asT||0)+1;if(PRO._asT*30<n*60)return;PRO._asT=0;if(APPMODE&&PID==='builtin'){return;}if(draw||drag||PRO.annMode)return;commit();$('saveNote').textContent='Auto-saved '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});},30000);
+PRO.versions=async(cmp)=>{let L=[];try{L=(await VDB.list(vpid())).sort((a,b)=>b.t-a.t);}catch(_){}
+  const body=`<p style="margin:0 0 10px;color:#5d6b78">A version is kept every time you save${+SET.autosave?' (and by auto-save every '+SET.autosave+' minutes)':''}. The last 40 are kept on this device.</p><div class="vlist">${L.map((v,i)=>`<div class="vrow"><b>${new Date(v.t).toLocaleString([], {weekday:'short',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</b><span>${esc(v.note)} · ${v.nb} buildings · ${v.ni} items</span><button class="pbtn" data-cmp="${i}">${ic('compare')} Compare with now</button><button class="pbtn" data-res="${i}">${ic('history')} Restore</button></div>`).join('')||'<p>No versions yet. Save once to start the history.</p>'}</div>`;
+  const m=modal('vers',cmp?'Compare with an earlier version':'Version history',body,`<button class="pbtn" id="vNow">${ic('bookmark')} Keep a version now</button>${PRO.diffOn?`<button class="pbtn dng" id="vClr">Clear comparison</button>`:''}`,820);
+  m.querySelectorAll('[data-res]').forEach(b=>b.onclick=()=>{const v=L[+b.dataset.res];remember();restore(JSON.stringify(v.snap));m.hidden=true;flash('Restored the version from '+new Date(v.t).toLocaleString()+'. Undo brings back what you had; Save to keep it.');});
+  m.querySelectorAll('[data-cmp]').forEach(b=>b.onclick=()=>{m.hidden=true;PRO.compare(L[+b.dataset.cmp]);});
+  $('vNow').onclick=async()=>{await addVersion('Kept by hand');PRO.versions(cmp);};if($('vClr'))$('vClr').onclick=()=>{PRO.clearDiff();m.hidden=true;};};
+// ---------- compare ----------
+PRO.clearDiff=()=>{while(G.diff.children.length){const c=G.diff.children[0];G.diff.remove(c);c.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose();});}PRO.diffOn=false;};
+PRO.compare=v=>{PRO.clearDiff();const old=v.snap;const add=[],rem=[],mov=[],chg=[];
+  const ob={};old.blds.forEach(b=>ob[b.num]=b);const nb={};S.blds.forEach(b=>nb[b.num]=b);
+  S.blds.forEach(b=>{const o=ob[b.num];if(!o)add.push(['building',b,bTitle(b)]);else{if(Math.hypot(o.cx-b.cx,o.cz-b.cz)>1||Math.abs((o.rot||0)-(b.rot||0))>1)mov.push(['building',b,bTitle(b)]);if((o.info&&o.info.type)!==b.info.type||(o.info&&o.info.importance)!==b.info.importance||Math.abs(o.w-b.w)>.5||Math.abs(o.d-b.d)>.5||Math.abs(o.h-b.h)>.3)chg.push(['building',b,bTitle(b)]);}});
+  old.blds.forEach(o=>{if(!nb[o.num])rem.push(['building',o,(o.info&&o.info.type)||o.name]);});
+  const oi={};(old.items||[]).forEach(i=>oi[i.id]=i);const ni={};S.items.forEach(i=>ni[i.id]=i);
+  S.items.forEach(i=>{const o=oi[i.id];if(!o)add.push(['item',i,i.name]);else{if(Math.hypot(o.x-i.x,o.z-i.z)>1||Math.abs((o.rot||0)-(i.rot||0))>1)mov.push(['item',i,i.name]);if(o.type!==i.type||o.status!==i.status||o.duty!==i.duty||(o.range||0)!==(i.range||0)||(o.fov||0)!==(i.fov||0))chg.push(['item',i,i.name]);}});
+  (old.items||[]).forEach(o=>{if(!ni[o.id])rem.push(['item',o,o.name]);});
+  const box=(x,z,w,d,h,rot,col)=>{const g=new THREE.Mesh(new THREE.BoxGeometry(w+2,h+2,d+2),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.28,depthWrite:false}));g.position.set(x,h/2,z);g.rotation.y=(rot||0)*Math.PI/180;g.renderOrder=45;g.raycast=()=>{};G.diff.add(g);
+    const e=new THREE.LineSegments(new THREE.EdgesGeometry(g.geometry),new THREE.LineBasicMaterial({color:col,depthTest:false}));e.position.copy(g.position);e.rotation.copy(g.rotation);e.renderOrder=46;e.raycast=()=>{};G.diff.add(e);};
+  const mark=(k,o,col)=>{if(k==='building')box(o.cx,o.cz,o.w,o.d,o.h||4,o.rot,col);else box(o.x,o.z,4,4,4,0,col);};
+  add.forEach(([k,o])=>mark(k,o,0x1e8e3e));rem.forEach(([k,o])=>mark(k,o,0xd93025));mov.forEach(([k,o])=>mark(k,o,0xf0a000));chg.forEach(([k,o])=>{if(!mov.some(m=>m[1]===o))mark(k,o,0x1f6feb);});
+  PRO.diffOn=true;
+  const li=(arr,col,lab)=>`<h4 style="margin:12px 0 4px;color:${col}">${lab} (${arr.length})</h4>`+(arr.length?arr.slice(0,200).map(([k,o,n],j)=>`<div class="lf" style="padding-left:6px;cursor:pointer" data-g="${lab}" data-j="${j}">${k==='building'?'🏢':'•'} ${esc(n)}</div>`).join(''):'<div style="color:#8a96a3">None</div>');
+  const m=modal('diff','Changes since '+new Date(v.t).toLocaleString(),`<p style="margin:0 0 6px;color:#5d6b78">Changes are now outlined on the model: <b style="color:#1e8e3e">green = added</b>, <b style="color:#d93025">red = removed</b>, <b style="color:#c77800">orange = moved or turned</b>, <b style="color:#1f6feb">blue = changed</b>. Click a line to fly to it.</p><div class="brw">${li(add,'#1e8e3e','Added')}${li(rem,'#d93025','Removed')}${li(mov,'#c77800','Moved or turned')}${li(chg,'#1f6feb','Changed')}</div>`,`<button class="pbtn dng" id="dClr">Clear outlines</button><button class="pbtn pri" data-close>Keep outlines and close</button>`,760);
+  const groups={Added:add,Removed:rem,'Moved or turned':mov,Changed:chg};
+  m.querySelectorAll('[data-g]').forEach(d=>d.onclick=()=>{const [k,o]=groups[d.dataset.g][+d.dataset.j];m.hidden=true;if(k==='building')focusOn(o.cx,o.cz,Math.max(o.w,o.d));else focusOn(o.x,o.z);});
+  $('dClr').onclick=()=>{PRO.clearDiff();m.hidden=true;};flash(`Compared: ${add.length} added, ${rem.length} removed, ${mov.length} moved, ${chg.length} changed.`);};
+// ---------- scenario playback ----------
+PRO.scenario=()=>{if(PRO.scen){PRO.stopScen();return;}const bar=document.createElement('div');bar.id='scen';document.body.appendChild(bar);
+  const gate=S.items.find(i=>i.type==='maingate')||S.items.find(i=>i.type==='gate');const thr=S.items.find(i=>/threat|weak/i.test(((TYPES[i.type]||{}).grp||'')+i.type));const qrf=S.items.find(i=>/qrf/.test(i.type));const dr=S.items.find(i=>/drone/.test(i.type));const cr=S.blds.find(b=>/control room/i.test(b.info.type||''));
+  const tgt=thr||gate;const c=dutyCounts();
+  const EV=[[0,'Alarm raised — sirens sounding, garrison lockdown ordered',()=>{setDuty('lockdown');if(tgt)focusOn(tgt.x,tgt.z,120);}],
+   [30,'Gates closed and barriers down'+(gate?' at '+gate.name:''),()=>{if(gate)focusOn(gate.x,gate.z,60);}],
+   [60,'Central control room alerted — all camera feeds on screen',()=>{if(cr)focusOn(cr.cx,cr.cz,80);}],
+   [90,`QRF launched${qrf?' from '+qrf.name:''} towards ${tgt?tgt.name:'the threat'}`,()=>{if(qrf&&tgt){runner(qrf,tgt,150);focusOn((qrf.x+tgt.x)/2,(qrf.z+tgt.z)/2,Math.hypot(qrf.x-tgt.x,qrf.z-tgt.z)+60);}}],
+   [150,`Stand-to positions manned — ${c.on+c.sb} positions, ${c.pon+c.psb} people`,()=>flyTo(HOME[0].clone(),HOME[1].clone())],
+   [210,dr?`Drone airborne — ${dr.name} flying its route`:'No drone on the model — perimeter observed by posts only',()=>{if(dr)focusOn(dr.x,dr.z,140);}],
+   [240,'QRF in position at the threat'+(tgt?' ('+tgt.name+')':''),()=>{if(tgt)focusOn(tgt.x,tgt.z,70);}],
+   [480,'Search of the area complete — perimeter secure',()=>flyTo(HOME[0].clone(),HOME[1].clone())],
+   [600,'End of drill — ready to stand down',()=>{}]];
+  const T=600;let t=0,playing=true,last=performance.now(),done=-1,spd=20;
+  bar.innerHTML=`<div class="top"><span class="clk" id="scClk">T+00:00</span><span class="ev" id="scEv">Starting drill…</span><button id="scPl">Pause</button><select id="scSp" style="height:30px;background:#1d2b39;color:#e6eef6;border:1px solid #3a516a;border-radius:5px"><option value="10">Slow</option><option value="20" selected>Normal</option><option value="40">Fast</option></select><button id="scSt">Stand down</button></div><div class="bar" id="scBar"><i id="scFill"></i></div><div class="ticks">${EV.map(e=>`<span style="left:${e[0]/T*100}%" title="${esc(e[1])}">${Math.floor(e[0]/60)}′</span>`).join('')}</div>`;
+  $('scPl').onclick=()=>{playing=!playing;$('scPl').textContent=playing?'Pause':'Play';last=performance.now();};$('scSt').onclick=()=>PRO.stopScen();$('scSp').onchange=e=>{spd=+e.target.value;};
+  $('scBar').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();t=Math.max(0,Math.min(T,(e.clientX-r.left)/r.width*T));done=EV.filter(x=>x[0]<=t).length-2;};
+  PRO.scen={bar,iv:setInterval(()=>{const now=performance.now();if(playing){t=Math.min(T,t+(now-last)/1000*spd);}last=now;
+    for(let k=done+1;k<EV.length&&EV[k][0]<=t;k++){done=k;$('scEv').textContent=EV[k][1];try{EV[k][2]();}catch(_){}}
+    $('scClk').textContent='T+'+String(Math.floor(t/60)).padStart(2,'0')+':'+String(Math.floor(t%60)).padStart(2,'0');$('scFill').style.width=(t/T*100)+'%';if(t>=T&&playing){playing=false;$('scPl').textContent='Play';}},100)};flash('Drill playback: watch the clock — each step flies the camera to the action.');};
+let runG=null;function runner(a,b,secs){if(runG){scene.remove(runG);}runG=new THREE.Group();scene.add(runG);const m=new THREE.Mesh(new THREE.SphereGeometry(3,16,12),new THREE.MeshBasicMaterial({color:0xff3b30}));m.renderOrder=48;runG.add(m);
+  const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(a.x,1.5,a.z),new THREE.Vector3(b.x,1.5,b.z)]),new THREE.LineDashedMaterial({color:0xff3b30,dashSize:4,gapSize:3,depthTest:false}));ln.computeLineDistances();ln.renderOrder=47;runG.add(ln);
+  const t0=performance.now();const dur=secs*1000/20;(function step(){if(!runG)return;const k=Math.min(1,(performance.now()-t0)/dur);m.position.set(a.x+(b.x-a.x)*k,2.5+Math.sin(performance.now()/120)*.5,a.z+(b.z-a.z)*k);if(k<1)requestAnimationFrame(step);})();}
+PRO.stopScen=()=>{if(!PRO.scen)return;clearInterval(PRO.scen.iv);PRO.scen.bar.remove();PRO.scen=null;if(runG){scene.remove(runG);runG=null;}setDuty('normal');flash('Drill ended — back to normal routine.');};
+// ---------- settings ----------
+PRO.settings=()=>{const sel_=(id,opts,v)=>`<select id="${id}">${opts.map(([k,l])=>`<option value="${k}" ${String(k)===String(v)?'selected':''}>${l}</option>`).join('')}</select>`;
+  const body=`<div class="setgrid"><div class="seth">Appearance</div><label>Ribbon style</label>${sel_('sTheme',[['light','Light'],['dark','Dark']],SET.theme)}<label>Picture quality</label>${sel_('sQ',[['1','High (shadows)'],['0','Fast (older devices)']],HQ?1:0)}<label>Label size</label>${sel_('sLs',[['0.6','Small'],['0.8','Medium'],['1.1','Large']],LBLSZ<.75?'0.6':LBLSZ<1?'0.8':'1.1')}
+   <div class="seth">Editing</div><label>Snap to grid and 15° turns</label>${sel_('sSnap',[['1','On'],['0','Off']],snapOn?1:0)}<label>Solid buildings (stop when touching)</label>${sel_('sSolid',[['1','On'],['0','Off']],collideOn?1:0)}<label>Auto-save</label>${sel_('sAuto',[['0','Off'],['2','Every 2 minutes'],['5','Every 5 minutes'],['10','Every 10 minutes']],SET.autosave)}
+   <div class="seth">Printed sheets and reports</div><label>Unit / formation name</label><input type="text" id="sUnit" value="${esc(SET.unitName)}" placeholder="e.g. 5 Corps HQ"><label>Prepared by</label><input type="text" id="sBy" value="${esc(SET.preparedBy)}" placeholder="Rank and name"><label>Security classification</label>${sel_('sCls',[['','None'],['RESTRICTED','RESTRICTED'],['CONFIDENTIAL','CONFIDENTIAL'],['SECRET','SECRET'],['FOR TRAINING ONLY','FOR TRAINING ONLY']],SET.classif)}
+   <div class="seth">Help</div><label>Guided tour</label><div><button class="pbtn" id="sTour">${ic('tour')} Show the tour again</button></div></div>`;
+  const m=modal('settings','Settings',body,`<button class="pbtn pri" data-close>Done</button>`,720);
+  const on=(id,f)=>{$(id).onchange=e=>{f(e.target.value);saveSet();syncRib();};};
+  on('sTheme',v=>{SET.theme=v;document.body.classList.toggle('dark',v==='dark');});on('sQ',v=>setQuality(v==='1'));on('sLs',v=>setLabelSize(+v));
+  on('sSnap',v=>{if((v==='1')!==snapOn)clk('snapChk');});on('sSolid',v=>{if((v==='1')!==collideOn)clk('solidChk');});on('sAuto',v=>{SET.autosave=+v;});on('sCls',v=>{SET.classif=v;});
+  $('sUnit').oninput=e=>{SET.unitName=e.target.value;saveSet();};$('sBy').oninput=e=>{SET.preparedBy=e.target.value;saveSet();};
+  $('sTour').onclick=()=>{m.hidden=true;PRO.tour(0);};};
+// ---------- guided tour ----------
+const TOUR=[['#ribbon .rtabs','The ribbon','All tools live here, grouped into tabs: Home, Build, Security, Analyse, View, Output and Help. The blue File tab has New, Open, Save and Export.'],
+ ['#ribbon .rpanel','Tools in groups','Each tab shows large buttons in labelled groups. Buttons that switch something on stay highlighted while it is on.'],
+ ['.hud','Project browser','Everything in your model is listed here: saved views, notes, buildings by type, security items, walls, roads and grounds. Click a name to find it. The Layers tab shows or hides things; the Add tab has everything you can place.'],
+ ['#panel','Properties','When you select something, all its details and settings appear here. Change them directly.'],
+ ['#vcube','View cube','Click a face to look from that side. The compass shows north. Scroll to zoom, right-drag to move, left-drag to rotate.'],
+ ['.statusbar','Status bar','Tells you what the current tool is waiting for, the cursor position, and whether your work is saved.'],
+ ['.qat','Quick access','Save, Undo, Redo and Open are always one click away. Right-click anything on the model for its own menu.']];
+PRO.tour=i=>{if(!isPro()){flash('The tour is for larger screens.');return;}let tr=$('tour');if(!tr){tr=document.createElement('div');tr.id='tour';tr.innerHTML='<div class="ring"></div><div class="tip"></div>';document.body.appendChild(tr);}
+  if(i>=TOUR.length||i<0){tr.hidden=true;SET.tour=true;saveSet();return;}const [q,h,t]=TOUR[i];const el=document.querySelector(q);if(!el){PRO.tour(i+1);return;}tr.hidden=false;const r=el.getBoundingClientRect();const ring=tr.querySelector('.ring');ring.style.left=(r.left-4)+'px';ring.style.top=(r.top-4)+'px';ring.style.width=(r.width+8)+'px';ring.style.height=(r.height+8)+'px';
+  const tip=tr.querySelector('.tip');tip.innerHTML=`<h4>${h}</h4><div>${t}</div><div class="row2"><span>${i+1} / ${TOUR.length}</span><button class="pbtn" data-t="skip">Skip</button>${i?'<button class="pbtn" data-t="back">Back</button>':''}<button class="pbtn pri" data-t="next">${i===TOUR.length-1?'Finish':'Next'}</button></div>`;
+  let x=r.right+14,y=r.top;if(x+330>innerWidth)x=Math.max(10,r.left-334);if(x<10)x=Math.min(innerWidth-330,r.left);if(r.width>innerWidth*.6){x=Math.min(innerWidth-340,Math.max(10,r.left+40));y=r.bottom+14;}if(y+200>innerHeight)y=Math.max(10,innerHeight-220);tip.style.left=x+'px';tip.style.top=y+'px';
+  tip.querySelector('[data-t=next]').onclick=()=>PRO.tour(i+1);tip.querySelector('[data-t=skip]').onclick=()=>PRO.tour(99);const bk=tip.querySelector('[data-t=back]');if(bk)bk.onclick=()=>PRO.tour(i-1);};
+const _cs=closeStart;closeStart=function(){const r=_cs.apply(this,arguments);if(!SET.tour&&isPro()&&!navigator.webdriver)setTimeout(()=>PRO.tour(0),900);return r;};
+// right-click extras
+const _oc=openCtx;openCtx=function(e){const r=_oc.apply(this,arguments);try{if(!ctx.hidden&&sel&&(sel.kind==='building'||sel.kind==='item')&&!MS.length){const b=document.createElement('button');b.innerHTML='Select all like this';const ref=sel.ref,k=sel.kind;b.onclick=()=>{hideCtx();PRO.selectLike(k,ref);};const hr=ctx.querySelector('hr');if(hr)ctx.insertBefore(b,hr);else ctx.appendChild(b);}}catch(_){}return r;};
+// fit home view inside docks
+const _fh=fitHome;fitHome=function(){_fh.apply(this,arguments);if(isPro()&&!document.body.classList.contains('nopanels')){const k=Math.max(1,innerWidth/Math.max(300,innerWidth-590))*1.02;const v=HOME[0].clone().sub(HOME[1]).multiplyScalar(k);HOME[0].copy(HOME[1]).add(v);}};
+fitHome();if(!sel&&!anim){ctl.target.copy(HOME[1]);camera.position.copy(HOME[0]);csync();}
+// keyboard: Ctrl+P print, Esc closes modals
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&(e.key==='p'||e.key==='P')){e.preventDefault();PRO.sheet();}if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.hidden=true);});
+})();
+// menu entries for smaller screens (and the File tab)
+(function(){const P=window.__PRO;const add=(k,items)=>{const f=MENUS[k];MENUS[k]=()=>[...f(),'-',...items];};
+ add('file',[['Print sheet / PDF…','Ctrl+P',()=>P.sheet()],['Save view as picture','',()=>P.saveImage()],['Version history…','',()=>P.versions()]]);
+ add('analysis',[['Schedules (tables)…','',()=>P.schedules()],['Security report…','',()=>P.report()],['Compare with earlier version…','',()=>P.versions(true)],['Drill playback','',()=>P.scenario()],['Select by type…','',()=>P.filterDlg()]]);
+ add('insert',[['Dimension','',()=>P.startDim()],['Text note','',()=>P.startNote()],['Save current view','',()=>P.saveView()]]);
+ add('help',[['Guided tour','',()=>P.tour(0)],['Settings…','',()=>P.settings()]]);})();
+
 }catch(err){
   let tried=false;try{tried=sessionStorage.getItem('g3d-fix')==='1';sessionStorage.setItem('g3d-fix','1');}catch(_){}
   if(!tried&&APPMODE){(async()=>{try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()));}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)));}}catch(_){}location.reload();})();}
