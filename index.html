@@ -630,6 +630,16 @@ body #proj.start .stf{color:#5f7f9c}
   body.pro.lcol #lColBtn{transform:rotate(180deg);place-items:end center;padding-bottom:12px;padding-top:0}
   body.pro.rcol #rColBtn:hover,body.pro.lcol #lColBtn:hover{background:#dfe8f3;color:#0f1b27}
 }
+/* label room: ribbon buttons and palette tiles never cut text */
+@media (min-width:1100px){
+  body.pro{--hdr:150px}
+  body.pro #ribbon{height:110px}
+  #ribbon .rb{height:auto;min-height:56px;width:auto;min-width:56px;max-width:84px;padding:4px 5px 3px}
+  #ribbon .rb span{display:block;white-space:normal;line-height:1.15}
+  #ribbon .rgrp .rcap{padding-bottom:4px}
+}
+.pal button{height:auto!important;min-height:58px;overflow:visible!important}
+.pal button span,.pal button b{white-space:normal;overflow:visible;text-overflow:clip}
 
 </style>
 
@@ -3039,7 +3049,7 @@ function buildSecOverlays(){setTimeout(()=>{if(typeof updDutyBanner==='function'
   const blocked=(x1,z1,x2,z2)=>{for(const s2 of occ){if(Math.max(s2[0],s2[2])<Math.min(x1,x2)||Math.min(s2[0],s2[2])>Math.max(x1,x2)||Math.max(s2[1],s2[3])<Math.min(z1,z2)||Math.min(s2[1],s2[3])>Math.max(z1,z2))continue;
     const d=(x2-x1)*(s2[3]-s2[1])-(z2-z1)*(s2[2]-s2[0]);if(Math.abs(d)<1e-9)continue;const t=((s2[0]-x1)*(s2[3]-s2[1])-(s2[1]-z1)*(s2[2]-s2[0]))/d,u=((s2[0]-x1)*(z2-z1)-(s2[1]-z1)*(x2-x1))/d;if(t>.03&&t<.97&&u>=0&&u<=1)return true;}return false;};
   let watched=0,gapM=0,tot=0;samples.forEach(p=>{let n=0;for(const it of obs){const R=it.range||OBS[it.type]||0;const d=Math.hypot(p.x-it.x,p.z-it.z);if(d>R)continue;if((it.range||!OBS[it.type])&&!inArc(it,p.x,p.z,0))continue;if(blocked(it.x,it.z,p.x,p.z))continue;n++;if(n>=2)break;}p.n=n;tot+=p.len;if(n)watched+=p.len;else gapM+=p.len;});
-  STATS.wallW=tot?Math.round(watched/tot*100):0;STATS.wallGap=Math.round(gapM);STATS.wallObs=obs.length;
+  {const nw=tot?Math.round(watched/tot*100):0;const ch=nw!==STATS.wallW;STATS.wallW=nw;if(ch)setTimeout(()=>{try{if(!sel&&!MS.length&&!ctrlMode&&/OVERVIEW/i.test(pT.textContent))showOverview();if(typeof updDutyBanner==='function')updDutyBanner();}catch(_){}},50);}STATS.wallGap=Math.round(gapM);STATS.wallObs=obs.length;
   clear(G.wallchk);if(WALLON){const WH=(S.wallH||3)+.5;const cols=[0xd93025,0xf2a900,0x1e8e3e];[0,1,2].forEach(c=>{const ps=samples.filter(p=>Math.min(2,p.n)===c);if(!ps.length)return;const im=new THREE.InstancedMesh(new THREE.BoxGeometry(1,.6,1.4),new THREE.MeshBasicMaterial({color:cols[c]}),ps.length);const m4=new THREE.Matrix4(),q4=new THREE.Quaternion(),sc=new THREE.Vector3();
       ps.forEach((p,i)=>{q4.setFromAxisAngle(new THREE.Vector3(0,1,0),-p.ang);sc.set(p.len+.05,1,1);m4.compose(new THREE.Vector3(p.x,WH,p.z),q4,sc);im.setMatrixAt(i,m4);});im.raycast=()=>{};G.wallchk.add(im);});}
   G.wallchk.visible=WALLON;}
@@ -3515,7 +3525,7 @@ function startDraw(cls,target){setEdit(true);draw={cls,pts:target?[]:[],target};
     $('d_fin').onclick=finishDraw;$('d_cancel').onclick=()=>{cancelDraw();select('item',target);};$('d_undo').onclick=()=>{if(draw&&draw.pts.length){draw.pts.pop();drawPreview();}};statusEl.textContent='Tap the ground to add flight-path points';return;}
   setPanel('Drawing',cls==='power'?(target?'Extend power line':'New power line'):cls==='dirt'?'New dirt track':(target?'Extend road':'New road'),'',`<div class="form"><p class="hint">Tap the ground at each point along the ${cls==='power'?'power line (poles go about every 40 m)':cls==='dirt'?'track':'road'}${target?', starting near the end you want to extend':''}. Press Finish when done.</p><div class="row"><button class="btn" id="d_fin">Finish road</button><button class="btn ghost" id="d_undo">Remove last point</button><button class="btn ghost" id="d_cancel">Cancel</button></div></div>`);
   $('d_fin').onclick=finishDraw;$('d_cancel').onclick=()=>{cancelDraw();showOverview();};$('d_undo').onclick=()=>{if(draw&&draw.pts.length){draw.pts.pop();drawPreview();}};
-  statusEl.textContent='Tap the ground to add road points';}
+  statusEl.textContent=cls==='power'?'Tap the ground to add power-line poles · Enter to finish':'Tap the ground to add road points · Enter to finish';}
 function drawPreview(){while(G.draw.children.length)G.draw.remove(G.draw.children[0]);if(!draw)return;
   draw.pts.forEach(p=>{const m=new THREE.Mesh(new THREE.SphereGeometry(1.4,12,8),hMat);m.position.set(p[0],1,p[1]);m.renderOrder=40;G.draw.add(m);});
   if(draw.pts.length>1){const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints(draw.pts.map(p=>new THREE.Vector3(p[0],1,p[1]))),lineM);l.renderOrder=39;G.draw.add(l);}
@@ -4200,7 +4210,7 @@ let fpsN=0,fpsT=0;
   if(hoverBox&&hoverRef){const ob=hoverRef.group||hoverRef.obj;if(ob)hoverBox.setFromObject(ob);}
   cupdate();fitLabels();
   if(G.gizmo.children.length)G.gizmo.children.forEach(hScale);
-  if(HQ){const T0=ctl.target;sun.target.position.set(T0.x,0,T0.z);sun.position.set(T0.x-260,420,T0.z+220);const ext=Math.min(700,Math.max(45,ctl.r*.85));const sc=sun.shadow.camera;if(Math.abs(sc.right-ext)>ext*.08){sc.left=-ext;sc.right=ext;sc.top=ext;sc.bottom=-ext;sc.updateProjectionMatrix();}sun.target.updateMatrixWorld();}
+  if(HQ){const T0=ctl.target;const ex0=Math.max(45,Math.min(700,ctl.r*.85));const stp=Math.pow(2,Math.ceil(Math.log2(ex0)))/256;const tx=Math.round(T0.x/stp)*stp,tz=Math.round(T0.z/stp)*stp;sun.target.position.set(tx,0,tz);sun.position.set(tx-260,420,tz+220);const ext=Math.pow(2,Math.ceil(Math.log2(Math.min(700,Math.max(45,ctl.r*.85)))));const sc=sun.shadow.camera;if(Math.abs(sc.right-ext)>ext*.08){sc.left=-ext;sc.right=ext;sc.top=ext;sc.bottom=-ext;sc.updateProjectionMatrix();}sun.target.updateMatrixWorld();}
   if(compare3){const W=innerWidth,H=innerHeight,a=Math.round(W/3),b2=Math.round(W*2/3);const keep=LOOK;renderer.setScissorTest(true);renderer.setViewport(0,0,W,H);setLook('day');renderer.setScissor(0,0,a,H);renderer.render(scene,camera);setLook('night');renderer.setScissor(a,0,b2-a,H);renderer.render(scene,camera);setLook('sec');renderer.setScissor(b2,0,W-b2,H);renderer.render(scene,camera);renderer.setScissorTest(false);setLook(keep);}
   else if(compare){const W=innerWidth,H=innerHeight,x=Math.round(W*splitX);renderer.setScissorTest(true);applyLook(false);renderer.setViewport(0,0,W,H);renderer.setScissor(0,0,x,H);renderer.render(scene,camera);applyLook(true);renderer.setScissor(x,0,W-x,H);renderer.render(scene,camera);renderer.setScissorTest(false);applyLook(night);}
   else if(HQ&&(night||LOOK==='sec')&&fxInit()){const f=FX;f.b.strength=LOOK==='sec'?.75:.8;f.b.threshold=LOOK==='sec'?.6:.7;f.c.render();}
@@ -4346,7 +4356,7 @@ const RIB=[
  ]],
  ['Security',[
   ['Readiness',[['normal','Normal',()=>setDuty('normal'),()=>DUTYMODE==='normal','Normal routine: on-duty positions only'],['lock','Lockdown',()=>setDuty(DUTYMODE==='lockdown'?'normal':'lockdown'),()=>DUTYMODE==='lockdown','Garrison lockdown (K)','red'],['play','Drill playback',()=>PRO.scenario(),()=>!!PRO.scen,'Play a lockdown drill minute by minute','org']]],
-  ['Views',[['target','Planning',()=>tacticalView(),()=>TACT,'Security planning view (T)'],['shield','Security look',()=>{if(LOOK==='sec')setNight(false);else setLook('sec');},()=>LOOK==='sec','Glowing by security level (S)'],['monitor','Control room',()=>setCtrl(!ctrlMode),()=>ctrlMode,'All camera feeds (C)']]],
+  ['Views',[['target','Planning',()=>tacticalView(),()=>TACT,'Security planning view (T)'],['shield','Security look',()=>PRO.soft(()=>{if(LOOK==='sec')setNight(false);else setLook('sec');},LOOK!=='sec'),()=>LOOK==='sec','Glowing by security level (S)'],['monitor','Control room',()=>setCtrl(!ctrlMode),()=>ctrlMode,'All camera feeds (C)']]],
   ['Overlays',[['s:cam','Camera coverage',()=>clickCk('cover'),()=>ckOn('cover')],['s:eyeoff','Blind spots',()=>clickCk('blind'),()=>ckOn('blind')],['s:arcs','Weapon arcs',()=>clickCk('fire'),()=>ckOn('fire')],['s:lamp','Light at night',()=>clickCk('lit'),()=>ckOn('lit')],['s:moon','Dark areas',()=>clickCk('dark'),()=>ckOn('dark')],['s:rings','Ranges',()=>clickCk('zones'),()=>ckOn('zones')],['s:qrf','QRF times',()=>clickCk('qrfr'),()=>ckOn('qrfr')],['s:wallchk','Wall watch',()=>clickCk('wallchk'),()=>ckOn('wallchk')],['s:heat','Heat map',()=>{HEATON=!HEATON;buildHeat();if(SECX.heat)SECX.heat.visible=LOOK==='sec'&&HEATON;},()=>HEATON]]],
  ]],
  ['Analyse',[
@@ -4358,7 +4368,7 @@ const RIB=[
  ['View',[
   ['Camera',[['home','Home',()=>flyTo(HOME[0].clone(),HOME[1].clone()),null,'Whole site'],['top','Top',()=>viewGo('top')],['oblique','3D',()=>viewGo('oblique')],['s:low','Low pass',()=>viewGo('low')],['s:north','North up',()=>northUp()],['s:spin','Auto-rotate',()=>clk('spinBtn'),()=>ctl.auto]]],
   ['Saved views',[['bookmark','Save view',()=>PRO.saveView(),null,'Remember this camera position'],['s:eye','Show list',()=>{showTab('browser');setMin(false);PRO.openBranch('views');}]]],
-  ['Look',[['sun','Day',()=>{setCompare(false);setCompare3(false);setNight(false);},()=>LOOK==='day'&&!compare&&!compare3],['moon','Night',()=>setNight(!night||LOOK==='sec'?true:false),()=>LOOK==='night'&&!compare&&!compare3,'Night view (N)'],['s:split2','Day | night',()=>setCompare(!compare),()=>compare],['s:split3','3 views',()=>setCompare3(!compare3),()=>compare3]]],
+  ['Look',[['sun','Day',()=>PRO.soft(()=>{setCompare(false);setCompare3(false);setNight(false);},false),()=>LOOK==='day'&&!compare&&!compare3],['moon','Night',()=>PRO.soft(()=>setNight(!night||LOOK==='sec'?true:false),true),()=>LOOK==='night'&&!compare&&!compare3,'Night view (N)'],['s:split2','Day | night',()=>PRO.soft(()=>setCompare(!compare),true),()=>compare],['s:split3','3 views',()=>PRO.soft(()=>setCompare3(!compare3),true),()=>compare3]]],
   ['Colours',[['s:shield','Security level',()=>{if(natural)clk('natBtn');setColorBy('sec');},()=>COLORBY==='sec'&&!natural],['s:people','People',()=>{if(natural)clk('natBtn');setColorBy('ppl');},()=>COLORBY==='ppl'&&!natural],['s:cube','White model',()=>{if(natural)clk('natBtn');setColorBy('model');},()=>COLORBY==='model'&&!natural],['s:leaf','Natural',()=>{if(!natural)clk('natBtn');},()=>natural]]],
   ['Ground',[['s:map','Drawn map',()=>setGround('map'),()=>GROUNDMODE!=='photo'],['s:photo','Aerial photo',()=>setGround('photo'),()=>GROUNDMODE==='photo']]],
   ['Labels',[['s:tagoff','Off',()=>setLabelMode('off'),()=>LBLMODE==='off'],['s:tag','Key places',()=>setLabelMode('key'),()=>LBLMODE==='key'],['s:tag','All',()=>setLabelMode('all'),()=>LBLMODE==='all']]],
@@ -4717,7 +4727,7 @@ P.vectorGrounds=function(){if(!WORLD.groundTex)return;const img=new Image();img.
    gTex.image=c;gTex.needsUpdate=true;S.areas.forEach(buildArea);mmDirty=true;}catch(err){console.error(err);}};img.src=WORLD.groundTex;};
 const _ba=buildArea;buildArea=function(a){const r=_ba.apply(this,arguments);try{if(!a.group)return r;let tex=null;const cut=a.texCut&&a.texCut[5]===a.kind;
    if(cut&&decTex[a.id])tex=decTex[a.id];else if(a.kind&&a.kind!=='open')tex=linesTex(a.kind);
-   if(tex){const m=new THREE.Mesh(new THREE.PlaneGeometry(a.w,a.d),new THREE.MeshLambertMaterial({map:tex,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-1}));m.rotation.x=-Math.PI/2;m.position.y=.06;m.receiveShadow=true;m.userData={kind:'area',ref:a};a.group.add(m);}}catch(_){}return r;};
+   if(tex){const m=new THREE.Mesh(new THREE.PlaneGeometry(a.w,a.d),new THREE.MeshLambertMaterial({map:tex,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-1}));m.rotation.x=-Math.PI/2;m.position.y=.035;m.receiveShadow=true;m.userData={kind:"area",ref:a};a.group.add(m);}}catch(_){}return r;};
 // when a project is restored or loaded, decals follow
 const _rs=restore;restore=function(){const r=_rs.apply(this,arguments);P.vectorGrounds();return r;};
 P.vectorGrounds();
@@ -4731,6 +4741,26 @@ P.vectorGrounds();
  rb.onclick=e=>{e.stopPropagation();set('rcol',!document.body.classList.contains('rcol'));};lb.onclick=e=>{e.stopPropagation();set('lcol',!document.body.classList.contains('lcol'));};
  try{if(localStorage.getItem('g3d-rcol')==='1')document.body.classList.add('rcol');if(localStorage.getItem('g3d-lcol')==='1')document.body.classList.add('lcol');}catch(_){}upd();
  window.__PRO.dock=set;})();
+// ================= smoothness: adaptive resolution, pre-warmed looks, soft transitions =================
+(function(){const P=window.__PRO;
+// 1) adaptive resolution: keep the picture smooth on any Mac
+let PR=Math.min(devicePixelRatio||1,HQ?1.5:1);const PRmax=()=>Math.min(devicePixelRatio||1,HQ?1.75:1.25),PRmin=.75;
+const applyPR=v=>{PR=Math.max(PRmin,Math.min(PRmax(),v));renderer.setPixelRatio(PR);renderer.setSize(innerWidth,innerHeight);if(typeof FX==='object'&&FX&&FX.c){try{FX.c.setPixelRatio(PR);FX.c.setSize(innerWidth,innerHeight);}catch(_){}}};
+applyPR(PR);const _sq=setQuality;setQuality=function(hi){const r=_sq.apply(this,arguments);applyPR(hi?1.5:1);return r;};
+let fr=[],lastT=performance.now(),cool=0;(function mon(t){const dt=t-lastT;lastT=t;if(!document.hidden&&dt<500)fr.push(dt);if(fr.length>=90){fr.sort((a,b)=>a-b);const med=fr[45];fr=[];if(cool>0)cool--;else if(med>34&&PR>PRmin){applyPR(PR-.25);cool=2;}else if(med<17.5&&PR<PRmax()){applyPR(PR+.25);cool=4;}}requestAnimationFrame(mon);})(lastT);
+P.pr=()=>PR;
+// 2) pre-warm night / security / bloom shaders while the welcome screen is up, so the first switch is instant
+setTimeout(()=>{try{const keep=LOOK;const was=night;if(HQ)fxInit();setLook('night');renderer.compile(scene,camera);if(HQ&&FX&&FX.c)FX.c.render();setLook('sec');renderer.compile(scene,camera);if(HQ&&FX&&FX.c)FX.c.render();if(keep==='sec')setLook('sec');else setNight(was);renderer.render(scene,camera);}catch(e){console.warn(e);}},1200);
+// 3) soft fade when changing day / night / security
+const fade=document.createElement('div');fade.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:4;opacity:0;transition:opacity .16s ease;background:#0b1018';document.body.appendChild(fade);
+let busy=false;P.soft=(fn,dark)=>{if(busy){fn();return;}busy=true;fade.style.background=dark?'#0b1018':'#e9edf1';fade.style.transition='opacity .14s ease';fade.style.opacity='.9';
+  setTimeout(()=>{try{fn();}catch(e){console.error(e);}requestAnimationFrame(()=>requestAnimationFrame(()=>{fade.style.transition='opacity .38s ease';fade.style.opacity='0';setTimeout(()=>{busy=false;},400);}));},150);};
+// route user actions through the fade
+document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,select'))return;if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.key==='n'||e.key==='N'){e.stopImmediatePropagation();e.preventDefault();P.soft(()=>setNight(!night),!night);}
+  else if(e.key==='s'||e.key==='S'){e.stopImmediatePropagation();e.preventDefault();P.soft(()=>{if(LOOK==='sec')setNight(false);else setLook('sec');},LOOK!=='sec');}},true);
+const nb=$('nightBtn');if(nb){const o=nb.onclick;nb.onclick=e=>P.soft(()=>o&&o.call(nb,e),!night);}
+})();
 
 }catch(err){
   let tried=false;try{tried=sessionStorage.getItem('g3d-fix')==='1';sessionStorage.setItem('g3d-fix','1');}catch(_){}
