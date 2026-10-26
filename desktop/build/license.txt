@@ -1,0 +1,11 @@
+SENTINEL 3D — SOFTWARE LICENCE
+
+Copyright (c) 2026 Syed Iftikhar Shah. All rights reserved.
+
+1. This software is licensed for use by authorised personnel only. It is not sold.
+2. No part of this software may be copied, modified, reverse-engineered, redistributed, published, sold or used to create derivative products without the prior written permission of the copyright holder.
+3. Project files made with Sentinel 3D may contain sensitive information. Users are responsible for handling, storing and sharing them according to their organisation's security instructions.
+4. All project data is stored on the user's own computer. Sentinel 3D does not send project data to any server. The only internet connection it makes is to check for and download official updates.
+5. Sentinel 3D is a planning and visualisation aid. Coverage, ranges, response times and distances are estimates and must be verified on the ground before operational use. The author accepts no liability for decisions taken on the basis of this software.
+
+By clicking "I Agree" you accept these terms.

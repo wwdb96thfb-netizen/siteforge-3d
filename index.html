@@ -777,14 +777,14 @@ body #proj.start .stf{color:#5f7f9c}
 <div id="scalebar"><span id="scaleTxt">50 m</span><i id="scaleBar" style="width:100px"></i></div>
 <div id="ctx" hidden></div>
 <div id="proj" hidden><div class="card pcard"><div class="ph2"><h3>Projects</h3><button class="btn ghost" id="projX">Close</button></div><div id="projBody"></div></div></div>
-<input type="file" id="projFile" accept=".json,.g3d,application/json" hidden><input type="file" id="photoFile" accept="image/*" hidden>
+<input type="file" id="projFile" accept=".json,.g3d,.s3d,application/json" hidden><input type="file" id="photoFile" accept="image/*" hidden>
 <div id="ldBanner" class="ld" hidden></div>
 <div id="camPiP" hidden><div class="ph3"><b>CAMERA VIEW</b><span id="camPiPn"></span></div><div id="camPiPv"></div><div class="hint3">Drag the blue handle on the map to aim · orange handles to widen</div></div>
 <div id="mbox" hidden style="position:fixed;border:1.5px dashed #ffd23f;background:rgba(255,210,63,.12);z-index:8;pointer-events:none"></div>
 <div id="draftBar" hidden><span>You have unsaved changes from last time.</span><button class="btn" id="draftYes">Bring them back</button><button class="btn ghost" id="draftNo">Throw away</button></div>
 <div id="about" hidden><div class="card" style="max-width:560px">
 <div style="display:flex;gap:14px;align-items:center"><img id="aboutLogo" alt="" style="width:64px;height:64px;border-radius:14px"><div><h3 style="margin:0;letter-spacing:.08em">SENTINEL 3D</h3><div style="font:600 12px var(--mono);color:var(--muted);letter-spacing:.12em">TACTICAL SITE PLANNING</div></div></div>
-<dl style="margin:14px 0 6px"><dt>Version</dt><dd>3.0.0 Professional · build 2026.10.26</dd><dt>Created by</dt><dd><b>Syed Iftikhar Shah</b></dd><dt>Purpose</dt><dd>3D modelling and security planning of garrisons and military sites: buildings, perimeter, posts, cameras, lighting, weapons coverage, QRF, drones and lockdown drills.</dd></dl>
+<dl style="margin:14px 0 6px"><dt>Version</dt><dd>3.1.0 Professional · build 2026.10.26</dd><dt>Created by</dt><dd><b>Syed Iftikhar Shah</b></dd><dt>Purpose</dt><dd>3D modelling and security planning of garrisons and military sites: buildings, perimeter, posts, cameras, lighting, weapons coverage, QRF, drones and lockdown drills.</dd></dl>
 <div style="font-size:12.5px;line-height:1.55;color:var(--fg);max-height:42vh;overflow:auto;border-top:1px solid var(--line);padding-top:10px">
 <p style="margin:0 0 8px"><b>Copyright © 2026 Syed Iftikhar Shah. All rights reserved.</b></p>
 <p style="margin:0 0 8px">Sentinel 3D, its name, logo, design, source code, 3D models and documentation are the intellectual property of Syed Iftikhar Shah and are protected by copyright law, including the Copyright Ordinance, 1962 (Pakistan) and international copyright treaties.</p>
@@ -1731,7 +1731,7 @@ const G3P=(()=>{const DBN='garrison3d',ST='projects';let dbp=null;
   const cur=()=>{try{return localStorage.getItem('g3d-current')||'builtin';}catch(_){return 'builtin';}};
   const setCur=id=>{try{localStorage.setItem('g3d-current',id);}catch(_){}};
   async function boot(){window.__PID='builtin';window.__PREC=null;const pid=cur();
-    if(pid!=='builtin'){try{const rec=await get(pid);if(rec&&rec.world){Object.assign(WORLD,rec.world);window.__PID=pid;window.__PREC=rec;}else setCur('builtin');}catch(_){}}
+    if(pid!=='builtin'){try{const rec=await G3P.get(pid);if(rec&&rec.world){Object.assign(WORLD,rec.world);window.__PID=pid;window.__PREC=rec;}else setCur('builtin');}catch(_){}}
     if(APPMODE&&'serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){try{const had=!!navigator.serviceWorker.controller;navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{try{r.update();}catch(_){}});let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!rl&&!unsaved){rl=true;try{sessionStorage.removeItem('g3d-started');}catch(_){}location.reload();}});}catch(_){}}
     window.__MAIN();}
   return {get,put,del,all,cur,setCur,boot};})();
@@ -4084,7 +4084,7 @@ function blankWorld(W,D){W=Math.max(40,Math.min(5000,W||500));D=Math.max(40,Math
 function openProj(id){G3P.setCur(id);location.reload();}
 function closeStart(){$('proj').hidden=true;$('proj').classList.remove('start');document.body.classList.remove('starting');}
 function fmtDate(t){try{return new Date(t).toLocaleString([], {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(_){return '';}}
-async function download(name,text){if(window.claude&&window.claude.use){try{const dl=await window.claude.use('downloads');if(dl){try{await dl.save({filename:name,data:new Blob([text])});}catch(e){if(e&&e.code!=='declined')flash('The file could not be saved here.');}return;}}catch(_){}}const blob=new Blob([text],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},3000);}
+async function download(name,text){if(window.sentinelDesktop){try{const enc=typeof text==='string'?new TextEncoder().encode(text):new Uint8Array(await new Blob([text]).arrayBuffer());await window.sentinelDesktop.saveFile(name,enc);}catch(e){flash('Could not save the file.');}return;}if(window.claude&&window.claude.use){try{const dl=await window.claude.use('downloads');if(dl){try{await dl.save({filename:name,data:new Blob([text])});}catch(e){if(e&&e.code!=='declined')flash('The file could not be saved here.');}return;}}catch(_){}}const blob=new Blob([text],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},3000);}
 function safeName(n){return (n||'project').replace(/[^A-Za-z0-9 _-]+/g,'').trim().replace(/\s+/g,'-')||'project';}
 function exportRec(name,world,layout){download(safeName(name)+'.g3d.json',JSON.stringify({format:'garrison3d-project',v:1,name,exported:new Date().toISOString(),world,layout}));}
 function loadPhoto(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const mx=4096,k=Math.min(1,mx/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res({url:c.toDataURL('image/jpeg',.85),w:im.width,h:im.height});};im.onerror=rej;im.src=fr.result;};fr.onerror=rej;fr.readAsDataURL(file);});}
@@ -4094,14 +4094,14 @@ async function openProjects(mode){projMode=mode||'list';$('proj').hidden=false;$
   let h='';
   if(projMode==='start'){const lg=document.querySelector('.brandx img');h+=`<div class="stl"><img src="${lg?lg.src:''}" alt=""><div><div class="stn">SENTINEL 3D</div><div class="sts">TACTICAL SITE PLANNING</div></div></div><div class="stq">Start</div>`;}
   if(projMode==='welcome')h+=`<p class="hint" style="font-size:13px">Welcome. Make a new project (a blank site you build on), or open a project file you were sent — for example your garrison file.</p>`;
-  h+=projMode==='start'?`<div class="stacts"><button class="stb" id="pj_new"><b>＋</b><span><b>New project</b><i>Start a blank site and build it</i></span></button><button class="stb" id="pj_imp"><b>⤓</b><span><b>Open a project file…</b><i>A .g3d.json file from this or another device</i></span></button>${(PREC||!APPMODE)?`<button class="stb" id="pj_cont"><b>▶</b><span><b>Continue: ${esc(curName.replace(/ \(built in\)$/,''))}</b><i>The project you had open last</i></span></button>`:''}<button class="btn ghost" id="pj_saveas" hidden></button><button class="btn ghost" id="pj_exp" hidden></button></div><div class="stq">Recent projects</div>`:`<div class="pacts"><button class="btn" id="pj_new">+ New project</button><button class="btn ghost" id="pj_imp">Open a project file…</button><button class="btn ghost" id="pj_saveas">Save current as…</button><button class="btn ghost" id="pj_exp">Export current to a file</button></div>`;
+  h+=projMode==='start'?`<div class="stacts"><button class="stb" id="pj_new"><b>＋</b><span><b>New project</b><i>Start a blank site and build it</i></span></button><button class="stb" id="pj_imp"><b>⤓</b><span><b>Open a project file…</b><i>A project file (.g3d.json, or protected .s3d) from this or another computer</i></span></button>${(PREC||!APPMODE)?`<button class="stb" id="pj_cont"><b>▶</b><span><b>Continue: ${esc(curName.replace(/ \(built in\)$/,''))}</b><i>The project you had open last</i></span></button>`:''}<button class="btn ghost" id="pj_saveas" hidden></button><button class="btn ghost" id="pj_exp" hidden></button></div><div class="stq">Recent projects</div>`:`<div class="pacts"><button class="btn" id="pj_new">+ New project</button><button class="btn ghost" id="pj_imp">Open a project file…</button><button class="btn ghost" id="pj_saveas">Save current as…</button><button class="btn ghost" id="pj_exp">Export current to a file</button></div>`;
   h+=`<div id="pj_form"></div>`;
   if(projMode!=='start')h+=`<div class="ch" style="font:600 10.5px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">Open now</div><div class="prow cur"><div class="pn"><b>${esc(curName)}</b><span>${Math.round(GW)} × ${Math.round(GD)} m${PREC&&PREC.updated?' · saved '+fmtDate(PREC.updated):''}${unsaved?' · unsaved changes':''}</span></div>${PREC?'<button class="btn ghost" id="pj_photo">Background photo…</button><button class="btn ghost" id="pj_size">Site size…</button>':''}</div>`;
   if(projMode!=='start')h+=`<div class="ch" style="font:600 10.5px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:12px">Projects on this device (${L.length+(APPMODE?0:1)})</div>`;
   if(!APPMODE)h+=`<div class="prow"><div class="pn"><b>Garrison Master Plan (built in)</b><span>the original model on this page</span></div>${PID==='builtin'?'<span class="hint" style="margin:0">open</span>':'<button class="btn ghost" data-open="builtin">Open</button>'}</div>`;
   h+=L.map(r=>`<div class="prow" data-id="${r.id}"><div class="pn"><b>${esc(r.name)}</b><span>${r.world&&r.world.site?Math.round(r.world.site[2]-r.world.site[0])+' × '+Math.round(r.world.site[3]-r.world.site[1])+' m · ':''}${fmtDate(r.updated||r.created)}</span></div>
     ${r.id===PID?'<span class="hint" style="margin:0">open</span>':`<button class="btn" data-open="${r.id}">Open</button>`}<button class="btn ghost" data-ren="${r.id}">Rename</button><button class="btn ghost" data-dup="${r.id}">Copy</button><button class="btn ghost" data-exp="${r.id}">Export</button><button class="btn danger" data-del="${r.id}">Delete</button></div>`).join('')||(APPMODE?'<p class="hint">No projects yet.</p>':'');
-  if(projMode==='start')h+=`<div class="stf">Version 3.0.0 Professional · © 2026 Syed Iftikhar Shah. All rights reserved.</div>`;else h+=`<p class="hint" style="margin-top:12px">Projects are kept on this device. To move one to another device (Mac ↔ iPhone), use Export, send the file, then "Open a project file…" there.${unsaved?' You have unsaved changes here — save them before opening another project, or they wait for you as a draft.':''}</p>`;
+  if(projMode==='start')h+=`<div class="stf">Version 3.1.0 Professional · © 2026 Syed Iftikhar Shah. All rights reserved.</div>`;else h+=`<p class="hint" style="margin-top:12px">Projects are kept on this device. To move one to another device (Mac ↔ iPhone), use Export, send the file, then "Open a project file…" there.${unsaved?' You have unsaved changes here — save them before opening another project, or they wait for you as a draft.':''}</p>`;
   body.innerHTML=h;
   if($('pj_cont'))$('pj_cont').onclick=()=>closeStart();
   const form=$('pj_form');
@@ -4111,8 +4111,9 @@ async function openProjects(mode){projMode=mode||'list';$('proj').hidden=false;$
     `<div class="two"><label>Site width (m)<input type="number" id="pf_w" value="500" min="40" max="5000"></label><label>Site depth (m)<input type="number" id="pf_d" value="300" min="40" max="5000"></label></div><label>Background photo from above (optional)<input type="file" id="pf_ph" accept="image/*"></label><p class="hint" style="margin:0">A drone or Google Earth picture is stretched over the whole site, so set the width and depth to the real size the picture shows. A boundary wall is drawn round the edge — move its corners in Edit.</p>`);
   $('pj_saveas').onclick=()=>nameForm('Save current as a new project',(PREC?PREC.name+' copy':'Garrison Master Plan'),async nm=>{if(!nm)return;const rec={id:newId(),name:nm,created:Date.now(),updated:Date.now(),world:worldNow(),layout:snapshot()};await G3P.put(rec);try{localStorage.removeItem(DKEY);}catch(_){}unsaved=false;openProj(rec.id);});
   $('pj_exp').onclick=()=>exportRec(PREC?PREC.name:'Garrison Master Plan',worldNow(),snapshot());
-  $('pj_imp').onclick=()=>{const fi=$('projFile');fi.value='';fi.onchange=async()=>{const f=fi.files[0];if(!f)return;try{const o=JSON.parse(await f.text());if(o.format!=='garrison3d-project'||!o.world||!o.world.site)throw 0;let nm=o.name||f.name.replace(/\.g3d\.json$|\.json$/,'');if(L.some(r=>r.name===nm))nm+=' (imported)';
-      const rec={id:newId(),name:nm,created:Date.now(),updated:Date.now(),world:o.world,layout:o.layout||null};await G3P.put(rec);openProj(rec.id);}catch(_){flash('That file is not a project file from this app.');}};fi.click();};
+  const doImp=async(f)=>{try{const o=await window.__readProj(await f.text(),f.name);if(!o)return;if(o.format!=='garrison3d-project'||!o.world||!o.world.site)throw 0;let nm=o.name||f.name.replace(/\.g3d\.json$|\.json$|\.s3d$/,'');if(L.some(r=>r.name===nm))nm+=' (imported)';
+      const rec={id:newId(),name:nm,created:Date.now(),updated:Date.now(),world:o.world,layout:o.layout||null};await G3P.put(rec);openProj(rec.id);}catch(_){flash('That file is not a project file from this app, or the password was wrong.');}};window.__projImportFile=doImp;
+  $('pj_imp').onclick=()=>{const fi=$('projFile');fi.value='';fi.onchange=async()=>{const f=fi.files[0];if(f)await doImp(f);};fi.click();};
   if($('pj_photo'))$('pj_photo').onclick=()=>{form.innerHTML=`<div class="pform"><b>Background photo</b><p class="hint" style="margin:0">The picture is stretched over the whole site (${Math.round(GW)} × ${Math.round(GD)} m). Unsaved changes are saved first.</p><div class="row"><button class="btn" id="pf_pick">Choose a picture…</button>${WORLD.groundTex?'<button class="btn ghost" id="pf_rm">Remove photo</button>':''}<button class="btn ghost" id="pf_cancel">Cancel</button></div></div>`;$('pf_cancel').onclick=()=>form.innerHTML='';
     const apply=async url=>{const rec=Object.assign({},PREC,{world:Object.assign({},PREC.world,{groundTex:url}),layout:snapshot(),updated:Date.now()});await G3P.put(rec);try{localStorage.removeItem(DKEY);}catch(_){}unsaved=false;location.reload();};
     $('pf_pick').onclick=()=>{const fi=$('photoFile');fi.value='';fi.onchange=async()=>{const f=fi.files[0];if(!f)return;try{const p=await loadPhoto(f);apply(p.url);}catch(_){flash('Could not read that picture.');}};fi.click();};if($('pf_rm'))$('pf_rm').onclick=()=>apply(null);};
@@ -4388,7 +4389,7 @@ const RIB=[
  ]],
  ['Output',[
   ['Print',[['print','Print sheet',()=>PRO.sheet(),null,'Print or save a PDF sheet with title block'],['image','Save image',()=>PRO.saveImage(),null,'Save the current view as a picture']]],
-  ['Export',[['xls','Excel tables',()=>PRO.schedules(true),null,'Export schedules for Excel'],['report','Report',()=>PRO.report()],['file','Project file',()=>exportRec(projName(),worldNow(),snapshot())]]],
+  ['Export',[['xls','Excel tables',()=>PRO.schedules(true),null,'Export schedules for Excel'],['report','Report',()=>PRO.report()],['lock','Protected file',()=>PRO.exportProtected(),null,'Export an encrypted, password-protected project file (.s3d)'],['file','Project file',()=>exportRec(projName(),worldNow(),snapshot())]]],
  ]],
  ['Help',[
   ['Learn',[['tour','Guided tour',()=>PRO.tour(0)],['key','Shortcuts',()=>{$('help').hidden=false;}]]],
@@ -4584,7 +4585,7 @@ PRO.report=()=>{const cams=S.items.filter(i=>TYPES[i.type]&&TYPES[i.type].cam);c
   $('repPr').onclick=()=>{document.body.classList.add('reporting');setTimeout(()=>{window.print();setTimeout(()=>document.body.classList.remove('reporting'),500);},50);};
   $('repDl').onclick=()=>{const html='<!doctype html><html><head><meta charset="utf-8"><title>Security report</title><style>body{font-family:Arial,sans-serif;margin:24px}'+[...document.styleSheets].map(()=> '').join('')+'.classbar{background:#c0392b;color:#fff;text-align:center;font-weight:700;letter-spacing:.3em;padding:3px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.kpi{border:1px solid #ddd;border-radius:6px;padding:8px}.kpi b{display:block;font-size:22px}.bad{color:#c0392b}.ok{color:#1e8e3e}.warn{color:#c77800}h2{border-bottom:2px solid #1f6feb;font-size:16px;padding-bottom:4px}img{width:100%}</style></head><body>'+m.querySelector('.rep').innerHTML+'</body></html>';download(safeName(projName())+' - security report.html',html);};};
 // ---------- version history (IndexedDB) ----------
-const VDB={db:null,open(){return this.db?Promise.resolve(this.db):new Promise((res,rej)=>{const r=indexedDB.open('G3V',1);r.onupgradeneeded=()=>{const d=r.result;if(!d.objectStoreNames.contains('v')){const s=d.createObjectStore('v',{keyPath:'id'});s.createIndex('pid','pid');}};r.onsuccess=()=>{this.db=r.result;res(this.db);};r.onerror=()=>rej(r.error);});},
+const VDB=window.__VDB={db:null,open(){return this.db?Promise.resolve(this.db):new Promise((res,rej)=>{const r=indexedDB.open('G3V',1);r.onupgradeneeded=()=>{const d=r.result;if(!d.objectStoreNames.contains('v')){const s=d.createObjectStore('v',{keyPath:'id'});s.createIndex('pid','pid');}};r.onsuccess=()=>{this.db=r.result;res(this.db);};r.onerror=()=>rej(r.error);});},
  async put(rec){const d=await this.open();return new Promise((res,rej)=>{const t=d.transaction('v','readwrite');t.objectStore('v').put(rec);t.oncomplete=res;t.onerror=()=>rej(t.error);});},
  async list(pid){const d=await this.open();return new Promise((res,rej)=>{const t=d.transaction('v');const q=t.objectStore('v').index('pid').getAll(pid);q.onsuccess=()=>res(q.result||[]);q.onerror=()=>rej(q.error);});},
  async del(id){const d=await this.open();return new Promise(res=>{const t=d.transaction('v','readwrite');t.objectStore('v').delete(id);t.oncomplete=res;});}};
@@ -4865,6 +4866,36 @@ const nb=$('nightBtn');if(nb){const o=nb.onclick;nb.onclick=e=>P.soft(()=>o&&o.c
    g.insertBefore(d,g.querySelector('.seth:last-of-type'));const sv=()=>{try{localStorage.setItem('g3d-settings',JSON.stringify(SET));}catch(_){}};
    $('sDay').onchange=e=>{SET.dayVis=+e.target.value;S.items.forEach(it=>{if(TYPES[it.type]&&TYPES[it.type].obsArc&&it.vr<SET.dayVis)it.vr=SET.dayVis;});sv();P.refreshArcs(false);};$('sNight').onchange=e=>{SET.nightVis=+e.target.value;sv();P.refreshArcs(false);};$('sTrees').onchange=e=>{SET.losTrees=e.target.value==='1';sv();P.refreshArcs();};};
 })();
+// ================= security settings, protected export, desktop integration =================
+(function(){const P=window.__PRO,SEC=window.__SEC;if(!SEC)return;
+ // encrypt version history too
+ const V=window.__VDB;if(V){const put0=V.put.bind(V),list0=V.list.bind(V);V.put=async rec=>{if(SEC.enabled()&&SEC.key&&rec.snap){const o=Object.assign({},rec);o.encSnap=await SEC.encObj(rec.snap);delete o.snap;return put0(o);}return put0(rec);};
+   V.list=async pid=>{const L=await list0(pid);const out=[];for(const r of L){if(r.encSnap){try{const o=Object.assign({},r);o.snap=await SEC.decObj(r.encSnap);delete o.encSnap;out.push(o);}catch(_){}}else out.push(r);}return out;};}
+ // protected export
+ P.exportProtected=async()=>{const pw=await SEC.askNewPassword('Export protected file','The project is encrypted (AES-256) with this password. Anyone opening the file in Sentinel 3D will need the password.');if(!pw)return;
+   const nm=(PREC&&PREC.name)||'Garrison Master Plan';const payload={format:'garrison3d-project',v:1,name:nm,exported:new Date().toISOString(),world:worldNow(),layout:snapshot()};
+   flash('Encrypting…');const o=await SEC.protect(payload,pw);download(safeName(nm)+'.s3d',JSON.stringify(o));flash('Protected file saved (.s3d). Keep the password safe — it cannot be recovered.');};
+ const fm=MENUS.file;MENUS.file=()=>{const L=fm();const i=L.findIndex(x=>x!=='-'&&/^Export to a file/.test(x[0]));L.splice(i+1,0,['Export protected file (password)…','',()=>P.exportProtected()]);return L.concat(SEC.enabled()?['-',['Lock now','',()=>SEC.lockNow()]]:[]);};
+ // settings section
+ const _st=P.settings;P.settings=function(){_st();const g=document.querySelector('#settings .setgrid');if(!g)return;const en=SEC.enabled();let lm=15;try{lm=P.SET.lockMins!=null?P.SET.lockMins:15;}catch(_){}
+   const d=document.createElement('div');d.style.display='contents';d.innerHTML=`<div class="seth">Security</div><label>Password to open Sentinel 3D</label><div>${en?'<b style="color:#1e8e3e">On</b> — saved projects on this computer are encrypted (AES-256).':'<b style="color:#c0392b">Off</b> — anyone using this computer can open your projects.'}<div class="row" style="margin-top:6px;display:flex;gap:6px">${en?'<button class="pbtn" id="sChg">Change password</button><button class="pbtn dng" id="sOff">Turn off</button><button class="pbtn" id="sLock">Lock now</button>':'<button class="pbtn pri" id="sOn">Set a password</button>'}</div></div>
+     <label>Lock automatically when idle</label><select id="sLm">${[[0,'Never'],[5,'After 5 minutes'],[15,'After 15 minutes'],[30,'After 30 minutes'],[60,'After 1 hour']].map(([k,l])=>`<option value="${k}" ${k==lm?'selected':''}>${l}</option>`).join('')}</select>
+     <label>Protected project files</label><div><button class="pbtn" id="sExp">Export protected file (.s3d)…</button></div>`;
+   g.insertBefore(d,g.firstChild);const sv=()=>{try{localStorage.setItem('g3d-settings',JSON.stringify(P.SET));}catch(_){}};
+   const re=()=>{document.getElementById('settings').hidden=true;P.settings();};
+   if($('sOn'))$('sOn').onclick=async()=>{const pw=await SEC.askNewPassword('Set a password','Sentinel 3D will ask for this password every time it opens. All saved projects and version history on this computer will be encrypted with it.');if(!pw)return;flash('Encrypting your projects…');await SEC.enable(pw);if(unsaved&&!(APPMODE&&PID==='builtin'))commit();flash('Password set. Your projects are now encrypted on this computer.');re();};
+   if($('sOff'))$('sOff').onclick=async()=>{const r=await SEC.ask('Turn off the password','Enter the current password. Your projects will be stored without encryption.',['Current password'],'Turn off');if(!r)return;const ok=await SEC.disable(r.vals[0]);flash(ok?'Password removed.':'Wrong password — nothing changed.');re();};
+   if($('sChg'))$('sChg').onclick=async()=>{const r=await SEC.ask('Change password','Enter the current password first.',['Current password'],'Next');if(!r)return;if(!(await SEC.verify(r.vals[0]))){flash('Wrong password — nothing changed.');return;}const pw=await SEC.askNewPassword('New password','Choose the new password.');if(!pw)return;await SEC.disable(r.vals[0]);await SEC.enable(pw);flash('Password changed.');re();};
+   if($('sLock'))$('sLock').onclick=()=>{document.getElementById('settings').hidden=true;SEC.lockNow();};
+   $('sLm').onchange=e=>{P.SET.lockMins=+e.target.value;sv();};$('sExp').onclick=()=>{document.getElementById('settings').hidden=true;P.exportProtected();};};
+ // desktop app: open files from Finder/Explorer, update progress
+ const D=window.sentinelDesktop;if(D){
+   D.onOpenFile(f=>{openProjects('list').then(()=>{setTimeout(()=>{if(window.__projImportFile)window.__projImportFile(new File([f.data],f.name));},200);});});
+   D.onUpdate(s=>{if(s.state==='downloading')flash('Downloading Sentinel 3D '+s.version+' in the background…');else if(s.state==='progress'){const n=$('saveNote');if(n)n.textContent='Update '+s.percent+'%';}else if(s.state==='ready')flash('Update '+s.version+' is ready — restart to install.');});
+   D.onBeforeUpdate(()=>{try{if(unsaved&&!(APPMODE&&PID==='builtin'))commit();}catch(_){}});
+   const hm=MENUS.help;MENUS.help=()=>hm().concat([['Check for updates…','',()=>D.checkUpdates()]]);
+   D.version().then(v=>{document.querySelectorAll('#about dd').forEach(dd=>{if(/build/.test(dd.textContent))dd.textContent=v+' Professional (desktop)';});});}
+})();
 
 }catch(err){
   if(window.__bootDone)window.__bootDone();
@@ -4874,6 +4905,64 @@ const nb=$('nightBtn');if(nb){const o=nb.onclick;nb.onclick=e=>P.soft(()=>o&&o.c
 }
 });
 </script>
-<script>G3P.boot();</script>
+<script>
+// ================= Sentinel 3D security: app password, encryption at rest, protected files =================
+(function(){
+const SK='g3d-lock-v1',ITER=310000;
+const te=new TextEncoder(),td=new TextDecoder();
+const b64=buf=>{const u=new Uint8Array(buf);let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s);};
+const ub64=s=>{const b=atob(s);const u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;};
+async function derive(pw,salt,iter){const k=await crypto.subtle.importKey('raw',te.encode(pw),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:iter,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
+async function enc(key,obj){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,te.encode(JSON.stringify(obj)));return {iv:b64(iv),ct:b64(ct)};}
+async function dec(key,e){const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:ub64(e.iv)},key,ub64(e.ct));return JSON.parse(td.decode(pt));}
+let cfg=null;try{cfg=JSON.parse(localStorage.getItem(SK)||'null');}catch(_){}
+const SEC={key:null,enabled:()=>!!cfg,cfg:()=>cfg};window.__SEC=SEC;
+// ---- small modal used before the main app exists
+function ask(title,body,fields,okLabel,extra){return new Promise(res=>{const d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:2147483600;display:grid;place-items:center;background:rgba(3,11,26,.72);font-family:-apple-system,Segoe UI,Arial,sans-serif';
+  d.innerHTML=`<form style="background:#fff;color:#17212b;border-radius:10px;box-shadow:0 24px 60px rgba(0,0,0,.45);width:min(420px,92vw);padding:20px 22px"><h3 style="margin:0 0 6px;font-size:18px">${title}</h3><p style="margin:0 0 12px;font-size:13px;color:#5d6b78;line-height:1.45">${body}</p>${fields.map((f,i)=>`<input type="password" data-i="${i}" placeholder="${f}" autocomplete="new-password" style="display:block;width:100%;box-sizing:border-box;height:38px;border:1px solid #c5ced7;border-radius:6px;padding:0 10px;font-size:14px;margin:0 0 8px">`).join('')}<div id="askErr" style="color:#c0392b;font-size:12.5px;min-height:16px;margin-bottom:6px"></div><div style="display:flex;gap:8px;justify-content:flex-end">${extra||''}<button type="button" data-c style="height:34px;padding:0 14px;border:1px solid #c5ced7;background:#fff;border-radius:6px;cursor:pointer">Cancel</button><button type="submit" style="height:34px;padding:0 16px;border:0;background:#1f6feb;color:#fff;border-radius:6px;font-weight:600;cursor:pointer">${okLabel||'OK'}</button></div></form>`;
+  document.body.appendChild(d);const fm=d.querySelector('form');const ins=[...d.querySelectorAll('input')];setTimeout(()=>ins[0]&&ins[0].focus(),30);
+  const done=v=>{d.remove();res(v);};d.querySelector('[data-c]').onclick=()=>done(null);fm.onkeydown=e=>{e.stopPropagation();if(e.key==='Escape')done(null);};
+  fm.onsubmit=e=>{e.preventDefault();done({vals:ins.map(i=>i.value),err:m=>{}});};
+  d.__err=m=>{d.querySelector('#askErr').textContent=m;};SEC._lastAsk=d;});}
+SEC.ask=ask;
+async function askNewPassword(title,body){for(;;){const r=await ask(title,body+'<br><b>Use at least 8 characters. If you forget it, the protected data cannot be recovered — not even by the author.</b>',['New password','Type it again'],'Set password');if(!r)return null;const [a,b]=r.vals;if(a.length<8){body='The password must be at least 8 characters.';continue;}if(a!==b){body='The two passwords did not match. Try again.';continue;}return a;}}
+SEC.askNewPassword=askNewPassword;
+// ---- protected project files (.s3d)
+SEC.protect=async(obj,pw)=>{const salt=crypto.getRandomValues(new Uint8Array(16));const key=await derive(pw,salt,ITER);const e=await enc(key,obj);return {format:'sentinel3d-protected',v:1,app:'Sentinel 3D',kdf:'PBKDF2-SHA256',iter:ITER,salt:b64(salt),iv:e.iv,ct:e.ct};};
+SEC.unprotect=async(o,pw)=>{const key=await derive(pw,ub64(o.salt),o.iter||ITER);return dec(key,{iv:o.iv,ct:o.ct});};
+window.__readProj=async(text,name)=>{let o;try{o=JSON.parse(text);}catch(_){throw new Error('bad');}
+  if(o&&o.format==='sentinel3d-protected'){let msg='This project file is password-protected. Enter its password to open it.';for(let tries=0;tries<5;tries++){const r=await ask('Open protected project',msg+(name?'<br><span style="font-family:monospace">'+String(name).replace(/</g,'')+'</span>':''),['Password'],'Open');if(!r)return null;try{return await SEC.unprotect(o,r.vals[0]);}catch(_){msg='Wrong password. Try again.';}}return null;}
+  return o;};
+// ---- encryption at rest for saved projects (IndexedDB)
+const wrapRec=async r=>{if(!SEC.key||!r||r.enc)return r;const o=Object.assign({},r);const payload={world:o.world,layout:o.layout};delete o.world;delete o.layout;o.enc=await enc(SEC.key,payload);return o;};
+const unwrap=async r=>{if(!r||!r.enc)return r;if(!SEC.key)throw new Error('locked');const d=await dec(SEC.key,r.enc);const o=Object.assign({},r,d);delete o.enc;return o;};
+const g0=G3P.get,p0=G3P.put,a0=G3P.all;
+G3P.get=async id=>unwrap(await g0(id));G3P.put=async r=>p0(await wrapRec(r));G3P.all=async()=>Promise.all((await a0()).map(r=>unwrap(r).catch(()=>Object.assign({},r,{name:(r.name||'Project')+' (locked)'}))));
+SEC.wrap=wrapRec;SEC.unwrap=unwrap;SEC.encObj=o=>enc(SEC.key,o);SEC.decObj=e=>dec(SEC.key,e);
+// keep garrison layouts out of plain browser storage while protection is on
+const sset=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(cfg&&/^garrison3d-(layout|draft)/.test(k)){try{Storage.prototype.removeItem.call(this,k);}catch(_){}return;}return sset.call(this,k,v);};
+const sget=Storage.prototype.getItem;Storage.prototype.getItem=function(k){if(cfg&&/^garrison3d-(layout|draft)/.test(k))return null;return sget.call(this,k);};
+async function purgePlain(){try{Object.keys(localStorage).forEach(k=>{if(/^garrison3d-(layout|draft)/.test(k))localStorage.removeItem(k);});}catch(_){}}
+SEC.enable=async pw=>{const salt=crypto.getRandomValues(new Uint8Array(16));const key=await derive(pw,salt,ITER);const chk=await enc(key,'sentinel-ok');const all=await a0();SEC.key=key;for(const r of all){if(!r.enc)await p0(await wrapRec(r));}
+  cfg={salt:b64(salt),iter:ITER,chk,since:Date.now()};sset.call(localStorage,SK,JSON.stringify(cfg));await purgePlain();if(SEC.onChange)SEC.onChange();return true;};
+SEC.verify=async pw=>{if(!cfg)return true;try{const key=await derive(pw,ub64(cfg.salt),cfg.iter);const v=await dec(key,cfg.chk);if(v!=='sentinel-ok')return false;SEC.key=key;return true;}catch(_){return false;}};
+SEC.disable=async pw=>{if(!(await SEC.verify(pw)))return false;const all=await a0();for(const r of all){if(r.enc){const o=await unwrap(r);await p0(o);}}cfg=null;localStorage.removeItem(SK);SEC.key=null;if(SEC.onChange)SEC.onChange();return true;};
+// ---- lock screen (shown before anything is loaded)
+function lockScreen(onOpen,isRelock){const d=document.createElement('div');d.id='lockScr';d.style.cssText='position:fixed;inset:0;z-index:2147483500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:linear-gradient(160deg,#071428 0%,#030b1a 60%,#020814 100%);color:#fff;font-family:-apple-system,Segoe UI,Arial,sans-serif';
+  d.innerHTML=`<div style="font-weight:800;font-size:28px;letter-spacing:.16em">SENTINEL <span style="color:#2bd4ff">3D</span></div><div style="font:600 11px monospace;letter-spacing:.3em;color:#8fb3cf;margin-bottom:10px">${isRelock?'LOCKED — ENTER PASSWORD':'PROTECTED — ENTER PASSWORD'}</div>
+   <form style="display:flex;gap:8px"><input type="password" autocomplete="current-password" placeholder="Password" style="width:260px;height:40px;border-radius:7px;border:1px solid rgba(43,212,255,.4);background:rgba(12,32,58,.8);color:#fff;padding:0 12px;font-size:15px;outline:none"><button style="height:40px;padding:0 18px;border:0;border-radius:7px;background:linear-gradient(160deg,#2bd4ff,#1f6feb);color:#fff;font-weight:700;cursor:pointer">Unlock</button></form>
+   <div id="lkMsg" style="min-height:18px;font-size:13px;color:#ff8a7e"></div>${isRelock?'':'<button id="lkForgot" style="background:none;border:0;color:#5f7f9c;font-size:12px;cursor:pointer;text-decoration:underline">Forgot the password?</button>'}`;
+  document.body.appendChild(d);const inp=d.querySelector('input'),msg=d.querySelector('#lkMsg');setTimeout(()=>inp.focus(),50);let fails=0,until=0;
+  d.querySelector('form').onsubmit=async e=>{e.preventDefault();if(Date.now()<until){msg.textContent='Too many wrong tries. Wait '+Math.ceil((until-Date.now())/1000)+' s.';return;}msg.textContent='Checking…';const ok=await SEC.verify(inp.value);inp.value='';
+    if(ok){d.remove();onOpen();}else{fails++;msg.textContent='Wrong password.';if(fails>=5){until=Date.now()+Math.min(300,30*Math.pow(2,fails-5))*1000;msg.textContent='Too many wrong tries. Wait '+Math.ceil((until-Date.now())/1000)+' s.';}}};
+  const fg=d.querySelector('#lkForgot');if(fg)fg.onclick=async()=>{const r=await ask('Forgot the password?','The saved projects on this computer are encrypted with your password and <b>cannot be recovered</b> without it. You can erase them and start again. Project files you exported earlier are not affected.<br><br>Type <b>ERASE</b> to delete all saved projects on this computer.',['Type ERASE'],'Erase and start again');if(r&&r.vals[0]==='ERASE'){try{const all=await a0();for(const x of all)await G3P.del(x.id);}catch(_){}try{indexedDB.deleteDatabase('G3V');}catch(_){}localStorage.removeItem(SK);location.reload();}};}
+window.__sentinelLock=cb=>{if(!cfg){cb();return;}if(window.__bootDone)window.__bootDone();lockScreen(cb,false);};
+SEC.lockNow=()=>{if(!cfg)return;SEC.key=null;lockScreen(async()=>{},true);};
+// auto-lock when idle
+let last=Date.now();['pointerdown','keydown','wheel'].forEach(ev=>addEventListener(ev,()=>{last=Date.now();},true));
+setInterval(()=>{if(!cfg||document.getElementById('lockScr'))return;let mins=15;try{mins=JSON.parse(localStorage.getItem('g3d-settings')||'{}').lockMins;}catch(_){}if(mins==null)mins=15;if(+mins>0&&Date.now()-last>mins*60000){const k=SEC.key;lockScreen(()=>{},true);SEC._held=k;}},20000);
+})();
+</script>
+<script>(window.__sentinelLock?window.__sentinelLock(()=>G3P.boot()):G3P.boot());</script>
 
 </html>
